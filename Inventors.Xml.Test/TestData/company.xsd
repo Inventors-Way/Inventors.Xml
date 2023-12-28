@@ -3,11 +3,35 @@
 <xs:element name="company" nillable="true" type="Inventors.Xml.Test.TestObjects.Company" />
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Company">
+<xs:annotation>
+<xs:documentation>
+<p>Description of a company</p>
+</xs:documentation>
+</xs:annotation>
 <xs:sequence>
-<xs:element minOccurs="0" maxOccurs="1" name="departments" type="Inventors.Xml.Test.TestObjects.Company.Departments.Array" />
-<xs:element minOccurs="0" maxOccurs="1" name="employees" type="Inventors.Xml.Test.TestObjects.Company.Employees.Array" />
+<xs:element minOccurs="0" maxOccurs="1" name="departments" type="Inventors.Xml.Test.TestObjects.Company.Departments.Array">
+<xs:annotation>
+<xs:documentation>
+<h1 id="department-overview">Department Overview</h1>
+<p>In a company, a <strong>department</strong> is a distinct organizational unit that specializes in a specific function or set of related functions. Departments are designed to efficiently manage and execute tasks, contributing to the overall goals and objectives of the organization. Each department typically operates under the umbrella of the larger company structure, with its own set of responsibilities, roles, and leadership.</p>
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element minOccurs="0" maxOccurs="1" name="employees" type="Inventors.Xml.Test.TestObjects.Company.Employees.Array">
+<xs:annotation>
+<xs:documentation>
+<p>The employees of the company</p>
+</xs:documentation>
+</xs:annotation>
+</xs:element>
 </xs:sequence>
-<xs:attribute name="name" type="xs:string" use="required" />
+<xs:attribute name="name" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+<p>The name of the company</p>
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Identifiable" abstract="true">
@@ -17,6 +41,12 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Department">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Test.TestObjects.Data.Identifiable">
+<xs:annotation>
+<xs:documentation>
+<h1 id="department-overview">Department Overview</h1>
+<p>In a company, a <strong>department</strong> is a distinct organizational unit that specializes in a specific function or set of related functions. Departments are designed to efficiently manage and execute tasks, contributing to the overall goals and objectives of the organization. Each department typically operates under the umbrella of the larger company structure, with its own set of responsibilities, roles, and leadership.</p>
+</xs:documentation>
+</xs:annotation>
 <xs:sequence>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
 <xs:element minOccurs="0" maxOccurs="1" name="position" type="Inventors.Xml.Test.TestObjects.Data.Position" />
@@ -42,6 +72,12 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Employee">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Test.TestObjects.Data.Identifiable">
+<xs:annotation>
+<xs:documentation>
+<h1 id="employee-overview">Employee Overview</h1>
+<p>An <strong>employee</strong> within a company is an individual hired to perform specific tasks and contribute to the overall success of the organization. Employees are essential components of the workforce, and their roles and responsibilities vary based on their positions and functions within the company.</p>
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required" />
 <xs:attribute name="address" type="xs:string" use="optional" />
 <xs:attribute name="salary" type="xs:double" use="required" />

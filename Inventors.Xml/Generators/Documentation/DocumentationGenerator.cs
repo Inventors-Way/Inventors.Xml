@@ -35,7 +35,10 @@ namespace Inventors.Xml.Generators.Documentation
 
             foreach (var e in element.Elements)
             {
-                Checkfile(info.GetFilename(e.PropertyName));
+                if (!e.Type.IsNested)
+                {
+                    Checkfile(info.GetFilename(e.PropertyName));
+                }
             }
 
             foreach (var a in element.Attributes)

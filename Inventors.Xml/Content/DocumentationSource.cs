@@ -86,17 +86,20 @@ namespace Inventors.Xml.Content
         public ElementDocumentationInfo GetElement(string name) =>  
             new(Path: GetElementPath(name), Name: GetElementName(name));
         
-        public string this[string filename]
+        public string this[string? filename]
         {
             get
             {
+                if (filename is null)
+                    return string.Empty;
+
                 if (File.Exists(filename))
                 {
                     var text = File.ReadAllText(filename);
 
                     if (!string.IsNullOrEmpty(text))
                     {
-                        return Markdown.ToHtml(text, markdownPipeline);
+                        return Markdown.ToHtml(text, markdownPipeline).Trim();
                     }
 
                     return string.Empty;

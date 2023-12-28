@@ -14,7 +14,7 @@
             <position
                 title="Senior Quantum Jargon Engineer"
                 employee-id="E2"/>
-        </department>
+        </department>        
     </departments>
 
     <employees>
@@ -35,6 +35,6 @@
             name="Draven Xylar"
             address=" Xylaris Minor, Nebula Falls"
             salary="8000"
-            type="administrative"/>
+            type="administrative"/>        
     </employees>
 </company>

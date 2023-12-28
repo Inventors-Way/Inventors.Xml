@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace Inventors.Xml.Generators.Xsd
 {
@@ -119,6 +120,8 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void CreateNonderivedType(ClassElement element)
         {
+            var info = AnnotateElement(element);
+            
             if (element.Elements.Count > 0)
             {
                 builder.AppendLine("<xs:sequence>");
@@ -131,7 +134,18 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                     else
                     {
-                        builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\" />");
+                        var annotation = GetDocumentation(info, e.PropertyName);
+
+                        if (annotation is null)
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\" />");
+                        }
+                        else
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
+                            Annotate(annotation);
+                            builder.AppendLine("</xs:element>");
+                        }
                     }
                 }
 
@@ -142,9 +156,61 @@ namespace Inventors.Xml.Generators.Xsd
             {
                 foreach (var a in element.Attributes)
                 {
-                    builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
+                    var annotation = GetDocumentation(info, a.PropertyName);
+
+                    if (annotation is null)
+                    {
+                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
+                        Annotate(annotation);
+                        builder.AppendLine("</xs:attribute>");
+                    }
                 }
             }
+        }
+
+        public string? GetDocumentation(ElementDocumentationInfo? info, string propertyName)
+        {
+            if (info is null)
+                return null;
+
+            if (documentation is null)
+                return null;
+
+            var content = documentation[info.GetFilename(propertyName)];
+
+            if (string.IsNullOrEmpty(content))
+                return null;
+
+            return content;
+        }
+
+        public ElementDocumentationInfo? AnnotateElement(Element element)
+        {
+            if (documentation is null)
+                return null;
+
+            var info = documentation.GetElement(element.Name);
+            var content = documentation[info.GetFilename()];
+
+            Annotate(content);
+
+            return info;
+        }
+
+        public void Annotate(string content)
+        {
+            if (string.IsNullOrEmpty(content))
+                return;
+
+            builder.AppendLine("<xs:annotation>");
+            builder.AppendLine("<xs:documentation>");
+            builder.AppendLine(content);
+            builder.AppendLine("</xs:documentation>");
+            builder.AppendLine("</xs:annotation>");
         }
 
         public void Visit(EnumElement element)
