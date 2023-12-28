@@ -143,7 +143,7 @@ namespace Inventors.Xml.Generators.Xsd
                         else
                         {
                             builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
-                            Annotate(annotation);
+                            Annotate(annotation, info?.Format);
                             builder.AppendLine("</xs:element>");
                         }
                     }
@@ -165,7 +165,7 @@ namespace Inventors.Xml.Generators.Xsd
                     else
                     {
                         builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
-                        Annotate(annotation);
+                        Annotate(annotation, info?.Format);
                         builder.AppendLine("</xs:attribute>");
                     }
                 }
@@ -196,21 +196,33 @@ namespace Inventors.Xml.Generators.Xsd
             var info = documentation.GetElement(element.Name);
             var content = documentation[info.GetFilename()];
 
-            Annotate(content);
+            Annotate(content, info.Format);
 
             return info;
         }
 
-        public void Annotate(string content)
+        public void Annotate(string content, DocumentationFormat? format)
         {
             if (string.IsNullOrEmpty(content))
                 return;
 
+            if (format is null)
+                return;
+
             builder.AppendLine("<xs:annotation>");
             builder.AppendLine("<xs:documentation>");
-            builder.AppendLine("<div>");
-            builder.AppendLine(content);
-            builder.AppendLine("</div>");
+
+            if (format == DocumentationFormat.MarkDown)
+            {
+                builder.AppendLine("<div>");
+                builder.AppendLine(content);
+                builder.AppendLine("</div>");
+            }
+            else
+            {
+                builder.AppendLine(content);
+            }
+
             builder.AppendLine("</xs:documentation>");
             builder.AppendLine("</xs:annotation>");
         }

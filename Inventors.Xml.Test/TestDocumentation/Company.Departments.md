@@ -1,3 +1,1 @@
-# Department Overview
-
-In a company, a **department** is a distinct organizational unit that specializes in a specific function or set of related functions. Departments are designed to efficiently manage and execute tasks, contributing to the overall goals and objectives of the organization. Each department typically operates under the umbrella of the larger company structure, with its own set of responsibilities, roles, and leadership.
+A description of the departments of the company.
