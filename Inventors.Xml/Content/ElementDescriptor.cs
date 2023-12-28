@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
-    public record ElementDescriptor(string Name, Element Type, bool Required);
+    public record ElementDescriptor(string Name, Element Type, bool Required, string PropertyName);
 }

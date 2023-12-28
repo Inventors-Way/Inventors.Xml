@@ -1,3 +1,4 @@
+using Inventors.Xml.Content;
 using Inventors.Xml.Generators.Documentation;
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
@@ -9,9 +10,22 @@ namespace Inventors.Xml.Test
     [TestClass]
     public class IntegrationTests
     {
+        public static string ProjectDir
+        {
+            get
+            {
+                var p0 = Directory.GetCurrentDirectory();
+                var p1 = Directory.GetParent(p0);
+                var p2 = Directory.GetParent(p1?.FullName ?? throw new InvalidOperationException("null"));
+                var p3 = Directory.GetParent(p2?.FullName ?? throw new InvalidOperationException("null"));
+
+                return p3?.FullName ?? throw new InvalidOperationException("null");
+            }
+        }
+
         public static string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
 
-        public static string DocumentationDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestDocumentation\\";
+        public static string DocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentation");
 
         [TestMethod]
         public void T01_ObjectDocument()
@@ -46,7 +60,8 @@ namespace Inventors.Xml.Test
         public void T04_GenerateDocumentation()
         {
             var document = Inspector.Run(typeof(Company));
-            var generator = new DocumentationGenerator(document, DocumentationDirectory);
+            var source = new DocumentationSource(DocumentationDirectory, document);
+            var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }
     }

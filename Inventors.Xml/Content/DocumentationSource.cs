@@ -8,10 +8,16 @@ namespace Inventors.Xml.Content
 {
     public class DocumentationSource
     {
-        public DocumentationSource(string basePath, int pathOffset) 
+        public DocumentationSource(string basePath, ObjectDocument document) 
         { 
             this.basePath = basePath;
-            this.pathOffset = pathOffset;
+            pathOffset = GetPathOffset(document);
+        }
+
+        private int GetPathOffset(ObjectDocument document) 
+        {
+            var parts = document.Namespace.Split('.');
+            return parts.Length;
         }
 
         public string[] GetPaths(string name)
@@ -46,7 +52,7 @@ namespace Inventors.Xml.Content
             return Path.Combine(parts);
         }
 
-        public static string GetElementName(string name) 
+        public string GetElementName(string name) 
         {
             var parts = name.Split('.');
 

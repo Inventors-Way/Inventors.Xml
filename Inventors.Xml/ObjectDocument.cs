@@ -13,7 +13,11 @@ namespace Inventors.Xml
 
         private ObjectDocument(Type type)
         {
-            Root = new ElementDescriptor(Name: type.RootElementName(), type.ParseClass(this), false);
+            if (type.Namespace is null)
+                throw new ArgumentException("Has no Namespace", nameof(type));
+
+            Namespace = type.Namespace;
+            Root = new ElementDescriptor(Name: type.RootElementName(), type.ParseClass(this), false, "");
         }
 
         public Element this[string id]
@@ -40,6 +44,8 @@ namespace Inventors.Xml
 
         public ElementDescriptor Root { get; }
 
+        public string Namespace { get; }
+
         public bool Exists(string name)
         {
             return _types.ContainsKey(name);
@@ -58,7 +64,7 @@ namespace Inventors.Xml
         {
             StringBuilder builder = new();
 
-            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Type.Name}]");
+            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Type.Name}, namespace: {Namespace}]");
             builder.AppendLine();
 
             foreach (var entry in _types)

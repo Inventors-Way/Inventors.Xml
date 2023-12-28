@@ -91,7 +91,8 @@ namespace Inventors.Xml
                         var elementType = ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document);
                         var elementDescriptor = new ElementDescriptor(Name: property.Name,
                                                                       Type: elementType,
-                                                                      Required: property.IsPropertyRequired());
+                                                                      Required: property.IsPropertyRequired(),
+                                                                      PropertyName: property.Name);
                         element.Add(elementDescriptor);
                     }
                     else
@@ -99,7 +100,8 @@ namespace Inventors.Xml
                         var elementType = ParseClass(property.PropertyType, document);
                         var elementDescriptor = new ElementDescriptor(Name: property.GetElementName(),
                                                                       Type: elementType,
-                                                                      Required: property.IsPropertyRequired());
+                                                                      Required: property.IsPropertyRequired(),
+                                                                      PropertyName: property.Name);
                         element.Add(elementDescriptor);
                     }
                 }
@@ -108,7 +110,8 @@ namespace Inventors.Xml
                     var elementType = ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document);
                     var elementDescriptor = new ElementDescriptor(Name: property.GetArrayName(),
                                                                   Type: elementType,
-                                                                  Required: property.IsPropertyRequired());
+                                                                  Required: property.IsPropertyRequired(),
+                                                                  PropertyName: property.Name   );
                     element.Add(elementDescriptor);
                 }
                 else if (property.IsPublic())

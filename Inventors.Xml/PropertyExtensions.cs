@@ -196,7 +196,8 @@ namespace Inventors.Xml
                 return new AttributeDescriptor(Name: property.GetAttributeName(),
                                                Type: _typeMapping[typeKey],
                                                Required: property.IsPropertyRequired(),
-                                               Primitive: true);
+                                               Primitive: true,
+                                               PropertyName: property.Name);
             }
             else if (property.PropertyType.IsEnum)
             {
@@ -222,7 +223,8 @@ namespace Inventors.Xml
             return new AttributeDescriptor(Name: property.GetAttributeName(),
                                            Type: type.FullName,
                                            Required: property.IsPropertyRequired(),
-                                           Primitive: false);
+                                           Primitive: false,
+                                           PropertyName: property.Name);
         }
 
         public static bool IsPropertyRequired(this PropertyInfo property)
