@@ -1,3 +1,4 @@
+using Inventors.Xml.Generators.Documentation;
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
 using Newtonsoft.Json.Bson;
@@ -9,6 +10,8 @@ namespace Inventors.Xml.Test
     public class IntegrationTests
     {
         public static string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
+
+        public static string DocumentationDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestDocumentation\\";
 
         [TestMethod]
         public void T01_ObjectDocument()
@@ -37,6 +40,14 @@ namespace Inventors.Xml.Test
             var company = text.ToObject<Company>();
 
             Console.WriteLine(company);
+        }
+
+        [TestMethod]
+        public void T04_GenerateDocumentation()
+        {
+            var document = Inspector.Run(typeof(Company));
+            var generator = new DocumentationGenerator(document, DocumentationDirectory);
+            generator.Run();
         }
     }
 }

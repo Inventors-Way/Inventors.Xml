@@ -9,19 +9,31 @@ namespace Inventors.Xml.Generators.Documentation
 {
     public class DocumentationGenerator : IElementVisitor
     {
-        public DocumentationGenerator(ObjectDocument document) 
+        public DocumentationGenerator(ObjectDocument document, string path) 
         {
             this.document = document;
+            basePath = path;
+            reporter = new NullReporter();
         }
 
-        public void Run()
+        public void Run() =>
+            Run(new ConsoleReporter());
+
+        public void Run(IProgress<string> reporter)
         {
+            this.reporter = reporter;
+            reporter.Report($"Generating documentation:");
 
             document.Run(this);
         }
 
         public void Visit(ClassElement element)
         {
+            var path = DocumentationSource.GetElementPath(basePath, element);
+            var name = DocumentationSource.GetElementName(element);
+
+            reporter.Report("");
+            reporter.Report($"CLASS ELEMENT: {Path.Combine(path, name)}.md");
         }
 
         public void Visit(EnumElement element)
@@ -33,5 +45,7 @@ namespace Inventors.Xml.Generators.Documentation
         public void Visit(NullElement element) { }
 
         private readonly ObjectDocument document;
+        private readonly string basePath;
+        private IProgress<string> reporter;
     }
 }
