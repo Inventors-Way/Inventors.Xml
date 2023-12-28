@@ -9,7 +9,7 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T01_ObjectDocument()
         {
-            var document = Inspector.Run(typeof(Project));
+            var document = Inspector.Run(typeof(Company));
 
             Console.WriteLine(document);
         }
@@ -17,12 +17,12 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T02_GenerateSchema()
         {
-            var document = Inspector.Run(typeof(Project));
+            var document = Inspector.Run(typeof(Company));
             var generator = new XSDGenerator(document);
             var content = generator.Run();
 
             Console.WriteLine(content);
-            WriteSchema("Project.xsd", content);
+            WriteSchema("company.xsd", content);
         }
 
 

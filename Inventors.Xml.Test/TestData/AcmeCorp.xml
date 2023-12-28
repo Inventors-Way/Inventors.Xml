@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<company xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="company.xsd">
+    <departments>
+        <department
+            id="D1"
+            manager="FOO"
+            name="Acme Skunk Works">
+            <position
+                title=""
+                employee-id=""/>
+            <position
+                title=""
+                employee-id=""/>
+        </department>
+    </departments>        
+</company>

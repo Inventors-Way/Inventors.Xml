@@ -7,8 +7,10 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
 {
-    [XmlRoot("project")]
-    public class Project
+    public abstract class Identifiable 
     {
+        [XmlAttribute("id")]
+        [XmlRequired(true)]
+        public string ID { get; set; } = "";
     }
 }

@@ -90,7 +90,18 @@ namespace Inventors.Xml
             if (property is null)
                 return false;
 
-            return property.GetCustomAttributes<XmlElementAttribute>().Count() > 1;
+            return property.GetCustomAttributes<XmlElementAttribute>().Count() > 1 || property.IsEnumerable();
+        }
+
+        public static Type? GetGenericDefault(PropertyInfo property)
+        {
+            if (!property.PropertyType.IsGenericType)
+                return null;
+
+            if (property.PropertyType.GenericTypeArguments.Length == 0)
+                return null;
+
+            return property.PropertyType.GenericTypeArguments[0];
         }
 
         public static IEnumerable<(string, Type)> GetChoiceTypes(this PropertyInfo property)
@@ -98,11 +109,17 @@ namespace Inventors.Xml
             if (!property.IsChoiceElement())
                 throw new ArgumentException("Is not a choice element", nameof(property));
 
+            Type? defaultType = GetGenericDefault(property);
+
             foreach (var element in property.GetCustomAttributes<XmlElementAttribute>())
             {
                 if (element.Type is not null)
                 {
                     yield return (element.ElementName, element.Type);
+                }
+                else if (defaultType is not null)
+                {
+                    yield return (element.ElementName, defaultType);
                 }
             }
         }

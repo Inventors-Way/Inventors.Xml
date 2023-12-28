@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="company" nillable="true" type="Inventors.Xml.Test.TestObjects.Company" />
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Company">
+<xs:sequence>
+<xs:element minOccurs="0" maxOccurs="1" name="departments" type="Inventors.Xml.Test.TestObjects.Company.Departments.Array" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Identifiable" abstract="true">
+<xs:attribute name="id" type="xs:string" use="required" />
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Department">
+<xs:complexContent mixed="false">
+<xs:extension base="Inventors.Xml.Test.TestObjects.Identifiable">
+<xs:sequence>
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="0" maxOccurs="1" name="position" type="Inventors.Xml.Test.TestObjects.Position" />
+</xs:choice>
+</xs:sequence>
+<xs:attribute name="name" type="xs:string" use="required" />
+<xs:attribute name="manager" type="xs:string" use="optional" />
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Position">
+<xs:attribute name="title" type="xs:string" use="required" />
+<xs:attribute name="employee-id" type="xs:string" use="required" />
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Departments.Array">
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="1" maxOccurs="1" name="department" nillable="true" type="Inventors.Xml.Test.TestObjects.Department" />
+</xs:choice>
+</xs:complexType>
+</xs:schema>
