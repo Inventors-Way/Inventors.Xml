@@ -5,22 +5,22 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Company">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<h1>Company</h1>
-<p>Description of a company</p>]]>
+&lt;h1&gt;Company&lt;/h1&gt;
+&lt;p&gt;Description of a company&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:sequence>
 <xs:element minOccurs="0" maxOccurs="1" name="departments" type="Inventors.Xml.Test.TestObjects.Company.Departments.Array">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>A description of the departments of the company.</p>]]>
+&lt;p&gt;A description of the departments of the company.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:element>
 <xs:element minOccurs="0" maxOccurs="1" name="employees" type="Inventors.Xml.Test.TestObjects.Company.Employees.Array">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The employees of the company</p>]]>
+&lt;p&gt;The employees of the company&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:element>
@@ -28,7 +28,7 @@
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The name of the company</p>]]>
+&lt;p&gt;The name of the company&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -37,13 +37,13 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Identifiable" abstract="true">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>ID of the object, which is used to refer to it from other objects.</p>]]>
+&lt;p&gt;ID of the object, which is used to refer to it from other objects.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="id" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>ID of the object, which is used to refer to it from other objects.</p>]]>
+&lt;p&gt;&lt;strong&gt;ID&lt;/strong&gt; of the object, which is used to refer to it from other objects.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -54,10 +54,10 @@
 <xs:extension base="Inventors.Xml.Test.TestObjects.Data.Identifiable">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<h1>Department</h1>
-<p>A description of the department of the company.</p>
-<h2>Content</h2>
-<p>A department contains a description of its manager and its employees.</p>]]>
+&lt;h1&gt;Department&lt;/h1&gt;
+&lt;p&gt;A description of the department of the company.&lt;/p&gt;
+&lt;h2&gt;Content&lt;/h2&gt;
+&lt;p&gt;A department contains a description of its manager and its employees.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:sequence>
@@ -68,14 +68,14 @@
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>Name of the dapartment</p>]]>
+&lt;p&gt;Name of the dapartment&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="manager" type="xs:string" use="optional">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The ID of the manager of the department.</p>]]>
+&lt;p&gt;The ID of the manager of the department.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -86,20 +86,20 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Position">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>A position within the department.</p>]]>
+&lt;p&gt;A position within the department.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="title" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>Title of the position</p>]]>
+&lt;p&gt;Title of the position&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="employee-id" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The ID of the employee that fills the position within the department.</p>]]>
+&lt;p&gt;The ID of the employee that fills the position within the department.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -116,34 +116,34 @@
 <xs:extension base="Inventors.Xml.Test.TestObjects.Data.Identifiable">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>Description an employee of the company.</p>]]>
+&lt;p&gt;Description an employee of the company.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>Name of the employee</p>]]>
+&lt;p&gt;Name of the employee&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="address" type="xs:string" use="optional">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>Address of the employee</p>]]>
+&lt;p&gt;Address of the employee&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="salary" type="xs:double" use="required">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The salary of the employee</p>]]>
+&lt;p&gt;The salary of the employee&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="type" type="Inventors.Xml.Test.TestObjects.Data.EmployeeType" use="optional">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The type of employee.</p>]]>
+&lt;p&gt;The type of employee.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -154,21 +154,21 @@
 <xs:simpleType name="Inventors.Xml.Test.TestObjects.Data.EmployeeType">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The type of employee</p>]]>
+&lt;p&gt;The type of employee&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:restriction base="xs:string">
 <xs:enumeration value="engineer">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The employee is an engineer and does the actual fun stuff in the company.</p>]]>
+&lt;p&gt;The employee is an engineer and does the actual fun stuff in the company.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="administrative">
 <xs:annotation>
 <xs:documentation>
-<![CDATA[<p>The employee has administrative tasks.</p>]]>
+&lt;p&gt;The employee has administrative tasks.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:enumeration>

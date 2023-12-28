@@ -44,6 +44,7 @@ namespace Inventors.Xml.Test
             var documentation = DocumentationSource.Create(document, DocumentationDirectory)
                 .SetInputFormat(DocumentationFormat.MarkDown)
                 .SetOutputFormat(DocumentationFormat.Html)
+                .SetEncoding(true)
                 .Build();
 
             var generator = new XSDGenerator(document, documentation);

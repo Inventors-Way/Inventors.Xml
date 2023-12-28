@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,9 +60,15 @@ namespace Inventors.Xml.Content
                 return this;
             }
 
-            public DocumentationSourceOptions WrapHtmlInCDATA(bool enable = true)
+            public DocumentationSourceOptions SetCharacterData(bool enable = true)
             {
-                cdataHtml = enable;
+                cdata = enable;
+                return this;
+            }
+
+            public DocumentationSourceOptions SetEncoding(bool enable = true)
+            {
+                encoding = enable;
                 return this;
             }
 
@@ -75,7 +82,9 @@ namespace Inventors.Xml.Content
 
             public int PathOffset => pathOffset;
 
-            public bool CDATAHTML => cdataHtml;
+            public bool CDATA => cdata;
+
+            public bool Encoding => encoding;
 
             private static int GetPathOffset(ObjectDocument document)
             {
@@ -94,7 +103,8 @@ namespace Inventors.Xml.Content
             private readonly ObjectDocument document;
             private readonly string path;
             private int pathOffset;
-            private bool cdataHtml = true;
+            private bool cdata = false;
+            private bool encoding = false;
         }
 
         public static DocumentationSourceOptions Create(ObjectDocument document, string path) => new (document, path);
@@ -160,6 +170,21 @@ namespace Inventors.Xml.Content
         public ElementDocumentationInfo GetElement(string name) =>
             new(Path: GetElementPath(name), Name: GetElementName(name), Format: InputFormat);
 
+        private string Format(string text)
+        {
+            if (options.Encoding)
+            {
+                text = WebUtility.HtmlEncode(text);
+            }
+
+            if (options.CDATA)
+            {
+                text = $"<![CDATA[{text}]]>";
+            }
+
+            return text;
+        }
+
         public string this[string? filename]
         {
             get
@@ -177,22 +202,21 @@ namespace Inventors.Xml.Content
                     switch (InputFormat)
                     {
                         case DocumentationFormat.Text:
-                            return text;
+                            return Format(text);
                         case DocumentationFormat.Html:
-                            return text;
+                            return Format(text);
                         case DocumentationFormat.MarkDown:
                             {
                                 switch (OutputFormat)
                                 {
                                     case DocumentationFormat.Text:
-                                        return Markdown.ToPlainText(text).Trim();
+                                        return Format(Markdown.ToPlainText(text));
                                     case DocumentationFormat.Html:
-                                        if (options.CDATAHTML)
-                                            return $"<![CDATA[{Markdown.ToHtml(text).Trim()}]]>";
-                                        else
-                                            return Markdown.ToPlainText(text).Trim();
+                                        return Format(Markdown.ToHtml(text).Trim());
+                                    case DocumentationFormat.MarkDown:
+                                        return Format(text);
                                     default:
-                                        return text;
+                                        return Format(text);
                                 }
                             }
                         default:
