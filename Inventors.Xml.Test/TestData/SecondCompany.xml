@@ -2,4 +2,18 @@
 <company xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="company.xsd"
          name="Test">
+    <departments>
+        <department
+            id="D1"
+            manager="M1"
+            name="Gasket">
+            <position
+                employee-id="E1"
+                title="Developer"/>
+        </department>            
+    </departments>
+    
+    <employees>
+    </employees>
+    
 </company>

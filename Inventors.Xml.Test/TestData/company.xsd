@@ -34,6 +34,11 @@ The name of the company
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Identifiable" abstract="true">
+<xs:annotation>
+<xs:documentation>
+c
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="id" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
@@ -75,6 +80,11 @@ The ID of the manager of the department.
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Position">
+<xs:annotation>
+<xs:documentation>
+A position within the department.
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="title" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
