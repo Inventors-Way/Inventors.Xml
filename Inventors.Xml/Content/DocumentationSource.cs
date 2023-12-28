@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Markdig;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,9 @@ namespace Inventors.Xml.Content
 
             this.basePath = basePath;
             pathOffset = GetPathOffset(document);
+            markdownPipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .Build();
         }
 
         private static int GetPathOffset(ObjectDocument document) 
@@ -88,7 +92,14 @@ namespace Inventors.Xml.Content
             {
                 if (File.Exists(filename))
                 {
-                    return File.ReadAllText(filename);
+                    var text = File.ReadAllText(filename);
+
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        return Markdown.ToHtml(text, markdownPipeline);
+                    }
+
+                    return string.Empty;
                 }
 
                 return string.Empty;
@@ -97,5 +108,6 @@ namespace Inventors.Xml.Content
 
         private readonly string basePath;
         private readonly int pathOffset;
+        private readonly MarkdownPipeline markdownPipeline;
     }
 }

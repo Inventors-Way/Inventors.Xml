@@ -13,6 +13,13 @@ namespace Inventors.Xml.Generators.Xsd
         public XSDGenerator(ObjectDocument document)
         {
             this.document = document;
+            documentation = null;
+        }
+
+        public XSDGenerator(ObjectDocument document, DocumentationSource documentation)
+        {
+            this.document = document;
+            this.documentation = documentation;
         }
 
         public string Run()
@@ -104,7 +111,7 @@ namespace Inventors.Xml.Generators.Xsd
             builder.AppendLine("</xs:complexContent>");
         }
 
-        private string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
+        private static string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
 
         private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
 
@@ -157,6 +164,7 @@ namespace Inventors.Xml.Generators.Xsd
 
         private readonly StringBuilder builder = new();
         private readonly ObjectDocument document;
+        private readonly DocumentationSource? documentation;
         private bool executed = false;
     }
 
