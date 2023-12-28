@@ -58,7 +58,7 @@ namespace Inventors.Xml
         {
             StringBuilder builder = new();
 
-            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Type}]");
+            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Type.Name}]");
             builder.AppendLine();
 
             foreach (var entry in _types)

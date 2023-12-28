@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="project" nillable="true" type="Inventors.Xml.Test.TestObjects.Project" />
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Project">
+</xs:complexType>
+</xs:schema>

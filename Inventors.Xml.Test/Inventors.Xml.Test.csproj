@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Inventors.Xml\Inventors.Xml.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestData\" />
+  </ItemGroup>
+
 </Project>
