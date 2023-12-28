@@ -6,6 +6,20 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
+    public record ElementDocumentationInfo(string Path, string Name);
+
+    public static class ElementDocumentationInfoExtensions
+    {
+        public static string GetFilename(this ElementDocumentationInfo info)
+        {
+            return $"{Path.Combine(info.Path, info.Name)}.md";
+        }
+        public static string GetFilename(this ElementDocumentationInfo info, string propertyName)
+        {
+            return $"{Path.Combine(info.Path, info.Name)}.{propertyName}.md";
+        }
+    }
+
     public class DocumentationSource
     {
         public DocumentationSource(string basePath, ObjectDocument document) 
@@ -63,6 +77,11 @@ namespace Inventors.Xml.Content
                 throw new ArgumentException($"Invalid element name: {name}");
 
             return parts[^1];
+        }
+
+        public ElementDocumentationInfo GetElement(string name)
+        {
+            return new ElementDocumentationInfo(Path: GetElementPath(name), Name: GetElementName(name));
         }
 
         private readonly string basePath;

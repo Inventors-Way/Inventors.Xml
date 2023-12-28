@@ -9,10 +9,11 @@ namespace Inventors.Xml.Content
     public class EnumElement :
         Element
     {
-        public EnumElement(string name, IEnumerable<string> values) :
+        public EnumElement(string name, IEnumerable<string> values, IEnumerable<string> sourceValues) :
             base(name: name, baseType: "", false)
         {
             Values = values.ToList();
+            SourceValues = sourceValues.ToList();
         }
 
         public override bool IsNested => false;
@@ -34,5 +35,7 @@ namespace Inventors.Xml.Content
         }
 
         public IList<string> Values { get; }
+
+        public IList<string> SourceValues { get; }
     }
 }

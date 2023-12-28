@@ -14,12 +14,12 @@ namespace Inventors.Xml.Test
         {
             get
             {
-                var p0 = Directory.GetCurrentDirectory();
-                var p1 = Directory.GetParent(p0);
-                var p2 = Directory.GetParent(p1?.FullName ?? throw new InvalidOperationException("null"));
-                var p3 = Directory.GetParent(p2?.FullName ?? throw new InvalidOperationException("null"));
+                var p = Directory.GetCurrentDirectory();
+                p = Directory.GetParent(p)?.FullName ?? throw new InvalidOperationException("null");
+                p = Directory.GetParent(p)?.FullName ?? throw new InvalidOperationException("null");
+                p = Directory.GetParent(p)?.FullName ?? throw new InvalidOperationException("null");
 
-                return p3?.FullName ?? throw new InvalidOperationException("null");
+                return p;
             }
         }
 

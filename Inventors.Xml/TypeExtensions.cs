@@ -183,5 +183,16 @@ namespace Inventors.Xml
                     yield return name;
             }
         }
+
+        public static IEnumerable<string> GetEnumStrings(this Type type)
+        {
+            if (!type.IsEnum)
+                throw new ArgumentException("Is not an enum", nameof(type));
+
+            foreach (var value in Enum.GetValues(type))
+            {
+                yield return $"{value}";
+            }
+        }
     }
 }
