@@ -41,7 +41,11 @@ namespace Inventors.Xml.Test
         public void T02_GenerateSchema()
         {
             var document = Inspector.Run(typeof(Company));
-            var documentation = new DocumentationSource(DocumentationDirectory, document, DocumentationFormat.Text);
+            var documentation = DocumentationSource.Create(document, DocumentationDirectory)
+                .SetInputFormat(DocumentationFormat.MarkDown)
+                .SetOutputFormat(DocumentationFormat.Html)
+                .Build();
+
             var generator = new XSDGenerator(document, documentation);
             var content = generator.Run();
 
@@ -63,7 +67,10 @@ namespace Inventors.Xml.Test
         public void T04_GenerateMarkdownDocumentation()
         {
             var document = Inspector.Run(typeof(Company));
-            var source = new DocumentationSource(DocumentationDirectory, document);
+            var source = DocumentationSource.Create(document, DocumentationDirectory)
+                .SetInputFormat(DocumentationFormat.MarkDown)
+                .SetOutputFormat(DocumentationFormat.Html)
+                .Build();
             var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }
@@ -72,7 +79,10 @@ namespace Inventors.Xml.Test
         public void T05_GenerateTextDocumentation()
         {
             var document = Inspector.Run(typeof(Company));
-            var source = new DocumentationSource(DocumentationDirectory, document, DocumentationFormat.Text);
+            var source = DocumentationSource.Create(document, DocumentationDirectory)
+                .SetInputFormat(DocumentationFormat.Text)
+                .SetOutputFormat(DocumentationFormat.Html)
+                .Build();
             var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }
@@ -89,7 +99,10 @@ namespace Inventors.Xml.Test
             Directory.CreateDirectory(DisposableDocumentationDirectory);
 
             var document = Inspector.Run(typeof(Company));
-            var source = new DocumentationSource(DisposableDocumentationDirectory, document);
+            var source = DocumentationSource.Create(document, DisposableDocumentationDirectory)
+                .SetInputFormat(DocumentationFormat.MarkDown)
+                .SetOutputFormat(DocumentationFormat.Text)
+                .Build();
             var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }

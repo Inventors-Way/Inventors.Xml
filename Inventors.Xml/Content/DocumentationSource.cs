@@ -16,6 +16,7 @@ namespace Inventors.Xml.Content
             {
                 DocumentationFormat.Text => $"{Path.Combine(info.Path, info.Name)}.txt",
                 DocumentationFormat.MarkDown => $"{Path.Combine(info.Path, info.Name)}.md",
+                DocumentationFormat.Html => $"{Path.Combine(info.Path, info.Name)}.html",
                 _ => throw new NotSupportedException()
             };
 
@@ -24,6 +25,7 @@ namespace Inventors.Xml.Content
             {
                 DocumentationFormat.Text => $"{Path.Combine(info.Path, info.Name)}.{propertyName}.txt",
                 DocumentationFormat.MarkDown => $"{Path.Combine(info.Path, info.Name)}.{propertyName}.md",
+                DocumentationFormat.Html => $"{Path.Combine(info.Path, info.Name)}.{propertyName}.html",
                 _ => throw new NotSupportedException()
             };
     }
@@ -31,50 +33,96 @@ namespace Inventors.Xml.Content
     public enum DocumentationFormat
     {
         Text,
-        MarkDown
+        MarkDown,
+        Html
     }
 
     public class DocumentationSource
     {
-        public DocumentationSource(string basePath, ObjectDocument document, DocumentationFormat format = DocumentationFormat.MarkDown)
+        public class DocumentationSourceOptions
         {
-            if (!Directory.Exists(basePath))
-                throw new ArgumentException($"Basepath [ {basePath} ] does not exists", nameof(basePath));
+            internal DocumentationSourceOptions(ObjectDocument document, string path)
+            {
+                this.document = document;
+                this.path = path;
+            }
 
-            this.basePath = basePath;
-            pathOffset = GetPathOffset(document);
+            public DocumentationSourceOptions SetOutputFormat(DocumentationFormat format) 
+            {
+                outputFormat = format;
+                return this;
+            }
+
+            public DocumentationSourceOptions SetInputFormat(DocumentationFormat format)
+            {
+                inputFormat = format;
+                return this;
+            }
+
+            public ObjectDocument Document => document;
+
+            public DocumentationFormat InputFormat => inputFormat;
+
+            public DocumentationFormat OutputFormat => outputFormat;
+
+            public string Path => path;
+
+            public int PathOffset => pathOffset;
+
+            private static int GetPathOffset(ObjectDocument document)
+            {
+                var parts = document.Namespace.Split('.');
+                return parts.Length;
+            }
+
+            public DocumentationSource Build()
+            {
+                pathOffset = GetPathOffset(document);
+                return new DocumentationSource(this);
+            }
+
+            private DocumentationFormat inputFormat;
+            private DocumentationFormat outputFormat;
+            private readonly ObjectDocument document;
+            private readonly string path;
+            private int pathOffset;
+        }
+
+        public static DocumentationSourceOptions Create(ObjectDocument document, string path) => new (document, path);
+
+        private DocumentationSource(DocumentationSourceOptions options)
+        {
+            if (!Directory.Exists(options.Path))
+                throw new ArgumentException($"Basepath [ {options.Path} ] does not exists", nameof(options));
+
+            this.options = options;
+
             markdownPipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .Build();
-
-            Format = format;
         }
 
-        public DocumentationFormat Format { get; }
+        public DocumentationFormat InputFormat => options.InputFormat;
 
-        private static int GetPathOffset(ObjectDocument document)
-        {
-            var parts = document.Namespace.Split('.');
-            return parts.Length;
-        }
+        public DocumentationFormat OutputFormat => options.OutputFormat;
 
         public string[] GetPaths(string name)
         {
             var parts = name.Split('.');
 
-            if (parts.Length < pathOffset + 1)
+            if (parts.Length < options.PathOffset + 1)
                 throw new ArgumentException($"Invalid element name: {name}");
 
-            if (parts.Length == pathOffset + 1)
-                return new string[] { basePath };
+            if (parts.Length == options.PathOffset + 1)
+                return new string[] { options.Path };
 
-            string[] retValue = new string[parts.Length - pathOffset];
+            string[] retValue = new string[parts.Length - options.PathOffset];
 
-            retValue[0] = basePath;
+            retValue[0] = options.Path;
 
-            for (int i = pathOffset; i < parts.Length - 1; ++i)
+            for (int i = options.PathOffset; i < parts.Length - 1; ++i)
             {
-                retValue[i - pathOffset + 1] = parts[i];
+                retValue[i - options.PathOffset + 1] = parts[i];
             }
 
             return retValue;
@@ -85,7 +133,7 @@ namespace Inventors.Xml.Content
             var parts = GetPaths(name);
 
             if (parts.Length == 0)
-                return basePath;
+                return options.Path;
 
             return Path.Combine(parts);
         }
@@ -101,7 +149,7 @@ namespace Inventors.Xml.Content
         }
 
         public ElementDocumentationInfo GetElement(string name) =>
-            new(Path: GetElementPath(name), Name: GetElementName(name), Format: Format);
+            new(Path: GetElementPath(name), Name: GetElementName(name), Format: InputFormat);
 
         public string this[string? filename]
         {
@@ -114,25 +162,37 @@ namespace Inventors.Xml.Content
                 {
                     var text = File.ReadAllText(filename);
 
-                    if (Format == DocumentationFormat.Text)
-                    {
-                        return text;
-                    }
+                    if (string.IsNullOrEmpty(text))
+                        return string.Empty;
 
-                    if (!string.IsNullOrEmpty(text))
+                    switch (InputFormat)
                     {
-                        return Markdown.ToHtml(text, markdownPipeline).Trim();
+                        case DocumentationFormat.Text:
+                            return text;
+                        case DocumentationFormat.Html:
+                            return text;
+                        case DocumentationFormat.MarkDown:
+                            {
+                                switch (OutputFormat)
+                                {
+                                    case DocumentationFormat.Text:
+                                        return Markdown.ToPlainText(text).Trim();
+                                    case DocumentationFormat.Html:
+                                        return $"<![CDATA[{Markdown.ToHtml(text).Trim()}]]>";
+                                    default:
+                                        return text;
+                                }
+                            }
+                        default:
+                            throw new NotSupportedException();
                     }
-
-                    return string.Empty;
                 }
 
                 return string.Empty;
             }
         }
 
-        private readonly string basePath;
-        private readonly int pathOffset;
+        private readonly DocumentationSourceOptions options;
         private readonly MarkdownPipeline markdownPipeline;
     }
 }

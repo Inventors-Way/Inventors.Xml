@@ -134,16 +134,14 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                     else
                     {
-                        var annotation = GetDocumentation(info, e.PropertyName);
-
-                        if (annotation is null)
+                        if (info is null)
                         {
                             builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\" />");
                         }
                         else
                         {
                             builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
-                            Annotate(annotation, info?.Format);
+                            Annotate(GetDocumentation(info, e.PropertyName));
                             builder.AppendLine("</xs:element>");
                         }
                     }
@@ -156,16 +154,14 @@ namespace Inventors.Xml.Generators.Xsd
             {
                 foreach (var a in element.Attributes)
                 {
-                    var annotation = GetDocumentation(info, a.PropertyName);
-
-                    if (annotation is null)
+                    if (info is null)
                     {
                         builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
                     }
                     else
                     {
                         builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
-                        Annotate(annotation, info?.Format);
+                        Annotate(GetDocumentation(info, a.PropertyName));
                         builder.AppendLine("</xs:attribute>");
                     }
                 }
@@ -196,46 +192,47 @@ namespace Inventors.Xml.Generators.Xsd
             var info = documentation.GetElement(element.Name);
             var content = documentation[info.GetFilename()];
 
-            Annotate(content, info.Format);
+            Annotate(content);
 
             return info;
         }
 
-        public void Annotate(string content, DocumentationFormat? format)
+        public void Annotate(string? content)
         {
             if (string.IsNullOrEmpty(content))
                 return;
 
-            if (format is null)
-                return;
-
             builder.AppendLine("<xs:annotation>");
             builder.AppendLine("<xs:documentation>");
-
-            if (format == DocumentationFormat.MarkDown)
-            {
-                builder.AppendLine("<div>");
-                builder.AppendLine(content);
-                builder.AppendLine("</div>");
-            }
-            else
-            {
-                builder.AppendLine(content);
-            }
-
+            builder.AppendLine(content);
             builder.AppendLine("</xs:documentation>");
             builder.AppendLine("</xs:annotation>");
         }
 
         public void Visit(EnumElement element)
         {
+            var values = element.Values;
+            var sourceValues = element.SourceValues;
+            var zipped = values.Zip(sourceValues, (value, source) => new { Value = value, Source = source });
+
             builder.AppendLine();
             builder.AppendLine($"<xs:simpleType name=\"{element.Name}\">");
+            var info = AnnotateElement(element);
             builder.AppendLine($"<xs:restriction base=\"xs:string\">");
 
-            foreach (var value in element.Values)
+
+            foreach (var value in zipped)
             {
-                builder.AppendLine($"<xs:enumeration value=\"{value}\" />");
+                if (info is null)
+                {
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Value}\" />");
+                }
+                else
+                {
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Value}\">");
+                    Annotate(GetDocumentation(info, value.Source));
+                    builder.AppendLine($"</xs:enumeration>");
+                }
             }
 
             builder.AppendLine($"</xs:restriction>");
