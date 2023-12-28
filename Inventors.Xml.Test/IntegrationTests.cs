@@ -1,11 +1,14 @@
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
+using System.IO;
 
 namespace Inventors.Xml.Test
 {
     [TestClass]
     public class IntegrationTests
     {
+        public string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
+
         [TestMethod]
         public void T01_ObjectDocument()
         {
@@ -29,7 +32,7 @@ namespace Inventors.Xml.Test
         private void WriteSchema(string filename, string content)
         {
             var path = Directory.GetCurrentDirectory();
-            File.WriteAllText($"{path}\\..\\..\\..\\TestData\\{filename}", content);
+            File.WriteAllText(Path.Combine(DataDirectory, filename), content);
         }
     }
 }
