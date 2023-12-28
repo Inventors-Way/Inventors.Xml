@@ -106,9 +106,9 @@ namespace Inventors.Xml.Generators.Xsd
 
         private string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
 
-        private string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
+        private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
 
-        private string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
+        private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
 
         public void CreateNonderivedType(ClassElement element)
         {
