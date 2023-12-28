@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Inventors.Xml.Test.TestObjects
+namespace Inventors.Xml.Test.TestObjects.Data
 {
     public enum EmployeeType
     {
@@ -27,7 +27,7 @@ namespace Inventors.Xml.Test.TestObjects
         public string Address { get; set; } = "";
 
         [XmlAttribute("salary")]
-        [XmlRequired(true)] 
+        [XmlRequired(true)]
         public double Salary { get; set; }
 
         [XmlAttribute("type")]

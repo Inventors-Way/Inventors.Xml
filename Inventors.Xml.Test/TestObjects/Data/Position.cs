@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Inventors.Xml.Test.TestObjects
+namespace Inventors.Xml.Test.TestObjects.Data
 {
 
     public class Position
@@ -15,7 +15,7 @@ namespace Inventors.Xml.Test.TestObjects
         public string Title { get; set; } = string.Empty;
 
         [XmlAttribute("employee-id")]
-        [XmlRequired(true)] 
+        [XmlRequired(true)]
         public string EmployeeID { get; set; } = string.Empty;
 
         public override string ToString() => $"{Title} [ employee-id: {EmployeeID} ]";

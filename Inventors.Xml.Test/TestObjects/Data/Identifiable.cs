@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Inventors.Xml.Test.TestObjects
+namespace Inventors.Xml.Test.TestObjects.Data
 {
-    public abstract class Identifiable 
+    public abstract class Identifiable
     {
         [XmlAttribute("id")]
         [XmlRequired(true)]

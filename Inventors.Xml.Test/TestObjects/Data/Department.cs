@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Inventors.Xml.Test.TestObjects
+namespace Inventors.Xml.Test.TestObjects.Data
 {
     public class Department :
         Identifiable
@@ -26,7 +26,7 @@ namespace Inventors.Xml.Test.TestObjects
 
             builder.AppendLine($"- {Name} [ Manager: {Manager} ]");
 
-            foreach ( var position in Positions )
+            foreach (var position in Positions)
             {
                 builder.AppendLine($"   - {position}");
             }

@@ -9,7 +9,10 @@ namespace Inventors.Xml.Content
     public class DocumentationSource
     {
         public DocumentationSource(string basePath, ObjectDocument document) 
-        { 
+        {
+            if (!Directory.Exists(basePath))
+                throw new ArgumentException($"Basepath [ {basePath} ] does not exists", nameof(basePath));
+
             this.basePath = basePath;
             pathOffset = GetPathOffset(document);
         }
