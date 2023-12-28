@@ -7,23 +7,36 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
-    public record ElementDocumentationInfo(string Path, string Name);
+    public record ElementDocumentationInfo(string Path, string Name, DocumentationFormat Format);
 
     public static class ElementDocumentationInfoExtensions
     {
-        public static string GetFilename(this ElementDocumentationInfo info)
-        {
-            return $"{Path.Combine(info.Path, info.Name)}.md";
-        }
-        public static string GetFilename(this ElementDocumentationInfo info, string propertyName)
-        {
-            return $"{Path.Combine(info.Path, info.Name)}.{propertyName}.md";
-        }
+        public static string GetFilename(this ElementDocumentationInfo info) =>
+            info.Format switch
+            {
+                DocumentationFormat.Text => $"{Path.Combine(info.Path, info.Name)}.txt",
+                DocumentationFormat.MarkDown => $"{Path.Combine(info.Path, info.Name)}.md",
+                _ => throw new NotSupportedException()
+            };
+
+        public static string GetFilename(this ElementDocumentationInfo info, string propertyName) =>
+            info.Format switch
+            {
+                DocumentationFormat.Text => $"{Path.Combine(info.Path, info.Name)}.{propertyName}.txt",
+                DocumentationFormat.MarkDown => $"{Path.Combine(info.Path, info.Name)}.{propertyName}.md",
+                _ => throw new NotSupportedException()
+            };
+    }
+
+    public enum DocumentationFormat
+    {
+        Text,
+        MarkDown
     }
 
     public class DocumentationSource
     {
-        public DocumentationSource(string basePath, ObjectDocument document) 
+        public DocumentationSource(string basePath, ObjectDocument document, DocumentationFormat format = DocumentationFormat.MarkDown)
         {
             if (!Directory.Exists(basePath))
                 throw new ArgumentException($"Basepath [ {basePath} ] does not exists", nameof(basePath));
@@ -33,9 +46,13 @@ namespace Inventors.Xml.Content
             markdownPipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .Build();
+
+            Format = format;
         }
 
-        private static int GetPathOffset(ObjectDocument document) 
+        public DocumentationFormat Format { get; }
+
+        private static int GetPathOffset(ObjectDocument document)
         {
             var parts = document.Namespace.Split('.');
             return parts.Length;
@@ -73,7 +90,7 @@ namespace Inventors.Xml.Content
             return Path.Combine(parts);
         }
 
-        public static string GetElementName(string name) 
+        public static string GetElementName(string name)
         {
             var parts = name.Split('.');
 
@@ -83,9 +100,9 @@ namespace Inventors.Xml.Content
             return parts[^1];
         }
 
-        public ElementDocumentationInfo GetElement(string name) =>  
-            new(Path: GetElementPath(name), Name: GetElementName(name));
-        
+        public ElementDocumentationInfo GetElement(string name) =>
+            new(Path: GetElementPath(name), Name: GetElementName(name), Format: Format);
+
         public string this[string? filename]
         {
             get
@@ -96,6 +113,11 @@ namespace Inventors.Xml.Content
                 if (File.Exists(filename))
                 {
                     var text = File.ReadAllText(filename);
+
+                    if (Format == DocumentationFormat.Text)
+                    {
+                        return text;
+                    }
 
                     if (!string.IsNullOrEmpty(text))
                     {

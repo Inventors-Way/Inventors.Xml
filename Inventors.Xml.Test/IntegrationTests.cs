@@ -60,7 +60,7 @@ namespace Inventors.Xml.Test
         }
 
         [TestMethod]
-        public void T04_GenerateDocumentation()
+        public void T04_GenerateMarkdownDocumentation()
         {
             var document = Inspector.Run(typeof(Company));
             var source = new DocumentationSource(DocumentationDirectory, document);
@@ -69,7 +69,16 @@ namespace Inventors.Xml.Test
         }
 
         [TestMethod]
-        public void T05_GenerateDisposableDocumentation()
+        public void T05_GenerateTextDocumentation()
+        {
+            var document = Inspector.Run(typeof(Company));
+            var source = new DocumentationSource(DocumentationDirectory, document, DocumentationFormat.Text);
+            var generator = new DocumentationGenerator(document, source);
+            generator.Run();
+        }
+
+        [TestMethod]
+        public void T06_GenerateDisposableDocumentation()
         {
             if (Directory.Exists(DisposableDocumentationDirectory))
             {
