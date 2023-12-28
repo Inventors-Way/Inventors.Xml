@@ -41,7 +41,8 @@ namespace Inventors.Xml.Test
         public void T02_GenerateSchema()
         {
             var document = Inspector.Run(typeof(Company));
-            var generator = new XSDGenerator(document);
+            var documentation = new DocumentationSource(DocumentationDirectory, document);
+            var generator = new XSDGenerator(document, documentation);
             var content = generator.Run();
 
             File.WriteAllText(Path.Combine(DataDirectory, "company.xsd"), content);
