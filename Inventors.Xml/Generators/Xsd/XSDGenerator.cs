@@ -23,6 +23,8 @@ namespace Inventors.Xml.Generators.Xsd
             this.documentation = documentation;
         }
 
+        public string FileName => $"{document.Root.Name}.xsd";        
+
         public string Run()
         {
             if (executed)

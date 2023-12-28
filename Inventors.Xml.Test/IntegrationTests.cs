@@ -50,7 +50,7 @@ namespace Inventors.Xml.Test
             var generator = new XSDGenerator(document, documentation);
             var content = generator.Run();
 
-            File.WriteAllText(Path.Combine(DataDirectory, "company.xsd"), content);
+            File.WriteAllText(Path.Combine(DataDirectory, generator.FileName), content);
 
             Console.WriteLine(content);
         }
