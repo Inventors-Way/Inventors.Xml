@@ -27,11 +27,11 @@ namespace Inventors.Xml
             }
         }
 
-        public void Run(IElementVisitor visitor)
+        public void Run(IElementVisitor visitor, bool runNestedTypes = false)
         {
             foreach (var item in _types)
             {
-                if (!item.Value.IsNested)
+                if (!item.Value.IsNested || runNestedTypes)
                 {
                     item.Value.Accept(visitor);
                 }
