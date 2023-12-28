@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 
 namespace xsdg 
 {
@@ -6,7 +7,16 @@ namespace xsdg
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Parser.Default.ParseArguments<SchemaOptions, DocumentationOptions>(args)
+                .WithParsed<SchemaOptions>(options => options.Run())
+                .WithParsed<DocumentationOptions>(options => options.Run())
+                .WithNotParsed(errors =>
+                {
+                    foreach (var error in errors) 
+                    {
+                        Console.WriteLine($"{error}");
+                    }
+                });
         }
     }
 }
