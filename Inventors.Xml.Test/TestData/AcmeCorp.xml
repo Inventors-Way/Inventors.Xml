@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <company xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="company.xsd">
+         xsi:noNamespaceSchemaLocation="company.xsd"
+         name="TechTurbulence Innovations, Inc.">
     <departments>
         <department
             id="D1"
-            manager="FOO"
-            name="Acme Skunk Works">
+            manager="E3"
+            name="Department of Quantum Quackery">
             <position
-                title=""
-                employee-id=""/>
+                title="Chief Buzzword Babble Officer"
+                employee-id="E1"/>
             <position
-                title=""
-                employee-id=""/>
+                title="Senior Quantum Jargon Engineer"
+                employee-id="E2"/>
         </department>
     </departments>        
 </company>

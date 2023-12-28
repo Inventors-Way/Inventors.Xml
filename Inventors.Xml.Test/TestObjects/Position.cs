@@ -18,5 +18,6 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlRequired(true)] 
         public string EmployeeID { get; set; } = string.Empty;
 
+        public override string ToString() => $"{Title} [ employee-id: {EmployeeID} ]";
     }
 }

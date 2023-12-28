@@ -19,5 +19,19 @@ namespace Inventors.Xml.Test.TestObjects
 
         [XmlElement("position")]
         public List<Position> Positions { get; } = new();
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"- {Name} [ Manager: {Manager} ]");
+
+            foreach ( var position in Positions )
+            {
+                builder.AppendLine($"   - {position}");
+            }
+
+            return builder.ToString();
+        }
     }
 }

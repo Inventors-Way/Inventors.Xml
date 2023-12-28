@@ -1,5 +1,6 @@
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
+using Newtonsoft.Json.Bson;
 using System.IO;
 
 namespace Inventors.Xml.Test
@@ -7,7 +8,7 @@ namespace Inventors.Xml.Test
     [TestClass]
     public class IntegrationTests
     {
-        public string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
+        public static string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
 
         [TestMethod]
         public void T01_ObjectDocument()
@@ -24,15 +25,18 @@ namespace Inventors.Xml.Test
             var generator = new XSDGenerator(document);
             var content = generator.Run();
 
+            File.WriteAllText(Path.Combine(DataDirectory, "company.xsd"), content);
+
             Console.WriteLine(content);
-            WriteSchema("company.xsd", content);
         }
 
-
-        private void WriteSchema(string filename, string content)
+        [TestMethod]
+        public void T03_LoadData()
         {
-            var path = Directory.GetCurrentDirectory();
-            File.WriteAllText(Path.Combine(DataDirectory, filename), content);
+            var text = File.ReadAllText(Path.Combine(DataDirectory, "AcmeCorp.xml"));
+            var company = text.ToObject<Company>();
+
+            Console.WriteLine(company);
         }
     }
 }
