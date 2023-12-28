@@ -31,7 +31,7 @@ namespace Inventors.Xml.Content
             pathOffset = GetPathOffset(document);
         }
 
-        private int GetPathOffset(ObjectDocument document) 
+        private static int GetPathOffset(ObjectDocument document) 
         {
             var parts = document.Namespace.Split('.');
             return parts.Length;
