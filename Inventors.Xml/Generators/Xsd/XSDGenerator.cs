@@ -208,7 +208,9 @@ namespace Inventors.Xml.Generators.Xsd
 
             builder.AppendLine("<xs:annotation>");
             builder.AppendLine("<xs:documentation>");
+            builder.AppendLine("<div>");
             builder.AppendLine(content);
+            builder.AppendLine("</div>");
             builder.AppendLine("</xs:documentation>");
             builder.AppendLine("</xs:annotation>");
         }
