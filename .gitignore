@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Disposable Test Documentation
+Inventors.Xml.Test/TestDocumentationDisposable/

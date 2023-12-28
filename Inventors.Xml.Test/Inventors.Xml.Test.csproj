@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="TestDocumentationDisposable\" />
     <Folder Include="TestDocumentation\" />
   </ItemGroup>
 

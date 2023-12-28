@@ -27,6 +27,8 @@ namespace Inventors.Xml.Test
 
         public static string DocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentation");
 
+        public static string DisposableDocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentationDisposable");
+
         [TestMethod]
         public void T01_ObjectDocument()
         {
@@ -61,6 +63,23 @@ namespace Inventors.Xml.Test
         {
             var document = Inspector.Run(typeof(Company));
             var source = new DocumentationSource(DocumentationDirectory, document);
+            var generator = new DocumentationGenerator(document, source);
+            generator.Run();
+        }
+
+        [TestMethod]
+        public void T05_GenerateDisposableDocumentation()
+        {
+            if (Directory.Exists(DisposableDocumentationDirectory))
+            {
+                Directory.Delete(DisposableDocumentationDirectory, true);
+                Console.WriteLine($"Deleted: {DisposableDocumentationDirectory}");
+            }
+
+            Directory.CreateDirectory(DisposableDocumentationDirectory);
+
+            var document = Inspector.Run(typeof(Company));
+            var source = new DocumentationSource(DisposableDocumentationDirectory, document);
             var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }
