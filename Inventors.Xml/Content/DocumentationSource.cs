@@ -69,7 +69,7 @@ namespace Inventors.Xml.Content
             return Path.Combine(parts);
         }
 
-        public string GetElementName(string name) 
+        public static string GetElementName(string name) 
         {
             var parts = name.Split('.');
 
@@ -79,9 +79,20 @@ namespace Inventors.Xml.Content
             return parts[^1];
         }
 
-        public ElementDocumentationInfo GetElement(string name)
+        public ElementDocumentationInfo GetElement(string name) =>  
+            new(Path: GetElementPath(name), Name: GetElementName(name));
+        
+        public string this[string filename]
         {
-            return new ElementDocumentationInfo(Path: GetElementPath(name), Name: GetElementName(name));
+            get
+            {
+                if (File.Exists(filename))
+                {
+                    return File.ReadAllText(filename);
+                }
+
+                return string.Empty;
+            }
         }
 
         private readonly string basePath;
