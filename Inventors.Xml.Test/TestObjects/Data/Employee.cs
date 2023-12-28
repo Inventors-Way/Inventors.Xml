@@ -33,5 +33,7 @@ namespace Inventors.Xml.Test.TestObjects.Data
         [XmlAttribute("type")]
         [XmlRequired(false)]
         public EmployeeType Type { get; set; } = EmployeeType.Engineer;
+
+        public override string ToString() => $"{ID}: {Name} [ address: {Address}, salary: {Salary}, type: {Type} ]";
     }
 }

@@ -28,12 +28,25 @@ namespace Inventors.Xml.Test.TestObjects
             var builder = new StringBuilder();
 
             builder.AppendLine($"COMPANY [ {Name} ]");
-            builder.AppendLine();
-            builder.AppendLine("DEPARTMENTS:");
 
-            foreach (var department in Departments )
+            if (Departments.Count > 0)
             {
-                builder.AppendLine(department.ToString());
+                builder.AppendLine("DEPARTMENTS:");
+
+                foreach (var department in Departments)
+                {
+                    builder.AppendLine(department.ToString());
+                }
+            }
+
+            if (Employees.Count > 0) 
+            {
+                builder.AppendLine("EMPLOYEES:");
+
+                foreach (var employee in Employees)
+                {
+                    builder.AppendLine($"- {employee}");
+                }
             }
 
             return builder.ToString();
