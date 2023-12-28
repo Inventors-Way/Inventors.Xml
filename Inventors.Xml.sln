@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventors.Xml", "Inventors.Xml\Inventors.Xml.csproj", "{3F74C47F-558F-48EC-9CAD-ECF62F335738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventors.Xml.Test", "Inventors.Xml.Test\Inventors.Xml.Test.csproj", "{5CE0D6FB-43BB-430A-A9FD-F3C9672536BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventors.Xml.Test", "Inventors.Xml.Test\Inventors.Xml.Test.csproj", "{5CE0D6FB-43BB-430A-A9FD-F3C9672536BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xsdg", "xsdg\xsdg.csproj", "{978F82E6-B31F-49E9-B310-ED78697E3A27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5CE0D6FB-43BB-430A-A9FD-F3C9672536BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CE0D6FB-43BB-430A-A9FD-F3C9672536BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CE0D6FB-43BB-430A-A9FD-F3C9672536BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{978F82E6-B31F-49E9-B310-ED78697E3A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{978F82E6-B31F-49E9-B310-ED78697E3A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{978F82E6-B31F-49E9-B310-ED78697E3A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{978F82E6-B31F-49E9-B310-ED78697E3A27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
