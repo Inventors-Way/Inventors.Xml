@@ -14,5 +14,26 @@
                 title="Senior Quantum Jargon Engineer"
                 employee-id="E2"/>
         </department>
-    </departments>        
+    </departments>
+
+    <employees>
+        <employee
+            id="E1"
+            name="Elysia Nova"
+            address="Celestria Prime, Nova Haven"
+            salary="10000"
+            type="engineer"/>
+        <employee
+            id="E2"
+            name="Jaxon Orion"
+            address="Orionis IX, Starlight City"
+            salary="15000"
+            type="engineer"/>
+        <employee
+            id="E3"
+            name="Draven Xylar"
+            address=" Xylaris Minor, Nebula Falls"
+            salary="8000"
+            type="administrative"/>
+    </employees>
 </company>

@@ -19,6 +19,10 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlArrayItem("department", typeof(Department))]
         public List<Department> Departments { get; } = new List<Department>();
 
+        [XmlArray("employees")]
+        [XmlArrayItem("employee", typeof(Employee))]
+        public List<Employee> Employees { get; } = new List<Employee>();
+
         public override string ToString()
         {
             var builder = new StringBuilder();
