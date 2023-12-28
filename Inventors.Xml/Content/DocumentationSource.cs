@@ -59,6 +59,12 @@ namespace Inventors.Xml.Content
                 return this;
             }
 
+            public DocumentationSourceOptions WrapHtmlInCDATA(bool enable = true)
+            {
+                cdataHtml = enable;
+                return this;
+            }
+
             public ObjectDocument Document => document;
 
             public DocumentationFormat InputFormat => inputFormat;
@@ -68,6 +74,8 @@ namespace Inventors.Xml.Content
             public string Path => path;
 
             public int PathOffset => pathOffset;
+
+            public bool CDATAHTML => cdataHtml;
 
             private static int GetPathOffset(ObjectDocument document)
             {
@@ -86,6 +94,7 @@ namespace Inventors.Xml.Content
             private readonly ObjectDocument document;
             private readonly string path;
             private int pathOffset;
+            private bool cdataHtml = true;
         }
 
         public static DocumentationSourceOptions Create(ObjectDocument document, string path) => new (document, path);
@@ -178,7 +187,10 @@ namespace Inventors.Xml.Content
                                     case DocumentationFormat.Text:
                                         return Markdown.ToPlainText(text).Trim();
                                     case DocumentationFormat.Html:
-                                        return $"<![CDATA[{Markdown.ToHtml(text).Trim()}]]>";
+                                        if (options.CDATAHTML)
+                                            return $"<![CDATA[{Markdown.ToHtml(text).Trim()}]]>";
+                                        else
+                                            return Markdown.ToPlainText(text).Trim();
                                     default:
                                         return text;
                                 }
