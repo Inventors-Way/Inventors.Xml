@@ -36,7 +36,8 @@ namespace xsdg
                     .SetInputFormat(DocumentationFormat.MarkDown)
                     .SetOutputFormat(DocumentationFormat.Html)
                     .SetEncoding(true)
-                .Build();
+                    .SetCharacterData(false)
+                    .Build();
 
                 return new XSDGenerator(document, documentation);
             }
