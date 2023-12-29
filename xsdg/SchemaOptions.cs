@@ -53,6 +53,13 @@ namespace xsdg
             {
                 var assembly = Assembly.LoadFrom(AssemblyName);
                 var type = assembly.GetType(Type);
+
+                if (type is null)
+                {
+                    Console.WriteLine($"Failed to load type [ {Type} ]");
+                    return;
+                }
+
                 var document = Inspector.Run(type.GetType());
                 var generator = GetGenerator(document);
 
