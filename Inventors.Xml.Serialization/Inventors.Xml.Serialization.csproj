@@ -1,20 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <Title></Title>
     <Version>1.0.0</Version>
     <Authors>Inventors' Way</Authors>
     <Company>Inventors' Way ApS</Company>
     <Copyright>Copyright 2023 Inventors Way ApS</Copyright>
     <PackageIcon>Logo128x128.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://inventors.dk/</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>XML</PackageTags>
+    <PackageTags>XML, Serialization, Documentation</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,19 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.34.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Inventors.Xml.Serialization\Inventors.Xml.Serialization.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Logo128x128.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

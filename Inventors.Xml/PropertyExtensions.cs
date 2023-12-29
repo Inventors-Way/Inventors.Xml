@@ -1,4 +1,5 @@
 ﻿using Inventors.Xml.Content;
+using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;

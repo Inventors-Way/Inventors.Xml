@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Inventors.Xml.Serialization;
 using Inventors.Xml.Test.TestObjects.Data;
 
 namespace Inventors.Xml.Test.TestObjects
