@@ -19,9 +19,26 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(true)]
         public string Type { get; set; } = string.Empty;
 
+        private static string GetAssemblyPath(string path, IJobConfiguration configuration)
+        {
+            if (string.IsNullOrEmpty(configuration.InputPath))
+            {
+                return Path.Combine(path, configuration.Assembly);
+            }
+            else
+            {
+                return Path.Combine(new string[]
+                {
+                    path,
+                    configuration.InputPath,
+                    configuration.Assembly
+                });
+            }
+        }
+
         protected Type LoadType(string path, IJobConfiguration configuration)
         {
-            var assemblyPath = Path.Combine(path, configuration.Assembly);
+            var assemblyPath = GetAssemblyPath(path, configuration);
 
             if (!File.Exists(assemblyPath))
             {

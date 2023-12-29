@@ -40,10 +40,17 @@ namespace Inventors.Xml
 
             foreach (var job in Jobs)
             {
-                Console.WriteLine($"Running: {job.Title}:");
-                stopwatch.Restart();
-                job.Run(path, this);
-                PrintRuntime(stopwatch);
+                try
+                {
+                    Console.WriteLine($"Running: {job.Title}:");
+                    stopwatch.Restart();
+                    job.Run(path, this);
+                    PrintRuntime(stopwatch);
+                }
+                catch (Exception ex) 
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
         }
 

@@ -24,8 +24,8 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xsdg -p $(SolutionDir) xsdg-config.xml" />
-  </Target>
+  <ItemGroup>
+    <Folder Include="Schema\" />
+  </ItemGroup>
 
 </Project>

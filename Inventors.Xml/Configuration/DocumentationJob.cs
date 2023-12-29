@@ -18,6 +18,10 @@ namespace Inventors.Xml.Configuration
 
         public override void Run(string path, IJobConfiguration configuration)
         {
+            Console.Write($"Loading type: {Type} from assembly {configuration.Assembly} ... ");
+            var type = LoadType(path, configuration);
+            Console.WriteLine("done");
+
             Console.WriteLine("Documentation job");
         }
     }
