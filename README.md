@@ -43,4 +43,8 @@ Besides the XmlRequiredAttribute, the library also contains several extension fu
 ## Documentation Files
 
 
+### Hover information
+
+![Hover information in Visual Studio Code](HoverExample.png)
+
 ## LabBench Flavored XML
