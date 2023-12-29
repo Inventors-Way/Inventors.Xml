@@ -13,7 +13,8 @@ using System.Reflection.Metadata;
 namespace xsdg
 {
     [Verb("xsd", HelpText = "Generate XSD schema")]
-    public class SchemaOptions
+    public class SchemaOptions :
+        Options
     {
         [Option(longName: "assembly", shortName: 'a', Required = true)]
         public string AssemblyName { get; set; } = string.Empty;
@@ -24,6 +25,15 @@ namespace xsdg
         [Option(longName: "doc", shortName: 'd', Required = false)]
         public string DocumentationDirectory { get; set; } = string.Empty;
 
+        [Option(longName: "input-format", shortName: 'i', Required = false)]
+        public string InputFormat { get; set; } = "md";
+
+        [Option(longName: "output-format", shortName: 'o', Required = false)]
+        public string OutputFormat { get; set; } = "html";
+
+        [Option(longName: "encode", shortName: 'e', Required = false)]
+        public bool EncodeHtml { get; set; } = true;
+
         private XSDGenerator GetGenerator(ObjectDocument document)
         {
             if (string.IsNullOrEmpty(DocumentationDirectory)) 
@@ -33,9 +43,9 @@ namespace xsdg
             else
             {
                 var documentation = DocumentationSource.Create(document, DocumentationDirectory)
-                    .SetInputFormat(DocumentationFormat.MarkDown)
-                    .SetOutputFormat(DocumentationFormat.Html)
-                    .SetEncoding(true)
+                    .SetInputFormat(GetFormat(InputFormat))
+                    .SetOutputFormat(GetFormat(OutputFormat))
+                    .SetEncoding(EncodeHtml)
                     .SetCharacterData(false)
                     .Build();
 
@@ -45,23 +55,9 @@ namespace xsdg
 
         public void Run()
         {
-            if (!File.Exists(AssemblyName)) 
-            {
-                Console.WriteLine($"Did not find assembly: {AssemblyName}");
-                return;
-            }
-
             try
             {
-                var assembly = Assembly.LoadFrom(AssemblyName);
-                var type = assembly.GetType(Type);
-
-                if (type is null)
-                {
-                    Console.WriteLine($"Failed to load type [ {Type} ]");
-                    return;
-                }
-
+                var type = LoadType(AssemblyName, Type);
                 var document = Inspector.Run(type.GetType());
                 var generator = GetGenerator(document);
 
