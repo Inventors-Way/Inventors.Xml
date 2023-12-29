@@ -68,15 +68,41 @@
 
 <xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
 <xs:attribute name="title" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Title&lt;/h1&gt;
+&lt;p&gt;Title of the job that will be displayed when the job is executed by the xsdg tool. This title has no functional importance, however, it can make it easier to identify the cause of any potential errors from logs.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="type" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Type in the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute must be the fullname of a type in the Assembly, which will be the type that is analysed by the xsdg tool. Meaning it must include both the namespace and the name of the type.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Configuration.DocumentationJob">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Generation of Documentation Files templates&lt;/h1&gt;
+&lt;p&gt;The xsdg tool can include documentation from Text, Markdown, or HTML files. Each the &lt;code&gt;xs:documention&lt;/code&gt; that will be included for classes and properties comes from one file for each entity. The documentation file for a class has the same name as the class and must be located in a folder structure matching the namespaces of the class. Documentation files for each property within the class have the name of [ClassName].[PropertyNAme] and must be located next to the class documentation file.&lt;/p&gt;
+&lt;p&gt;This job will create a full set of documentation files for all classes and properties in the class hirarchy of a class. All files be empty and have the correct extension for the selected input format.&lt;/p&gt;
+&lt;p&gt;Please note that this job will never overwrite files. If a documentation file for a class or property allready exists then this documentation job will not generate a documentation file for this entity. Consequently, there is no risk in running this job. Furthermore, this job will also never delete a documentation file. If a class or property has been deleted then any documentation file for this deleted entity will be left.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Format of the templates to generate.&lt;/h1&gt;
+&lt;p&gt;This attribute specified the format of the documentation template files that will be generated. The attribute is optional and if it is not specified then the documentation file templates will be generated in Markdown format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:extension>
 </xs:complexContent>
@@ -85,10 +111,25 @@
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
 <xs:restriction base="xs:string">
 <xs:enumeration value="text">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Plain text format&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="markdown">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Markdown formatted text&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="html">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Text in HTML format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 </xs:restriction>
 </xs:simpleType>
