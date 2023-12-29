@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -16,7 +17,7 @@ namespace Inventors.Xml
     {
         [XmlAttribute("assembly")]
         [XmlRequired(true)]
-        public string Assembly { get; set; } = string.Empty;
+        public string AssemblyName { get; set; } = string.Empty;
 
         [XmlAttribute("documentation-path")]
         [XmlRequired(false)]
@@ -34,9 +35,24 @@ namespace Inventors.Xml
         [XmlElement("schema", typeof(SchemaJob))]
         public List<Job> Jobs { get; } = new List<Job>();
 
+        [XmlIgnore]
+        public Assembly? Assembly { get; private set; }
+
         public void Run(string path)
         {
             Stopwatch stopwatch = new Stopwatch();
+
+            try
+            {
+                Console.Write($"Loading assembly [ {AssemblyName} ] ... ");
+                Assembly = LoadAssembly(path);
+                Console.WriteLine("done");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("failed");
+                Console.WriteLine(ex);
+            }
 
             foreach (var job in Jobs)
             {
@@ -51,6 +67,49 @@ namespace Inventors.Xml
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
+            }
+        }
+
+        private string GetName(string? fullname)
+        {
+            if (fullname is null)
+                return string.Empty;
+
+            var parts = fullname.Split(',');
+            return parts[0];
+        }
+
+        private Assembly LoadAssembly(string path)
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            if (assemblies.Any(a => GetName(a.FullName) == AssemblyName))
+                return Assembly.Load(AssemblyName);
+
+            var filename = GetAssemblyPath(path);
+
+            if (!File.Exists(filename))
+            {
+                throw new ArgumentException($"Assembly not found [ {filename} ]");
+            }
+
+            return Assembly.LoadFrom(filename);
+        }
+
+        private string GetAssemblyPath(string path)
+        {
+            if (string.IsNullOrEmpty(InputPath))
+            {
+                return Path.Combine(path, AssemblyName);
+            }
+            else
+            {
+                return Path.Combine(new string[]
+                {
+                    path,
+                    InputPath,
+                    $"{AssemblyName}.dll"
+                });
             }
         }
 
