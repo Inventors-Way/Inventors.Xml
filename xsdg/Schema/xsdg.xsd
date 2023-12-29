@@ -30,12 +30,39 @@
 </xs:choice>
 </xs:sequence>
 <xs:attribute name="assembly" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Assembly Name&lt;/h1&gt;
+&lt;p&gt;Name of the Assembly from which to load types. It is specified without the file extension of the assembly, which is assumed to be &lt;code&gt;dll&lt;/code&gt;.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Path to XSD documentation&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to the Documentation Files that will be included in &lt;code&gt;xsd:documention&lt;/code&gt; elements in generated XSD Schemas, or where templates for the Documentation Files will be generated. This attribute is optional. If it is not specified then the Documentation Files will be presumed located in the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="output-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Output path for generated XSD Schemas&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to which generated XSD Schemas will be written. This attribute is optional. If it is not specified then XSD Schemas will be written to the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="input-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Input path for the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to the Assembly which contains the types to be analysed by the xsdg tool. This attribute is optional. If it is not specified then the Assembly will be presumed located in the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:complexType>
 
