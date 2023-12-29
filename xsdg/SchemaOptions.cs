@@ -47,7 +47,8 @@ namespace xsdg
         {
             if (!File.Exists(AssemblyName)) 
             {
-                Console.WriteLine($"Did not assembly: {AssemblyName}");
+                Console.WriteLine($"Did not find assembly: {AssemblyName}");
+                return;
             }
 
             try
@@ -72,7 +73,7 @@ namespace xsdg
             }
             catch (Exception ex) 
             {
-                Console.WriteLine($"Exception while generating schema: {ex}");
+                Console.WriteLine(ex);
             }
         }
     }
