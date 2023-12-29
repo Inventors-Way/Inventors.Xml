@@ -9,10 +9,11 @@ namespace Inventors.Xml.Configuration
 {
     public static class JobExtensions
     {
-        public static T Evaluate<T>(this string str, Func<T> func)
+        public static T Run<T>(this string str, Func<T> func)
         {
+            Console.Write($"{str} ... ");
             T retValue = func();
-            Console.Write(str);
+            Console.WriteLine("done");
             return retValue;
         }
     }
