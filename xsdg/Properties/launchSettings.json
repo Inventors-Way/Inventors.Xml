@@ -2,8 +2,8 @@
   "profiles": {
     "xsdg": {
       "commandName": "Project",
-      "commandLineArgs": "xsdg-config.xml",
-      "workingDirectory": "C:\\Source\\Inventors\\Inventors.Xml\\xsdg"
+      "commandLineArgs": "./xsdg/xsdg-config.xml",
+      "workingDirectory": "C:\\Source\\Inventors\\Inventors.Xml"
     }
   }
 }

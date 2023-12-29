@@ -24,6 +24,14 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(false)]
         public DocumentationFormat DocumentationOutputFormat { get; set; } = DocumentationFormat.Html;
 
+        [XmlAttribute("encode-data")]
+        [XmlRequired(false)]
+        public bool EncodeData { get; set; } = true;
+
+        [XmlAttribute("encapsulate-character-data")]
+        [XmlRequired(false)]    
+        public bool EncapsulateCharacterData { get; set; } = false;
+
         public override void Run(string path, IJobConfiguration configuration)
         {
             Console.WriteLine("Schema Job");

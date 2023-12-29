@@ -3,11 +3,21 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="xsdg.xsd"
     assembly="Inventors.Xml"
-    input-path="../Inventors.Xml/bin/Debug/net6.0/">
+    input-path="Inventors.Xml/bin/Debug/net6.0/"
+    documentation-path="Inventors.Xml/Documentation/"
+    output-path="xsdg/Schema/">
     
     <documentation
         title="Creating Markdown Documentation"
         type="Inventors.Xml.XSDGConfig"
-        documentation-file-format="markdown" />
+        documentation-file-format="markdown"/>
 
+    <schema
+        title="Generating XML Schema"
+        type="Inventors.Xml.XSDGConfig"
+        include-documentation="true"
+        documentation-file-format="markdown"
+        documentation-output-format="html"
+        encode-data="false"
+        encapsulate-character-data="true"/>
 </xsdg>

@@ -29,6 +29,22 @@ namespace Inventors.Xml.Configuration
             return type ?? throw new InvalidOperationException($"Failed to load type [ {Type} ]");
         }
 
+        protected static string GetDocumentationPath(string path, IJobConfiguration c)
+        {
+            if (string.IsNullOrEmpty(c.DocumentationPath))
+            {
+                return path;
+            }
+            else
+            {
+                return Path.Combine(new string[]
+                {
+                    path,
+                    c.DocumentationPath
+                });
+            }
+        }
+
         public abstract void Run(string path, IJobConfiguration configuration);
     }
 }
