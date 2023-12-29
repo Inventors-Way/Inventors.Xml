@@ -30,6 +30,6 @@ what is checked into the Git repository.
         include-documentation="true"
         documentation-file-format="markdown"
         documentation-output-format="html"
-        encode-data="false"
-        encapsulate-character-data="true"/>
+        encode-data="true"
+        encapsulate-character-data="false"/>
 </xsdg>

@@ -3,6 +3,26 @@
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;XSDG Configuration File&lt;/h1&gt;
+&lt;p&gt;The xsdg tool is controlled by a configuration file, which specifies:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Defines paths to the Assembly, Documentation Files, and the Output Path for XSD Schemas. All paths within the configuration are relative to the working directory of the XSDG tool.&lt;/li&gt;
+&lt;li&gt;The name of the Assembly that contains the types to be analyzed.&lt;/li&gt;
+&lt;li&gt;A number of jobs to be performed. Two jobs can be configured:
+&lt;ol&gt;
+&lt;li&gt;Documentation jobs: which will generate templates for Documentation Files.&lt;/li&gt;
+&lt;li&gt;Schema jobs: which will generate XSD Schemas for selected types.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This configuration file is passed to the xsdg tool as a parameter:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;xsdg -p [working directory] [name of configuration file]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;-p [working directory]&lt;/code&gt; is optional and if specified will set the working directory of the xsdg tool. If it is not specied the working directory will be the directory from where the xsdg tool is invoked.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:sequence>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
 <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="Inventors.Xml.Configuration.DocumentationJob" />
