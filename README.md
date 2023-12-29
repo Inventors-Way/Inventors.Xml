@@ -64,6 +64,36 @@ The use of this Attribute is optional, and the Inventors.Xml.Serialization libra
 
 Besides the XmlRequiredAttribute, the library also contains several extension functions that we find helpful when working with XML data.
 
+Below is an example of how the XmlRequired attribute has been used to control XSD schema generation for the class for the ```<schema>``` element above:
+
+```C#
+public class SchemaJob :
+    Job
+{
+    [XmlAttribute("include-documentation")]
+    [XmlRequired(false)]
+    public bool IncludeDocumentation { get; set; } = true;
+
+    [XmlAttribute("documentation-file-format")]
+    [XmlRequired(false)]
+    public DocumentationFormat DocumentationFileFormat { get; set; } = DocumentationFormat.MarkDown;
+
+    [XmlAttribute("documentation-output-format")]
+    [XmlRequired(false)]
+    public DocumentationFormat DocumentationOutputFormat { get; set; } = DocumentationFormat.Html;
+
+    [XmlAttribute("encode-data")]
+    [XmlRequired(false)]
+    public bool EncodeData { get; set; } = true;
+
+    [XmlAttribute("encapsulate-character-data")]
+    [XmlRequired(false)]    
+    public bool EncapsulateCharacterData { get; set; } = false;
+}
+```
+
+Please note the ```title``` and ```type``` attributes comes from its base class ```Job```.
+
 ### Extension methods
 
 When the Inventors.Xml.Serialization namespace is used, the following extension methods becomes available:
