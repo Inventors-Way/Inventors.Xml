@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Inventors.Xml.Content
 {
@@ -33,8 +34,11 @@ namespace Inventors.Xml.Content
 
     public enum DocumentationFormat
     {
+        [XmlEnum("text")]
         Text,
+        [XmlEnum("markdown")]
         MarkDown,
+        [XmlEnum("html")]
         Html
     }
 
