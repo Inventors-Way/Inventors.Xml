@@ -6,7 +6,7 @@ Inventors.Xml combines an optional library  (Inventors.Xml.Serialization) and a 
 2. It provides no feature for including doccumentation elements within the generated XSD Schema, and
 3. It can only be used on the .NET Framework platform; no porting of the tool to .NET platform appears in the work.
 
-These three drawbacks inspired us to write the Inventors.Xml.Serialization library and xsdg.exe tool. The tool is written to document the LabBench Language we are developing for describing neuroscience experiments, but its usefulness is not restricted to this particular XML-based language. Consequently, we have released the tool and library as open source (MIT), hoping others may benefit from our work. 
+These three drawbacks inspired us to write the Inventors.Xml.Serialization library and xsdg.exe tool. The tool is written to document the [LabBench Language](https://labbench.io/) we are developing for describing neuroscience experiments, but its usefulness is not restricted to this particular XML-based language. Consequently, we have released the tool and library as open source (MIT), hoping others may benefit from our work. 
 
 ## Features
 
