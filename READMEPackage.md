@@ -58,7 +58,7 @@ Information on how to configure the tool can be found in the XSD schema (xsdg.xs
 
 ### Inventors.Xml.Serialization
 
-The System.Xml.Serialization namespace contains no Attribute that can control whether an attribute or element in the resulting XML schema is requiredï¿½the Inventors.Xml.Serialization library provides a single attribute  (XmlRequiredAttribute) that can be used on properties to control whether the resulting attributes or elements will be marked as required in the generated XML Schema.
+The System.Xml.Serialization namespace contains no Attribute that can control whether an attribute or element in the resulting XML schema is required—the Inventors.Xml.Serialization library provides a single attribute  (XmlRequiredAttribute) that can be used on properties to control whether the resulting attributes or elements will be marked as required in the generated XML Schema.
 
 The use of this Attribute is optional, and the Inventors.Xml.Serialization library is not required for the xsdg.exe tool to be used on an assembly. If the XmlRequiredAttribute is not used, then xsdg will generate XSD Schemas with the same conventions as the xsd.exe tool.
 
@@ -118,23 +118,10 @@ var xmlString = project.ToXML();
 
 ### Nuget Package
 
-The Inventors.Xml.Serialization is available on [nuget.org](https://www.nuget.org/packages/Inventors.Xml.Serialization).
-
 ### XSDG Tool
 
-In the future we plan to provide an installer for the xsdg tool. Currently, it is available as a binary with the release of the library or it can be compiled from source. 
+
 
 ## Documentation Files
 
 The xsdg tool can include documentation from Text, Markdown, or HTML files. Each the ```xs:documention``` that will be included for classes and properties comes from one file for each entity. The documentation file for a class has the same name as the class and must be located in a folder structure matching the namespaces of the class. Documentation files for each property within the class have the name of [ClassName].[PropertyNAme] and must be located next to the class documentation file.
-
-### Benefits of documentation files 
-
-#### Hover information
-
-![Hover information in Visual Studio Code](HoverExample.png)
-
-#### Code Completion
-
-![Code completion](CodeCompletion.png)
-
