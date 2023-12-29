@@ -20,10 +20,10 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
 
 ### xsdg.exe
 
-The xsdg.exe can generate an XSD Schema for a C# class with the ```xsd``` command. Below is an example of generating an XSD Schema for the MockData class in the Serialization.Xml.Test library:
+The xsdg.exe can generate an XSD Schema for a C# class or a set of documentation file templates (please see the Documentation Files sectoin below).
 
 ```
-xsdg xsd -a Serialization.Xml.Test.dll 
+xsdg xsd -p [Working Directory] [Configuration File] 
 ```
 
 With the doc command, the xsd.g.exe can generate empty stubs for documentation files for a C# class. Below is an example of how to generate stubs for the class MockData that was used in the previous example:
@@ -39,6 +39,16 @@ The System.Xml.Serialization namespace contains no Attribute that can control wh
 The use of this Attribute is optional, and the Inventors.Xml.Serialization library is not required for the xsdg.exe tool to be used on an assembly. If the XmlRequiredAttribute is not used, then xsdg will generate XSD Schemas with the same conventions as the xsd.exe tool.
 
 Besides the XmlRequiredAttribute, the library also contains several extension functions that we find helpful when working with XML data.
+
+### Extension methods
+
+## Installation
+
+### Nuget Package
+
+### XSDG Tool
+
+
 
 ## Documentation Files
 
