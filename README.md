@@ -11,7 +11,7 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
 ## Features
 
 * Generation of XSD schemas from C# classes.
-* Control of ```required``` for attributes and ```minOccurs``` for elements with an optional ```XmlRequiredAttribute``` from the Intentors.Xml.Serialization library.
+* Control of ```use``` for attributes and ```minOccurs``` for elements with an optional ```XmlRequiredAttribute``` from the Intentors.Xml.Serialization library.
 * Useful extension methods for working with XML in the Inventors.Xml.Serialization library
 * Generation of documentation annotations in the XSD schema from Text, Markdown, and HTML documentation files.
 * Generation of a complete set of documentation files for a C# class hierarchy. 
