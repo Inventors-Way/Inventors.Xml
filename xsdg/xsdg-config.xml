@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="xsdg.xsd"
     assembly="Inventors.Xml.dll"
-    input-path="Inventors.Xml/bin/Debug/net6.0/">
+    input-path="../Inventors.Xml/bin/Debug/net6.0/">
     
     <documentation
         title="Creating Markdown Documentation"
