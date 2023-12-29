@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
-This xsdg configuration file is intended to generate documentation files and XSD schema for itself.
+This xsdg configuration file is intended to generate documentation files and XSD schema for the xsdg tool itself.
 
 To enable it set Debug Properties to:
 
