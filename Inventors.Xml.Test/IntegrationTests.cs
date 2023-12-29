@@ -2,6 +2,7 @@ using Inventors.Xml.Content;
 using Inventors.Xml.Generators.Documentation;
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
+using Inventors.Xml.Serialization;
 using Newtonsoft.Json.Bson;
 using System.IO;
 
