@@ -20,17 +20,41 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
 
 ### xsdg.exe
 
-The xsdg.exe can generate an XSD Schema for a C# class or a set of documentation file templates (please see the Documentation Files sectoin below).
+The xsdg.exe can generate an XSD Schema for a C# class or a set of documentation file templates (please see the Documentation Files sectoin below). The general format for invoking the xsdg tool is:
 
 ```
-xsdg xsd -p [Working Directory] [Configuration File] 
+xsdg -p [Working Directory] [Configuration File] 
 ```
 
-With the doc command, the xsd.g.exe can generate empty stubs for documentation files for a C# class. Below is an example of how to generate stubs for the class MockData that was used in the previous example:
+where -p [Working Directory] is optional; if omitted the directory from which the command is invoked is used as the working directory for the tool. The configuration file describes the jobs that the tool should perform. Below is an example that first generates a set of documentation file templates and secondly generates a XSD schema:
 
 ```
-xsdg xsd -a Serialization.Xml.Test.dll 
+<?xml version="1.0" encoding="utf-8" ?>
+<xsdg 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="Schema/xsdg.xsd"
+    assembly="Inventors.Xml"
+    input-path="Inventors.Xml/bin/Debug/net6.0/"
+    documentation-path="Inventors.Xml/Documentation/"
+    output-path="xsdg/Schema/">
+    
+    <documentation
+        title="Creating Markdown Documentation"
+        type="Inventors.Xml.XSDGConfig"
+        documentation-file-format="markdown"/>
+
+    <schema
+        title="Generating XML Schema"
+        type="Inventors.Xml.XSDGConfig"
+        include-documentation="true"
+        documentation-file-format="markdown"
+        documentation-output-format="html"
+        encode-data="true"
+        encapsulate-character-data="false"/>
+</xsdg>
 ```
+
+Information on how to configure the tool can be found in the XSD schema (xsdg.xsd) for the XSDG tool. This XSD schema was generated with the tool itself. If a suitable editor such as Visual Studio Code with the Redhat XML extension is used then documentation will be provided by hover over and when code completion is invoked while writing configuration files.
 
 ### Inventors.Xml.Serialization
 
