@@ -43,8 +43,14 @@ Besides the XmlRequiredAttribute, the library also contains several extension fu
 ## Documentation Files
 
 
-### Hover information
+### Benefits of documentation files 
+
+#### Hover information
 
 ![Hover information in Visual Studio Code](HoverExample.png)
+
+#### Code Completion
+
+![Code completion](CodeCompletion.png)
 
 ## LabBench Flavored XML
