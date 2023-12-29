@@ -1,4 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+This xsdg configuration file is intended to generate documentation files and XSD schema for itself.
+
+To enable it set Debug Properties to:
+
+* Command Line Arguments:- ./xsdg/xsdg-config.xml
+* Working directory: path to the solution file.
+
+As the repository may be checked out to any location on a work computer the working directory must
+be set correctly for each checkout of the repository. As this is a user settting this will not conflict with
+what is checked into the Git repository.
+-->
 <xsdg 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="Schema/xsdg.xsd"
