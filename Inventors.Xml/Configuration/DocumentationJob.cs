@@ -9,12 +9,16 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Configuration
 {
-    public class DocumentationJob : 
+    public class DocumentationJob :
         Job
     {
         [XmlAttribute("documentation-file-format")]
         [XmlRequired(false)]
         public DocumentationFormat DocumentationFileFormat { get; set; } = DocumentationFormat.MarkDown;
 
+        public override void Run(string path, IJobConfiguration configuration)
+        {
+            Console.WriteLine("Documentation job");
+        }
     }
 }

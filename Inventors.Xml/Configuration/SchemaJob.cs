@@ -23,5 +23,10 @@ namespace Inventors.Xml.Configuration
         [XmlAttribute("documentation-output-format")]
         [XmlRequired(false)]
         public DocumentationFormat DocumentationOutputFormat { get; set; } = DocumentationFormat.Html;
+
+        public override void Run(string path, IJobConfiguration configuration)
+        {
+            Console.WriteLine("Schema Job");
+        }
     }
 }

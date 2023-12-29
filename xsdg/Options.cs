@@ -1,4 +1,7 @@
-﻿using Inventors.Xml.Content;
+﻿using CommandLine;
+using Inventors.Xml;
+using Inventors.Xml.Serialization;
+using Inventors.Xml.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,34 +11,41 @@ using System.Threading.Tasks;
 
 namespace xsdg
 {
-    public abstract class Options
+    public class Options
     {
-        protected static Type LoadType(string assemblyName, string typeName)
+        [Option(longName: "path", shortName: 'p', Required = false,
+                HelpText = "The working path")]
+        public string Path { get; set; } = string.Empty;
+
+        [Value(0, Required = true, HelpText = "Configuration file")]
+        public string ConfigFile { get; set; } = string.Empty;
+
+        public void Run()
         {
-            if (!File.Exists(assemblyName))
+            Console.Write($"Loading configuration file [ {ConfigFile} ] ... ");
+
+            if (!File.Exists(ConfigFile))
             {
-                Console.WriteLine($"Did not find assembly: {assemblyName}");
-                throw new ArgumentException("Assembly not found");
+                Console.WriteLine($"error, file not found!");
+                return;
             }
 
-            var assembly = Assembly.LoadFrom(assemblyName);
-            var type = assembly.GetType(typeName);
-
-            if (type is null)
+            var text = File.ReadAllText(ConfigFile);
+            var config = text.ToObject<XSDGConfig>();
+            Console.WriteLine("done");
+            
+            if (string.IsNullOrEmpty(Path))
             {
-                throw new InvalidOperationException($"Failed to load type [ {typeName} ]");
+                Path = Directory.GetCurrentDirectory();
             }
 
-            return type;
+            if (!Directory.Exists(Path)) 
+            {
+                Console.WriteLine($"Working path [ {Path} ] does not exists, aborting");
+            }
+
+            Console.WriteLine($"Working path set to: {Path}");
+            config.Run(Path);
         }
-
-        protected static DocumentationFormat GetFormat(string text) =>
-            text switch
-            {
-                "txt" => DocumentationFormat.Text,
-                "md" => DocumentationFormat.MarkDown,
-                "html" => DocumentationFormat.Html,
-                _ => throw new ArgumentException($"Invalid format [ {text} ] format must be either txt, md, or html.")
-            };
     }
 }

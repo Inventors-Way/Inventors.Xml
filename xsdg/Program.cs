@@ -7,9 +7,8 @@ namespace xsdg
     {
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<SchemaOptions, DocumentationOptions>(args)
-                .WithParsed<SchemaOptions>(options => options.Run())
-                .WithParsed<DocumentationOptions>(options => options.Run())
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(options => options.Run())
                 .WithNotParsed(errors =>
                 {
                     foreach (var error in errors) 

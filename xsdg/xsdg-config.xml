@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xsdg 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="xsdg.xsd"
+    assembly="Inventors.Xml.dll"
+    input-path="Inventors.Xml/bin/Debug/net6.0/">
+    
+    <documentation
+        title="Creating Markdown Documentation"
+        type="Inventors.Xml.XSDGConfig"
+        documentation-file-format="markdown" />
+
+</xsdg>

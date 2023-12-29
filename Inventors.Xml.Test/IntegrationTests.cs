@@ -107,5 +107,18 @@ namespace Inventors.Xml.Test
             var generator = new DocumentationGenerator(document, source);
             generator.Run();
         }
+
+        [TestMethod]
+        public void T07_GenerateXsdgSchema()
+        {
+            var document = Inspector.Run(typeof(XSDGConfig));
+            var generator = new XSDGenerator(document);
+            var content = generator.Run();
+
+            File.WriteAllText(Path.Combine(DataDirectory, generator.FileName), content);
+
+            Console.WriteLine(content);
+        }
+
     }
 }
