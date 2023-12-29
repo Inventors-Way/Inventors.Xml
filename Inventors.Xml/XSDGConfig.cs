@@ -58,6 +58,7 @@ namespace Inventors.Xml
             {
                 try
                 {
+                    Console.WriteLine();
                     Console.WriteLine($"Running: {job.Title}:");
                     stopwatch.Restart();
                     job.Run(path, this);
@@ -70,7 +71,7 @@ namespace Inventors.Xml
             }
         }
 
-        private string GetName(string? fullname)
+        private static string GetName(string? fullname)
         {
             if (fullname is null)
                 return string.Empty;
