@@ -25,6 +25,9 @@ namespace xsdg
         [Option(longName: "doc", shortName: 'd', Required = false)]
         public string DocumentationDirectory { get; set; } = string.Empty;
 
+        [Option(longName: "output-path", shortName: 'p', Required = false)]
+        public string OutputPath { get; set; } = string.Empty;
+
         [Option(longName: "input-format", shortName: 'i', Required = false)]
         public string InputFormat { get; set; } = "md";
 
@@ -62,9 +65,22 @@ namespace xsdg
                 var generator = GetGenerator(document);
 
                 Console.Write($"Generating XSD schema for [ {Type} ] ... ");
-                var content = generator.Run();                
+                var content = generator.Run();
 
-                File.WriteAllText(generator.FileName, content);
+                if (string.IsNullOrEmpty(OutputPath))
+                {
+                    File.WriteAllText(generator.FileName, content);
+                }
+                else
+                {
+                    if (!Directory.Exists(OutputPath)) 
+                    {
+                        throw new ArgumentException($"Output path [ {OutputPath} ] does not exists");
+                    }
+
+                    File.WriteAllText(Path.Combine(OutputPath, generator.FileName), content);
+                }
+
                 Console.WriteLine("done");
             }
             catch (Exception ex) 
