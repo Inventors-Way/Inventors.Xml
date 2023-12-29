@@ -45,6 +45,22 @@ namespace Inventors.Xml.Configuration
             }
         }
 
+        protected static string GetOutputPath(string path, IJobConfiguration c)
+        {
+            if (string.IsNullOrEmpty(c.OutputPath))
+            {
+                return path;
+            }
+            else
+            {
+                return Path.Combine(new string[]
+                {
+                    path,
+                    c.OutputPath
+                });
+            }
+        }
+
         public abstract void Run(string path, IJobConfiguration configuration);
     }
 }

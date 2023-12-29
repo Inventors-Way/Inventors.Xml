@@ -1,4 +1,6 @@
 ﻿using Inventors.Xml.Content;
+using Inventors.Xml.Generators.Documentation;
+using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
@@ -34,7 +36,30 @@ namespace Inventors.Xml.Configuration
 
         public override void Run(string path, IJobConfiguration configuration)
         {
-            Console.WriteLine("Schema Job");
+            var type = $"Loading type: {Type}".Run(() => LoadType(path, configuration));
+            var document = "Parsing type".Run(() => Inspector.Run(type));
+            var outputPath = "Output path".Run(() => GetOutputPath(path, configuration));
+
+            if (IncludeDocumentation)
+            {
+                var docPath = "Generating documentation path".Run(() => GetDocumentationPath(path, configuration));
+                var documentation = "Setting up documentation source".Run(() => DocumentationSource.Create(document, docPath)
+                    .SetInputFormat(DocumentationFileFormat)
+                    .SetOutputFormat(DocumentationOutputFormat)
+                    .SetEncoding(EncodeData)
+                    .SetCharacterData(EncapsulateCharacterData)
+                    .Build());
+
+                var generator = "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
+                var content = "Generating XSD".Run(() => generator.Run());
+                File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
+            }
+            else
+            {
+                var generator = "Creating XSD generator".Run(() => new XSDGenerator(document));
+                var content = "Generating XSD".Run(() => generator.Run());
+                File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
+            }
         }
     }
 }
