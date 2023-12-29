@@ -16,25 +16,32 @@ namespace xsdg
     public class SchemaOptions :
         Options
     {
-        [Option(longName: "assembly", shortName: 'a', Required = true)]
+        [Option(longName: "assembly", shortName: 'a', Required = true, 
+                HelpText = "Name of the assembly (dll) in which the type is located")]
         public string AssemblyName { get; set; } = string.Empty;
 
-        [Option(longName: "type", shortName: 't', Required = true)]
+        [Option(longName: "type", shortName: 't', Required = true,
+                HelpText = "The type for which to generate a XSD schema")]
         public string Type { get; set; } = string.Empty;
 
-        [Option(longName: "doc", shortName: 'd', Required = false)]
+        [Option(longName: "doc", shortName: 'd', Required = false,
+                HelpText = "Path where the documentation for the type is located [ default, empty, which means no documentation will be included in the schema ]")]
         public string DocumentationDirectory { get; set; } = string.Empty;
 
-        [Option(longName: "output-path", shortName: 'p', Required = false)]
+        [Option(longName: "output-path", shortName: 'p', Required = false,
+                HelpText = "Output path for the XSD schema, if omitted the XSD schema will be generated in the current working directory")]
         public string OutputPath { get; set; } = string.Empty;
 
-        [Option(longName: "input-format", shortName: 'i', Required = false)]
+        [Option(longName: "input-format", shortName: 'i', Required = false, 
+                HelpText = "Input format for documentation files, valid values are txt, md, or html [ default: md ]")]
         public string InputFormat { get; set; } = "md";
 
-        [Option(longName: "output-format", shortName: 'o', Required = false)]
+        [Option(longName: "output-format", shortName: 'o', Required = false, 
+                HelpText = "Output format for the xs:documentation elements, valid values are txt or html [ default: html ]")]
         public string OutputFormat { get; set; } = "html";
 
-        [Option(longName: "encode", shortName: 'e', Required = false)]
+        [Option(longName: "encode", shortName: 'e', Required = false,
+              HelpText = "Encode html tags xs:documentation text")]
         public bool EncodeHtml { get; set; } = true;
 
         private XSDGenerator GetGenerator(ObjectDocument document)
