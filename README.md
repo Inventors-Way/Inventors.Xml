@@ -66,6 +66,24 @@ Besides the XmlRequiredAttribute, the library also contains several extension fu
 
 ### Extension methods
 
+When the Inventors.Xml.Serialization namespace is used, the following extension methods becomes available:
+
+#### Deserializing XML
+
+Any string can be deserialized with the ```ToObject<T>``` extenstion method:
+
+```C#
+var project = xmlString.ToObject<Project>();
+```
+
+#### Serializing objects
+
+Any object can be serialized into a string with the ```ToObject<T>``` extension method:
+
+```C#
+var xmlString = project.ToXML();
+```
+
 ## Installation
 
 ### Nuget Package
