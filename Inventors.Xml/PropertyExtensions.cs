@@ -122,49 +122,18 @@ namespace Inventors.Xml
             }
         }
 
-        public static bool IsEnumerable(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
+        public static bool IsEnumerable(this PropertyInfo property) =>
+            property.PropertyType.GetInterfaces().Any((t) => t.Name.Contains("IEnumerable"));
 
-            if (property.PropertyType is null)
-                return false;
+        public static bool IsArray(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlArrayAttribute>() is not null;
 
-            var type = property.PropertyType;
-
-            return type.GetInterfaces().Any((t) => t.Name.Contains("IEnumerable"));
-        }
-
-        public static bool IsArray(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttribute<XmlArrayAttribute>() != null;
-        }
-
-        public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property)
-        {
-            if (!property.IsArray())
-                throw new ArgumentException("Is not an array", nameof(property));
-
-            foreach (var item in property.GetCustomAttributes<XmlArrayItemAttribute>())
-            {
-                yield return item.Type;
-            }
-        }
+        public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property) =>
+            from item in property.GetCustomAttributes<XmlArrayItemAttribute>()
+            select item.Type;
 
         public static AttributeDescriptor ParseAttribute(this PropertyInfo property, ObjectDocument document)
         {
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
-
-            if (document is null)
-                throw new ArgumentNullException(nameof(document));
-
-            if (property.PropertyType is null)
-                throw new ArgumentException("The property does not have a type", nameof(property));
-
             string typeKey = property.PropertyType.ToString();
 
             if (_typeMapping.ContainsKey(typeKey))
@@ -186,9 +155,7 @@ namespace Inventors.Xml
         public static AttributeDescriptor ParseEnum(this PropertyInfo property, ObjectDocument document)
         {
             var type = property.PropertyType;
-
-            if (type.FullName is null)
-                throw new InvalidOperationException($"Enum type {type.Name} in attribute {property.Name} does not have a FullName");
+            type.FullName.ThrowIfNull();
 
             if (!document.Exists(type.GetXSDTypeName()))
             {
@@ -207,13 +174,10 @@ namespace Inventors.Xml
 
         public static bool IsPropertyRequired(this PropertyInfo property)
         {
-            var required = property.GetCustomAttribute<XmlRequiredAttribute>();
+            if (property.GetCustomAttribute<XmlRequiredAttribute>() is XmlRequiredAttribute required)
+                return required.Required;
 
-            if (required is null)
-                return false;
-
-            return required.Required;
+            return false;
         }
     }
-
 }
