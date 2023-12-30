@@ -106,7 +106,7 @@ Any string can be deserialized with the ```ToObject<T>``` extenstion method:
 var project = xmlString.ToObject<Project>();
 ```
 
-The ```ToObject<T>``` extension method also provides the possibility for validating the XML against an XSD schema that are passed in as a parameter:
+The ```ToObject<T>``` extension method also provides the possibility for validating the XML against an XSD schema that are passed in as a string:
 
 ```C#
 text.ToObject<XSDGConfig>(xsdSchema)
