@@ -47,7 +47,7 @@ namespace Inventors.Xml.Serialization
             get
             {
                 if (_value is null)
-                    throw new InvalidOperationException("Operation failed");
+                    throw new InvalidOperationException($"{_error}");
 
                 return _value;
             }
