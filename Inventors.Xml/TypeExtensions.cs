@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml
 {
@@ -13,27 +14,18 @@ namespace Inventors.Xml
     {
         public static string RootElementName(this Type input)
         {
-            var attributes = input.GetCustomAttributes(typeof(XmlRootAttribute), false);
+            var root = input.GetCustomAttributes(typeof(XmlRootAttribute), false)
+                .ThrowIfNull()
+                .IfEmpty()
+                .Value[0] as XmlRootAttribute;
 
-            if (attributes.Length == 0)
-                throw new ArgumentException($"No XmlRoot attribute specified for type {input}", nameof(input));
-
-            if (attributes[0] is not XmlRootAttribute root)
-                throw new ArgumentException($"No XmlRoot attribute specified for type {input}", nameof(input));
-
-            if (root.ElementName is null)
-                throw new ArgumentException($"No XmlRoot attribute specified for type {input}", nameof(input));
-
-            return root.ElementName;
+            return root.ThrowIfNull()
+                .IfTrue(root => root.ElementName is null)
+                .Value.ElementName;
         }
 
-        public static string GetXSDTypeName(this Type type)
-        {
-            if (type.FullName is not null)
-                return type.FullName;
-
-            return type.Name;
-        }
+        public static string GetXSDTypeName(this Type type) =>
+            type.FullName is not null ? type.FullName : type.Name;
 
         public static bool IsPropertyInherited(this Type type, string name)
         {
