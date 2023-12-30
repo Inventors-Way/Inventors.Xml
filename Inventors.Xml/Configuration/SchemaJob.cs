@@ -36,7 +36,7 @@ namespace Inventors.Xml.Configuration
 
         public override void Run(string path, IJobConfiguration configuration)
         {
-            var type = $"Loading type: {Type}".Run(() => LoadType(path, configuration));
+            var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             var document = "Parsing type".Run(() => ObjectDocument.Parse(type));
             var outputPath = "Output path".Run(() => GetOutputPath(path, configuration));
 

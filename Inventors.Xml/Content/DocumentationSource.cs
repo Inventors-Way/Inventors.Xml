@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml.Content
 {
@@ -131,10 +132,10 @@ namespace Inventors.Xml.Content
 
         public string[] GetPaths(string name)
         {
-            var parts = name.Split('.');
-
-            if (parts.Length < options.PathOffset + 1)
-                throw new ArgumentException($"Invalid element name: {name}");
+            var parts = name.Split('.')
+                .Throw()
+                .IfTrue(parts => parts.Length < options.PathOffset + 1)
+                .Value;
 
             if (parts.Length == options.PathOffset + 1)
                 return new string[] { options.Path };
@@ -144,9 +145,7 @@ namespace Inventors.Xml.Content
             retValue[0] = options.Path;
 
             for (int i = options.PathOffset; i < parts.Length - 1; ++i)
-            {
                 retValue[i - options.PathOffset + 1] = parts[i];
-            }
 
             return retValue;
         }
@@ -161,15 +160,11 @@ namespace Inventors.Xml.Content
             return Path.Combine(parts);
         }
 
-        public static string GetElementName(string name)
-        {
-            var parts = name.Split('.');
-
-            if (parts.Length == 0)
-                throw new ArgumentException($"Invalid element name: {name}");
-
-            return parts[^1];
-        }
+        public static string GetElementName(string name) =>
+            name.Split('.')
+                .Throw(name => new ArgumentException($"Invalid element name: {name}"))
+                .IfTrue(parts => parts.Length == 0)
+                .Value[^1];
 
         public ElementDocumentationInfo GetElement(string name) =>
             new(Path: GetElementPath(name), Name: GetElementName(name), Format: InputFormat);
@@ -177,14 +172,10 @@ namespace Inventors.Xml.Content
         private string Format(string text)
         {
             if (options.Encoding)
-            {
                 text = WebUtility.HtmlEncode(text);
-            }
 
             if (options.CDATA)
-            {
                 text = $"<![CDATA[{text}]]>";
-            }
 
             return text;
         }

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
-    public record ArrayItem(string Name, Element Type);
-
     public class ArrayElement :
         Element
     {

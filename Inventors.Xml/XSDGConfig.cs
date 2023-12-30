@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml
 {
@@ -40,18 +41,16 @@ namespace Inventors.Xml
 
         public void Run(string path)
         {
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
 
             try
             {
-                Console.Write($"Loading assembly [ {AssemblyName} ] ... ");
-                Assembly = LoadAssembly(path);
-                Console.WriteLine("done");
+                Assembly = $"Loading assembly [ {AssemblyName} ]".Run(() => LoadAssembly(path));
             }
             catch (Exception ex)
             {
-                Console.WriteLine("failed");
-                Console.WriteLine(ex);
+                Console.WriteLine($"failed: {ex}");
+                return;
             }
 
             foreach (var job in Jobs)
@@ -71,61 +70,35 @@ namespace Inventors.Xml
             }
         }
 
-        private static string GetName(string? fullname)
-        {
-            if (fullname is null)
-                return string.Empty;
-
-            var parts = fullname.Split(',');
-            return parts[0];
-        }
+        private static string GetName(string? fullname) =>
+            fullname is null ? string.Empty : fullname.Split(',')[0];
 
         private Assembly LoadAssembly(string path)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            if (assemblies.Any(a => GetName(a.FullName) == AssemblyName))
+            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => GetName(a.FullName) == AssemblyName))
                 return Assembly.Load(AssemblyName);
 
-            var filename = GetAssemblyPath(path);
-
-            if (!File.Exists(filename))
-            {
-                throw new ArgumentException($"Assembly not found [ {filename} ]");
-            }
-
-            return Assembly.LoadFrom(filename);
+            return Assembly.LoadFrom(GetAssemblyPath(path)
+                .Throw()
+                .IfFalse(filename => File.Exists(filename))
+                .Value);
         }
 
-        private string GetAssemblyPath(string path)
-        {
-            if (string.IsNullOrEmpty(InputPath))
-            {
-                return Path.Combine(path, AssemblyName);
-            }
-            else
-            {
-                return Path.Combine(new string[]
+        private string GetAssemblyPath(string path) =>
+            string.IsNullOrEmpty(InputPath) ? 
+            Path.Combine(path, AssemblyName) :
+            Path.Combine(new string[]
                 {
                     path,
                     InputPath,
                     $"{AssemblyName}.dll"
                 });
-            }
-        }
-
         private static void PrintRuntime(Stopwatch stopwatch)
         {
-            stopwatch.Stop();
-
-            if (stopwatch.ElapsedMilliseconds > 1000)
-            {
+            if (stopwatch.ElapsedMilliseconds > 999)
                 Console.WriteLine($"Job completed in: {stopwatch.Elapsed.Seconds}s");
-            }
             else 
-            {
                 Console.WriteLine($"Job completed in: {stopwatch.ElapsedMilliseconds}ms");
-            }
         }
     }
 }

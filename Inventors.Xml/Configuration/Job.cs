@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml.Configuration
 {
@@ -19,47 +20,26 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(true)]
         public string Type { get; set; } = string.Empty;
 
-        protected Type LoadType(string path, IJobConfiguration configuration)
-        {
-            if (configuration.Assembly is null)
-                throw new InvalidOperationException("No assembly loaded");
+        protected Type LoadType(IJobConfiguration configuration) => configuration.Assembly
+                .ThrowIfNull()
+                .Value
+                .GetType(Type)
+                .ThrowIfNull()
+                .Value;
 
-            var type = configuration.Assembly.GetType(Type);
-
-            return type ?? throw new InvalidOperationException($"Failed to load type [ {Type} ]");
-        }
-
-        protected static string GetDocumentationPath(string path, IJobConfiguration c)
-        {
-            if (string.IsNullOrEmpty(c.DocumentationPath))
-            {
-                return path;
-            }
-            else
-            {
-                return Path.Combine(new string[]
+        protected static string GetDocumentationPath(string path, IJobConfiguration c) =>
+            string.IsNullOrEmpty(c.DocumentationPath) ? path : Path.Combine(new string[]
                 {
                     path,
                     c.DocumentationPath
                 });
-            }
-        }
 
-        protected static string GetOutputPath(string path, IJobConfiguration c)
-        {
-            if (string.IsNullOrEmpty(c.OutputPath))
-            {
-                return path;
-            }
-            else
-            {
-                return Path.Combine(new string[]
+        protected static string GetOutputPath(string path, IJobConfiguration c) =>
+            string.IsNullOrEmpty(c.OutputPath) ? path : Path.Combine(new string[]
                 {
                     path,
                     c.OutputPath
                 });
-            }
-        }
 
         public abstract void Run(string path, IJobConfiguration configuration);
     }

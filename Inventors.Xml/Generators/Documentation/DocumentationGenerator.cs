@@ -52,9 +52,9 @@ namespace Inventors.Xml.Generators.Documentation
             var info = Configure(element.Name);
             Checkfile(info.GetFilename());
 
-            foreach (var value in element.SourceValues)
+            foreach (var value in element.Values)
             {
-                Checkfile(info.GetFilename(value));
+                Checkfile(info.GetFilename(value.Name));
             }
         }
 

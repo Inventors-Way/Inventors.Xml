@@ -213,26 +213,22 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void Visit(EnumElement element)
         {
-            var values = element.Values;
-            var sourceValues = element.SourceValues;
-            var zipped = values.Zip(sourceValues, (value, source) => new { Value = value, Source = source });
-
             builder.AppendLine();
             builder.AppendLine($"<xs:simpleType name=\"{element.Name}\">");
             var info = AnnotateElement(element);
             builder.AppendLine($"<xs:restriction base=\"xs:string\">");
 
 
-            foreach (var value in zipped)
+            foreach (var value in element.Values)
             {
                 if (info is null)
                 {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.Value}\" />");
+                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\" />");
                 }
                 else
                 {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.Value}\">");
-                    Annotate(GetDocumentation(info, value.Source));
+                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\">");
+                    Annotate(GetDocumentation(info, value.Name));
                     builder.AppendLine($"</xs:enumeration>");
                 }
             }
