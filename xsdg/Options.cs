@@ -22,6 +22,7 @@ namespace xsdg
 
         public void Run()
         {
+            var xsdSchema = GetType().Assembly.ReadEmbeddedResource("Schema.xsdg.xsd");
             Console.Write($"Loading configuration file [ {ConfigFile} ] ... ");
 
             if (!File.Exists(ConfigFile))

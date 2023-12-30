@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Reflection;
 
 namespace Inventors.Xml.Serialization
 {
@@ -64,6 +65,18 @@ namespace Inventors.Xml.Serialization
             var base64EncodedBytes = Convert.FromBase64String(self);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
-    }
 
+        public static string ReadEmbeddedResource(this Assembly assembly, string resourceName)
+        {
+            string fullResourceName = $"{assembly.GetName().Name}.{resourceName}";
+
+            using Stream resourceStream = assembly.GetManifestResourceStream(fullResourceName);
+
+            if (resourceStream is null)
+                throw new Exception($"Resource '{resourceName}' not found in assembly.");
+
+            using StreamReader reader = new StreamReader(resourceStream);
+            return reader.ReadToEnd();
+        }
+    }
 }
