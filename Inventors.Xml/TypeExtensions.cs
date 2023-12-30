@@ -29,22 +29,15 @@ namespace Inventors.Xml
 
         public static bool IsPropertyInherited(this Type type, string name)
         {
-            if (type is null)
-                return false;
-
-            if (name is null)
-                return false;
+            type.ThrowIfNull();
+            name.ThrowIfNull();
 
             Type? current = type.BaseType;
 
             while (current is not null)
             {
-                PropertyInfo? property = current.GetProperty(name);
-
-                if (property is not null)
-                {
+                if (current.GetProperty(name) is not null)
                     return true;
-                }
 
                 current = current.BaseType;
             }
