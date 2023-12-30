@@ -66,7 +66,7 @@ namespace Inventors.Xml.Serialization
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        public static string ReadEmbeddedResource(this Assembly assembly, string resourceName)
+        public static string ReadEmbeddedResourceString(this Assembly assembly, string resourceName)
         {
             string fullResourceName = $"{assembly.GetName().Name}.{resourceName}";
 
