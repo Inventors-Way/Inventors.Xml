@@ -106,15 +106,7 @@ Any string can be deserialized with the ```ToObject<T>``` extenstion method:
 var project = xmlString.ToObject<Project>();
 ```
 
-#### Serializing objects
-
-Any object can be serialized into a string with the ```ToObject<T>``` extension method:
-
-```C#
-var xmlString = project.ToXML();
-```
-
-The ToObject<T> extension method also provides the possibility for validating the XML against an XSD schema that are passed in as a parameter:
+The ```ToObject<T>``` extension method also provides the possibility for validating the XML against an XSD schema that are passed in as a parameter:
 
 ```C#
 text.ToObject<XSDGConfig>(xsdSchema)
@@ -130,6 +122,13 @@ config.Run(Path)
 ```
 
 In this case an exception will be thrown if the XML fails validation.
+#### Serializing objects
+
+Any object can be serialized into a string with the ```ToXML``` extension method:
+
+```C#
+var xmlString = project.ToXML();
+```
 
 ## Installation
 
