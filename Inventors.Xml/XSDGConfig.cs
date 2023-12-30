@@ -40,18 +40,17 @@ namespace Inventors.Xml
 
         public void Run(string path)
         {
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new();
 
             try
             {
-                Console.Write($"Loading assembly [ {AssemblyName} ] ... ");
-                Assembly = LoadAssembly(path);
-                Console.WriteLine("done");
+                Assembly = $"Loading assembly [ {AssemblyName} ]".Run(() => LoadAssembly(path));
             }
             catch (Exception ex)
             {
                 Console.WriteLine("failed");
                 Console.WriteLine(ex);
+                return;
             }
 
             foreach (var job in Jobs)
