@@ -114,6 +114,30 @@ Any object can be serialized into a string with the ```ToObject<T>``` extension 
 var xmlString = project.ToXML();
 ```
 
+The ToObject<T> extension method also provides the possibility for validating the XML against an XSD schema that are passed in as a parameter:
+
+```C#
+text.ToObject<XSDGConfig>(xsdSchema)
+    .OnSuccess(config =>
+    {
+        config.Run(Path);
+    })
+    .OnError(errors =>
+    {
+        Console.WriteLine(("failed!"));
+        Console.WriteLine($"{errors}");
+    });            
+```
+
+This extension method use a Result pattern to avoid exceptions if so desired. The result class has an implicit unboxing operator. Consequently, it can also be used conventionally:
+
+```C#
+XSDGConfig config = text.ToObject<XSDGConfig>(xsdSchema);
+config.Run(Path)
+```
+
+In this case an exception will be thrown if the XML fails validation.
+
 ## Installation
 
 ### Nuget Package

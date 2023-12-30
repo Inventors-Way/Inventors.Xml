@@ -16,7 +16,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Inventors-Way/Inventors.Xml</RepositoryUrl>
     <Title>XML Documentation Library</Title>
-    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated with functions for validating XML against an XSD schema</PackageReleaseNotes>
     <Description>Inventors.Xml.Serialization combines this library and a tool (xsdg.exe) to replace the venerable xsd.exe tool from Microsoft. While this tool is handy for automatically generating XSD schemas from C# classes, it suffers from several drawbacks:
 
 1. It provides no feature for controlling whether an attribute or element is required,
