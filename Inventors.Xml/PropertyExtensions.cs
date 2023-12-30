@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml
 {
@@ -26,73 +27,48 @@ namespace Inventors.Xml
             _typeMapping.Add(typeof(byte).ToString(), "byte");
         }
 
-        public static bool IsPublic(this PropertyInfo property)
+        public static PropertyXSDType GetXSDType(this PropertyInfo property, Type type)
         {
-            if ((property.GetSetMethod() is null) &&
-                (property.GetGetMethod() is null))
-                return false;
+            if (type.IsPropertyInherited(property.Name)) 
+                return PropertyXSDType.Inherited;
+            if (property.Ignore()) 
+                return PropertyXSDType.Ignored;
+            if (property.IsAttribute()) 
+                return PropertyXSDType.Attribute;
+            if (property.IsElement())
+                return property.IsChoiceElement() ? PropertyXSDType.Choice : PropertyXSDType.Class;
+            if (property.IsArray()) 
+                return PropertyXSDType.Array;
+            if (!property.IsPublic()) 
+                return PropertyXSDType.Private;
 
-            return true;
+            return PropertyXSDType.Invalid;
         }
 
-        public static bool Ignore(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
+        public static bool IsPublic(this PropertyInfo property) =>
+            (property.GetSetMethod() is not null) || (property.GetGetMethod() is not null);
 
-            return property.GetCustomAttribute<XmlIgnoreAttribute>() != null;
-        }
+        public static bool Ignore(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlIgnoreAttribute>() is not null;
 
-        public static bool IsAttribute(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
+        public static bool IsAttribute(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlAttributeAttribute>() is not null;
 
-            return property.GetCustomAttribute<XmlAttributeAttribute>() != null;
-        }
+        public static string GetAttributeName(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlAttributeAttribute>()
+                .ThrowIfNull()
+                .Value.AttributeName;
 
-        public static string GetAttributeName(this PropertyInfo property)
-        {
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
+        public static bool IsElement(this PropertyInfo property) =>
+            property.GetCustomAttributes<XmlElementAttribute>().Any();
 
-            if (property.GetCustomAttribute<XmlAttributeAttribute>() is XmlAttributeAttribute attribute)
-            {
-                return attribute.AttributeName;
-            }
+        public static string GetElementName(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlElementAttribute>()
+                .ThrowIfNull()
+                .Value.ElementName;
 
-            throw new ArgumentException("Property is not an attribute", nameof(property));
-        }
-
-
-        public static bool IsElement(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttributes<XmlElementAttribute>().Any();
-        }
-
-        public static string GetElementName(this PropertyInfo property)
-        {
-            if (!property.IsElement())
-                throw new ArgumentException("Property is not an element", nameof(property));
-
-            var element = property.GetCustomAttribute<XmlElementAttribute>();
-
-            if (element is null)
-                throw new InvalidOperationException("This should be impossible due to the Guard clause above");
-
-            return element.ElementName;
-        }
-
-        public static bool IsChoiceElement(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttributes<XmlElementAttribute>().Count() > 1 || property.IsEnumerable();
-        }
+        public static bool IsChoiceElement(this PropertyInfo property) =>
+            property.GetCustomAttributes<XmlElementAttribute>().Count() > 1 || property.IsEnumerable();
 
         public static Type? GetGenericDefault(PropertyInfo property)
         {
@@ -107,8 +83,7 @@ namespace Inventors.Xml
 
         public static IEnumerable<(string, Type)> GetChoiceTypes(this PropertyInfo property)
         {
-            if (!property.IsChoiceElement())
-                throw new ArgumentException("Is not a choice element", nameof(property));
+            property.Throw("Is not a choice element").IfFalse(property.IsChoiceElement());
 
             Type? defaultType = GetGenericDefault(property);
 
@@ -147,49 +122,18 @@ namespace Inventors.Xml
             }
         }
 
-        public static bool IsEnumerable(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
+        public static bool IsEnumerable(this PropertyInfo property) =>
+            property.PropertyType.GetInterfaces().Any((t) => t.Name.Contains("IEnumerable"));
 
-            if (property.PropertyType is null)
-                return false;
+        public static bool IsArray(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlArrayAttribute>() is not null;
 
-            var type = property.PropertyType;
-
-            return type.GetInterfaces().Any((t) => t.Name.Contains("IEnumerable"));
-        }
-
-        public static bool IsArray(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttribute<XmlArrayAttribute>() != null;
-        }
-
-        public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property)
-        {
-            if (!property.IsArray())
-                throw new ArgumentException("Is not an array", nameof(property));
-
-            foreach (var item in property.GetCustomAttributes<XmlArrayItemAttribute>())
-            {
-                yield return item.Type;
-            }
-        }
+        public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property) =>
+            from item in property.GetCustomAttributes<XmlArrayItemAttribute>()
+            select item.Type;
 
         public static AttributeDescriptor ParseAttribute(this PropertyInfo property, ObjectDocument document)
         {
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
-
-            if (document is null)
-                throw new ArgumentNullException(nameof(document));
-
-            if (property.PropertyType is null)
-                throw new ArgumentException("The property does not have a type", nameof(property));
-
             string typeKey = property.PropertyType.ToString();
 
             if (_typeMapping.ContainsKey(typeKey))
@@ -211,9 +155,7 @@ namespace Inventors.Xml
         public static AttributeDescriptor ParseEnum(this PropertyInfo property, ObjectDocument document)
         {
             var type = property.PropertyType;
-
-            if (type.FullName is null)
-                throw new InvalidOperationException($"Enum type {type.Name} in attribute {property.Name} does not have a FullName");
+            type.FullName.ThrowIfNull();
 
             if (!document.Exists(type.GetXSDTypeName()))
             {
@@ -232,13 +174,10 @@ namespace Inventors.Xml
 
         public static bool IsPropertyRequired(this PropertyInfo property)
         {
-            var required = property.GetCustomAttribute<XmlRequiredAttribute>();
+            if (property.GetCustomAttribute<XmlRequiredAttribute>() is XmlRequiredAttribute required)
+                return required.Required;
 
-            if (required is null)
-                return false;
-
-            return required.Required;
+            return false;
         }
     }
-
 }
