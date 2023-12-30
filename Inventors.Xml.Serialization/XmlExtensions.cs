@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Reflection;
+using System.Xml.Schema;
+using System.Data.SqlTypes;
 
 namespace Inventors.Xml.Serialization
 {
@@ -40,6 +42,34 @@ namespace Inventors.Xml.Serialization
             var serializer = new XmlSerializer(typeof(T));
             serializer.Serialize(writer, x);
             return writer.ToString() ?? throw new InvalidOperationException("Serialization of {x} returned a null string");
+        }
+
+        public static Result<T, XmlValidationError> ToObject<T>(this string self, string xsdSchema)
+            where T : class
+        {
+            XmlValidationError errors = new XmlValidationError();
+
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
+            schemaSet.Add("", XmlReader.Create(new StringReader(xsdSchema)));
+
+
+            XmlReaderSettings settings = new XmlReaderSettings();
+
+            settings.Schemas = schemaSet;
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationEventHandler += (sender, e) => errors.Add(e);
+
+            using XmlReader reader = XmlReader.Create(new StringReader(self), settings);
+            while (reader.Read()) { }
+
+            if (errors.Failed)
+            {
+                return errors;
+            }
+            else
+            {
+                return self.ToObject<T>();  
+            }
         }
 
         public static string TrySerialize(this Type type) =>
