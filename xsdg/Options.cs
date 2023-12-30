@@ -26,7 +26,7 @@ namespace xsdg
 
             if (!File.Exists(ConfigFile))
             {
-                Console.WriteLine($"error, file not found!");
+                Console.WriteLine($"error, {ConfigFile} file not found!");
                 return;
             }
 
