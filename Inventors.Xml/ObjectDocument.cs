@@ -9,7 +9,7 @@ namespace Inventors.Xml
 {
     public class ObjectDocument
     {
-        public static ObjectDocument Create(Type type) => new(type);
+        public static ObjectDocument Parse(Type type) => new(type);
 
         private ObjectDocument(Type type)
         {
