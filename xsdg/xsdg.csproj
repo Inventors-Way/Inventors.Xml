@@ -10,18 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="xsdg-config.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="xsdg-config.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Inventors.Xml.Serialization\Inventors.Xml.Serialization.csproj" />
     <ProjectReference Include="..\Inventors.Xml\Inventors.Xml.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="xsdg-config.xml">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
