@@ -119,11 +119,7 @@ The ToObject<T> extension method also provides the possibility for validating th
 ```C#
 text.ToObject<XSDGConfig>(xsdSchema)
     .OnSuccess(config => config.Run(Path))
-    .OnError(errors =>
-    {
-        Console.WriteLine(("failed!"));
-        Console.WriteLine($"{errors}");
-    });            
+    .OnError(errors => Console.WriteLine($"{errors}"));            
 ```
 
 This extension method use a Result pattern to avoid exceptions if so desired. The result class has an implicit unboxing operator. Consequently, it can also be used conventionally:
