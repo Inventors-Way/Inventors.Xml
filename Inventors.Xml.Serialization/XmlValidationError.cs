@@ -11,8 +11,8 @@ namespace Inventors.Xml.Serialization
         {
             if (e.Severity == XmlSeverityType.Error)
             {
-                _errors.Add(e.Message);
                 _failed = true;
+                _errors.Add(e.Message);
             }
 
             if (e.Severity == XmlSeverityType.Warning)
@@ -20,6 +20,10 @@ namespace Inventors.Xml.Serialization
                 _warnings.Add(e.Message);
             }
         }
+
+        public IList<string> Errors => _errors;
+
+        public IList<string> Warnings => _warnings;
 
         public bool Failed => _failed;
 

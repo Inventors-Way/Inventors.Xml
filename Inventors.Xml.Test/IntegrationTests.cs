@@ -120,5 +120,30 @@ namespace Inventors.Xml.Test
             Console.WriteLine(content);
         }
 
+        [TestMethod]
+        public void T08_ValidationTest()
+        {
+            var xsdSchema = new XSDGenerator(ObjectDocument.Parse(typeof(Company))).Run();
+
+            var acmeText = File.ReadAllText(Path.Combine(DataDirectory, "AcmeCorp.xml"));
+            Company acmeCompany = acmeText.ToObject<Company>(xsdSchema)
+                .OnSuccess(company => Console.WriteLine($"Loaded company {company.Name}"))
+                .OnError(errors => Assert.IsTrue(false)); // We should not get an error
+
+            var invalidText = File.ReadAllText(Path.Combine(DataDirectory, "InvalidCompany.xml"));
+            invalidText.ToObject<Company>(xsdSchema)
+                .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
+                .OnError(errors =>
+                {
+                    Console.WriteLine("Errors:");
+                    foreach (var error in errors.Errors)
+                        Console.WriteLine(error);
+
+                    Console.WriteLine("Warnings:");
+                    foreach (var warning in errors.Warnings)
+                        Console.WriteLine(warning);
+                }); 
+        }
+
     }
 }
