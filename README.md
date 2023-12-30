@@ -142,7 +142,7 @@ In the future we plan to provide an installer for the xsdg tool. Currently, it i
 
 ## Documentation Files
 
-The xsdg tool can include documentation from Text, Markdown, or HTML files. Each the ```xs:documention``` that will be included for classes and properties comes from one file for each entity. The documentation file for a class has the same name as the class and must be located in a folder structure matching the namespaces of the class. Documentation files for each property within the class have the name of [ClassName].[PropertyNAme] and must be located next to the class documentation file.
+The xsdg tool can include documentation from Text, Markdown, or HTML files. Each the ```xs:documention``` that will be included for classes and properties comes from one file for each entity. The documentation file for a class has the same name as the class and must be located in a folder structure matching the namespaces of the class. Documentation files for each property within the class have the name of [ClassName].[PropertyName] and must be located next to the class documentation file.
 
 ### Benefits of documentation files 
 
