@@ -51,13 +51,14 @@ namespace Inventors.Xml
             return _types.ContainsKey(name);
         }
 
-        public string Add(Element element)
+        public T Add<T>(T element)
+            where T : Element
         {
             if (_types.ContainsKey(element.Name))
-                return element.Name;
+                return element;
 
             _types.Add(element.Name, element);
-            return element.Name;
+            return element;
         }
 
         public override string ToString()

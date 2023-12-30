@@ -12,17 +12,14 @@ namespace Inventors.Xml
 {
     public static class TypeExtensions
     {
-        public static string RootElementName(this Type input)
-        {
-            var root = input.GetCustomAttributes(typeof(XmlRootAttribute), false)
+        public static string RootElementName(this Type input) =>
+            (input.GetCustomAttributes(typeof(XmlRootAttribute), false)
                 .ThrowIfNull()
                 .IfEmpty()
-                .Value[0] as XmlRootAttribute;
-
-            return root.ThrowIfNull()
+                .Value[0] as XmlRootAttribute)
+                .ThrowIfNull()
                 .IfTrue(root => root.ElementName is null)
                 .Value.ElementName;
-        }
 
         public static string GetXSDTypeName(this Type type) =>
             type.FullName is not null ? type.FullName : type.Name;
@@ -47,14 +44,12 @@ namespace Inventors.Xml
 
         public static Element ParseClass(this Type type, ObjectDocument document)
         {
-            if (!type.IsClass)
-                throw new ArgumentException("Must a class to be parsed as a class", nameof(type));
+            type.Throw().IfFalse(type => type.IsClass);
 
-            ClassElement element = new(name: type.GetXSDTypeName(),
-                                       baseType: type.BaseType.ParseBaseType(document).Name,
-                                       isAbstract: type.IsAbstract);
-
-            document.Add(element);
+            var element = document.Add(new ClassElement(
+                name: type.GetXSDTypeName(),
+                baseType: type.BaseType.ParseBaseType(document).Name,
+                isAbstract: type.IsAbstract));
 
             foreach (var property in type.GetProperties())
             {
