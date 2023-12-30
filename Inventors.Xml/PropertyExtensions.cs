@@ -26,6 +26,34 @@ namespace Inventors.Xml
             _typeMapping.Add(typeof(byte).ToString(), "byte");
         }
 
+        public static PropertyXSDType GetXSDType(this PropertyInfo property, Type type)
+        {
+            if (type.IsPropertyInherited(property.Name))
+                return PropertyXSDType.Inherited;
+
+            if (property.Ignore())
+                return PropertyXSDType.Ignored;
+
+            if (property.IsAttribute())
+                return PropertyXSDType.Attribute;
+
+            if (property.IsElement())
+            {
+                if (property.IsChoiceElement())
+                    return PropertyXSDType.Choice;
+
+                return PropertyXSDType.Class;
+            }
+
+            if (property.IsArray())
+                return PropertyXSDType.Array;
+
+            if (!property.IsPublic())
+                return PropertyXSDType.Private;
+
+            return PropertyXSDType.Invalid;
+        }
+
         public static bool IsPublic(this PropertyInfo property)
         {
             if ((property.GetSetMethod() is null) &&

@@ -11,10 +11,10 @@ namespace Inventors.Xml.Content
     public class ChoiceElement :
         Element
     {
-        public ChoiceElement(string name, IList<Choice> choices, bool multiple) :
+        public ChoiceElement(string name, IEnumerable<Choice> choices, bool multiple) :
             base(name: name, baseType: "", false)
         {
-            Choices = choices;
+            Choices = choices.ToList();
             Multiple = multiple;
         }
 

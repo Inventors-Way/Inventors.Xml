@@ -11,10 +11,10 @@ namespace Inventors.Xml.Content
     public class ArrayElement :
         Element
     {
-        public ArrayElement(string name, IList<ArrayItem> items) :
+        public ArrayElement(string name, IEnumerable<ArrayItem> items) :
             base(name: name, baseType: "", false)
         {
-            Items = items;
+            Items = items.ToList();
         }
 
         public IList<ArrayItem> Items { get; }
