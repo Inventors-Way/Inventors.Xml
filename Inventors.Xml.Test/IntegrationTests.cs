@@ -25,6 +25,8 @@ namespace Inventors.Xml.Test
 
         public static string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
 
+        public static string GetData(string filename) => File.ReadAllText(Path.Combine(DataDirectory, filename));
+
         public static string DocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentation");
 
         public static string DisposableDocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentationDisposable");
@@ -120,5 +122,24 @@ namespace Inventors.Xml.Test
             Console.WriteLine(content);
         }
 
+        [TestMethod]
+        public void T08_ValidationTestPassingValidation()
+        {
+            var xsdSchema = typeof(Company).GetSchema(); 
+
+            Company acmeCompany = GetData("AcmeCorp.xml").ToObject<Company>(xsdSchema)
+                .OnSuccess(company => Console.WriteLine($"Loaded company {company.Name}"))
+                .OnError(errors => Assert.IsTrue(false)); // We should not get an error
+        }
+
+        [TestMethod]
+        public void T09_ValidationTestFailingValidation()
+        {
+            var xsdSchema = typeof(Company).GetSchema();
+
+            var result = GetData("InvalidCompany.xml").ToObject<Company>(xsdSchema)
+                .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
+                .OnError(errors => Console.WriteLine($"{errors}"));
+        }
     }
 }

@@ -242,5 +242,4 @@ namespace Inventors.Xml.Generators.Xsd
         private readonly DocumentationSource? documentation;
         private bool executed = false;
     }
-
 }

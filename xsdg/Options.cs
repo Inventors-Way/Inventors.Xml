@@ -22,30 +22,42 @@ namespace xsdg
 
         public void Run()
         {
-            Console.Write($"Loading configuration file [ {ConfigFile} ] ... ");
+            var xsdSchema = GetType().Assembly.ReadEmbeddedResourceString("Schema.xsdg.xsd");
 
             if (!File.Exists(ConfigFile))
             {
-                Console.WriteLine($"error, file not found!");
+                Console.WriteLine($"error, {ConfigFile} file not found!");
                 return;
             }
 
-            var text = File.ReadAllText(ConfigFile);
-            var config = text.ToObject<XSDGConfig>();
-            Console.WriteLine("done");
-            
             if (string.IsNullOrEmpty(Path))
             {
                 Path = Directory.GetCurrentDirectory();
             }
 
-            if (!Directory.Exists(Path)) 
+            if (!Directory.Exists(Path))
             {
                 Console.WriteLine($"Working path [ {Path} ] does not exists, aborting");
+                return;
             }
 
             Console.WriteLine($"Working path set to: {Path}");
-            config.Run(Path);
+
+            Console.Write($"Loading configuration file [ {ConfigFile} ] ... ");
+
+
+            var text = File.ReadAllText(ConfigFile);
+            text.ToObject<XSDGConfig>(xsdSchema)
+                .OnSuccess(config =>
+                {
+                    Console.WriteLine("done");
+                    config.Run(Path);
+                })
+                .OnError(errors =>
+                {
+                    Console.WriteLine(("failed!"));
+                    Console.WriteLine($"{errors}");
+                });            
         }
     }
 }

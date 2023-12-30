@@ -4,6 +4,9 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Reflection;
+using System.Xml.Schema;
+using System.Data.SqlTypes;
 
 namespace Inventors.Xml.Serialization
 {
@@ -41,6 +44,34 @@ namespace Inventors.Xml.Serialization
             return writer.ToString() ?? throw new InvalidOperationException("Serialization of {x} returned a null string");
         }
 
+        public static Result<T, XmlValidationError> ToObject<T>(this string self, string xsdSchema, bool warningsAsErrors = false)
+            where T : class
+        {
+            XmlValidationError errors = new XmlValidationError(typeof(T).Name, warningsAsErrors);
+
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
+            schemaSet.Add("", XmlReader.Create(new StringReader(xsdSchema)));
+
+
+            XmlReaderSettings settings = new XmlReaderSettings();
+
+            settings.Schemas = schemaSet;
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationEventHandler += (sender, e) => errors.Add(e);
+
+            using XmlReader reader = XmlReader.Create(new StringReader(self), settings);
+            while (reader.Read()) { }
+
+            if (errors.Failed)
+            {
+                return errors;
+            }
+            else
+            {
+                return self.ToObject<T>();  
+            }
+        }
+
         public static string TrySerialize(this Type type) =>
             Activator.CreateInstance(type).TrySerialize();
 
@@ -64,6 +95,18 @@ namespace Inventors.Xml.Serialization
             var base64EncodedBytes = Convert.FromBase64String(self);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
-    }
 
+        public static string ReadEmbeddedResourceString(this Assembly assembly, string resourceName)
+        {
+            string fullResourceName = $"{assembly.GetName().Name}.{resourceName}";
+
+            using Stream resourceStream = assembly.GetManifestResourceStream(fullResourceName);
+
+            if (resourceStream is null)
+                throw new Exception($"Resource '{resourceName}' not found in assembly.");
+
+            using StreamReader reader = new StreamReader(resourceStream);
+            return reader.ReadToEnd();
+        }
+    }
 }

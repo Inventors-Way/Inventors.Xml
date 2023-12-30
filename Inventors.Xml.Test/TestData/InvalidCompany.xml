@@ -10,7 +10,10 @@
             <position
                 employee-id="E1"
                 title="Developer"/>            
-        </department>    
+        </department>
+        <rubbish>
+            
+        </rubbish>
     </departments>
     
     <employees>

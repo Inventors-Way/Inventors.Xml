@@ -1,4 +1,5 @@
 ﻿using Inventors.Xml.Content;
+using Inventors.Xml.Generators.Xsd;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,11 @@ namespace Inventors.Xml
 {
     public static class TypeExtensions
     {
+        public static string GetSchema(this Type type)
+        {
+            return new XSDGenerator(ObjectDocument.Parse(type)).Run();
+        }
+
         public static string RootElementName(this Type input) =>
             (input.GetCustomAttributes(typeof(XmlRootAttribute), false)
                 .ThrowIfNull()
