@@ -70,14 +70,8 @@ namespace Inventors.Xml
             }
         }
 
-        private static string GetName(string? fullname)
-        {
-            if (fullname is null)
-                return string.Empty;
-
-            var parts = fullname.Split(',');
-            return parts[0];
-        }
+        private static string GetName(string? fullname) =>
+            fullname is null ? string.Empty : fullname.Split(',')[0];
 
         private Assembly LoadAssembly(string path)
         {
