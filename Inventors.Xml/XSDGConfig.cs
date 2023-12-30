@@ -103,16 +103,10 @@ namespace Inventors.Xml
 
         private static void PrintRuntime(Stopwatch stopwatch)
         {
-            stopwatch.Stop();
-
             if (stopwatch.ElapsedMilliseconds > 1000)
-            {
                 Console.WriteLine($"Job completed in: {stopwatch.Elapsed.Seconds}s");
-            }
             else 
-            {
                 Console.WriteLine($"Job completed in: {stopwatch.ElapsedMilliseconds}ms");
-            }
         }
     }
 }
