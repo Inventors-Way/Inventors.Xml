@@ -84,26 +84,18 @@ namespace Inventors.Xml
                 .Value);
         }
 
-        private string GetAssemblyPath(string path)
-        {
-            if (string.IsNullOrEmpty(InputPath))
-            {
-                return Path.Combine(path, AssemblyName);
-            }
-            else
-            {
-                return Path.Combine(new string[]
+        private string GetAssemblyPath(string path) =>
+            string.IsNullOrEmpty(InputPath) ? 
+            Path.Combine(path, AssemblyName) :
+            Path.Combine(new string[]
                 {
                     path,
                     InputPath,
                     $"{AssemblyName}.dll"
                 });
-            }
-        }
-
         private static void PrintRuntime(Stopwatch stopwatch)
         {
-            if (stopwatch.ElapsedMilliseconds > 1000)
+            if (stopwatch.ElapsedMilliseconds > 999)
                 Console.WriteLine($"Job completed in: {stopwatch.Elapsed.Seconds}s");
             else 
                 Console.WriteLine($"Job completed in: {stopwatch.ElapsedMilliseconds}ms");
