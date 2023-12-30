@@ -25,6 +25,8 @@ namespace Inventors.Xml.Test
 
         public static string DataDirectory => $"{Directory.GetCurrentDirectory()}\\..\\..\\..\\TestData\\";
 
+        public static string GetData(string filename) => File.ReadAllText(Path.Combine(DataDirectory, filename));
+
         public static string DocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentation");
 
         public static string DisposableDocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentationDisposable");
@@ -121,29 +123,23 @@ namespace Inventors.Xml.Test
         }
 
         [TestMethod]
-        public void T08_ValidationTest()
+        public void T08_ValidationTestPassingValidation()
         {
             var xsdSchema = new XSDGenerator(ObjectDocument.Parse(typeof(Company))).Run();
 
-            var acmeText = File.ReadAllText(Path.Combine(DataDirectory, "AcmeCorp.xml"));
-            Company acmeCompany = acmeText.ToObject<Company>(xsdSchema)
+            Company acmeCompany = GetData("AcmeCorp.xml").ToObject<Company>(xsdSchema)
                 .OnSuccess(company => Console.WriteLine($"Loaded company {company.Name}"))
                 .OnError(errors => Assert.IsTrue(false)); // We should not get an error
-
-            var invalidText = File.ReadAllText(Path.Combine(DataDirectory, "InvalidCompany.xml"));
-            invalidText.ToObject<Company>(xsdSchema)
-                .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
-                .OnError(errors =>
-                {
-                    Console.WriteLine("Errors:");
-                    foreach (var error in errors.Errors)
-                        Console.WriteLine(error);
-
-                    Console.WriteLine("Warnings:");
-                    foreach (var warning in errors.Warnings)
-                        Console.WriteLine(warning);
-                }); 
         }
 
+        [TestMethod]
+        public void T09_ValidationTestFailingValidation()
+        {
+            var xsdSchema = new XSDGenerator(ObjectDocument.Parse(typeof(Company))).Run();
+
+            var result = GetData("InvalidCompany.xml").ToObject<Company>(xsdSchema)
+                .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
+                .OnError(errors => Console.WriteLine($"{errors}"));
+        }
     }
 }

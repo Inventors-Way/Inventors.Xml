@@ -44,10 +44,10 @@ namespace Inventors.Xml.Serialization
             return writer.ToString() ?? throw new InvalidOperationException("Serialization of {x} returned a null string");
         }
 
-        public static Result<T, XmlValidationError> ToObject<T>(this string self, string xsdSchema)
+        public static Result<T, XmlValidationError> ToObject<T>(this string self, string xsdSchema, bool warningsAsErrors = false)
             where T : class
         {
-            XmlValidationError errors = new XmlValidationError();
+            XmlValidationError errors = new XmlValidationError(typeof(T).Name, warningsAsErrors);
 
             XmlSchemaSet schemaSet = new XmlSchemaSet();
             schemaSet.Add("", XmlReader.Create(new StringReader(xsdSchema)));
