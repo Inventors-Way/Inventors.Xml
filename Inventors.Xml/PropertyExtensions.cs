@@ -159,10 +159,8 @@ namespace Inventors.Xml
 
             if (!document.Exists(type.GetXSDTypeName()))
             {
-                var element = new EnumElement(name: type.FullName, 
-                                              values: type.ParseEnumValues(),
-                                              sourceValues: type.GetEnumStrings());
-                document.Add(element);
+                document.Add(new EnumElement(name: type.FullName, 
+                                             values: type.ParseEnumValues()));
             }
 
             return new AttributeDescriptor(Name: property.GetAttributeName(),

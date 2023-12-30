@@ -117,7 +117,7 @@ namespace Inventors.Xml
             return baseType.ParseClass(document);
         }
 
-        public static IEnumerable<string> ParseEnumValues(this Type type)
+        public static IEnumerable<EnumValue> ParseEnumValues(this Type type)
         {
             type.Throw().IfFalse(type.IsEnum);
 
@@ -127,20 +127,11 @@ namespace Inventors.Xml
                 var fieldInfo = type.GetField(name) ?? throw new InvalidOperationException($"No field into found for enum value {value}");
                 
                 if (Attribute.GetCustomAttribute(fieldInfo, typeof(XmlEnumAttribute)) is XmlEnumAttribute xmlEnum)
-                    yield return xmlEnum.Name is null ? name : xmlEnum.Name;
+                    yield return xmlEnum.Name is null ?
+                                 new EnumValue(Name: name, XSDName: name) :
+                                 new EnumValue(Name: name, XSDName: xmlEnum.Name);
                 else
-                    yield return name;
-            }
-        }
-
-        public static IEnumerable<string> GetEnumStrings(this Type type)
-        {
-            if (!type.IsEnum)
-                throw new ArgumentException("Is not an enum", nameof(type));
-
-            foreach (var value in Enum.GetValues(type))
-            {
-                yield return $"{value}";
+                    yield return new EnumValue(Name: name, XSDName: name);
             }
         }
     }

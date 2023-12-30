@@ -9,11 +9,10 @@ namespace Inventors.Xml.Content
     public class EnumElement :
         Element
     {
-        public EnumElement(string name, IEnumerable<string> values, IEnumerable<string> sourceValues) :
+        public EnumElement(string name, IEnumerable<EnumValue> values) :
             base(name: name, baseType: "", false)
         {
             Values = values.ToList();
-            SourceValues = sourceValues.ToList();
         }
 
         public override bool IsNested => false;
@@ -28,14 +27,12 @@ namespace Inventors.Xml.Content
 
             foreach (var value in Values)
             {
-                builder.AppendLine($"- {value}");
+                builder.AppendLine($"- {value.XSDName} [ {value.Name} ]");
             }
 
             return builder.ToString();
         }
 
-        public IList<string> Values { get; }
-
-        public IList<string> SourceValues { get; }
+        public IList<EnumValue> Values { get; }
     }
 }
