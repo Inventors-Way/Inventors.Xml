@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml
 {
@@ -53,46 +54,21 @@ namespace Inventors.Xml
         public static bool IsAttribute(this PropertyInfo property) =>
             property.GetCustomAttribute<XmlAttributeAttribute>() is not null;
 
-        public static string GetAttributeName(this PropertyInfo property)
-        {
+        public static string GetAttributeName(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlAttributeAttribute>()
+                .ThrowIfNull()
+                .Value.AttributeName;
 
-            if (property.GetCustomAttribute<XmlAttributeAttribute>() is XmlAttributeAttribute attribute)
-            {
-                return attribute.AttributeName;
-            }
+        public static bool IsElement(this PropertyInfo property) =>
+            property.GetCustomAttributes<XmlElementAttribute>().Any();
 
-            throw new ArgumentException("Property is not an attribute", nameof(property));
-        }
+        public static string GetElementName(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlElementAttribute>()
+                .ThrowIfNull()
+                .Value.ElementName;
 
-
-        public static bool IsElement(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttributes<XmlElementAttribute>().Any();
-        }
-
-        public static string GetElementName(this PropertyInfo property)
-        {
-            if (!property.IsElement())
-                throw new ArgumentException("Property is not an element", nameof(property));
-
-            var element = property.GetCustomAttribute<XmlElementAttribute>();
-
-            if (element is null)
-                throw new InvalidOperationException("This should be impossible due to the Guard clause above");
-
-            return element.ElementName;
-        }
-
-        public static bool IsChoiceElement(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttributes<XmlElementAttribute>().Count() > 1 || property.IsEnumerable();
-        }
+        public static bool IsChoiceElement(this PropertyInfo property) =>
+            property.GetCustomAttributes<XmlElementAttribute>().Count() > 1 || property.IsEnumerable();
 
         public static Type? GetGenericDefault(PropertyInfo property)
         {
@@ -107,8 +83,7 @@ namespace Inventors.Xml
 
         public static IEnumerable<(string, Type)> GetChoiceTypes(this PropertyInfo property)
         {
-            if (!property.IsChoiceElement())
-                throw new ArgumentException("Is not a choice element", nameof(property));
+            property.Throw("Is not a choice element").IfFalse(property.IsChoiceElement());
 
             Type? defaultType = GetGenericDefault(property);
 
