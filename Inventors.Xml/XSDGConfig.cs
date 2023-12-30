@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Throw;
 
 namespace Inventors.Xml
 {
@@ -48,8 +49,7 @@ namespace Inventors.Xml
             }
             catch (Exception ex)
             {
-                Console.WriteLine("failed");
-                Console.WriteLine(ex);
+                Console.WriteLine($"failed: {ex}");
                 return;
             }
 
@@ -75,19 +75,13 @@ namespace Inventors.Xml
 
         private Assembly LoadAssembly(string path)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            if (assemblies.Any(a => GetName(a.FullName) == AssemblyName))
+            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => GetName(a.FullName) == AssemblyName))
                 return Assembly.Load(AssemblyName);
 
-            var filename = GetAssemblyPath(path);
-
-            if (!File.Exists(filename))
-            {
-                throw new ArgumentException($"Assembly not found [ {filename} ]");
-            }
-
-            return Assembly.LoadFrom(filename);
+            return Assembly.LoadFrom(GetAssemblyPath(path)
+                .Throw()
+                .IfFalse(filename => File.Exists(filename))
+                .Value);
         }
 
         private string GetAssemblyPath(string path)
