@@ -28,61 +28,33 @@ namespace Inventors.Xml
 
         public static PropertyXSDType GetXSDType(this PropertyInfo property, Type type)
         {
-            if (type.IsPropertyInherited(property.Name))
+            if (type.IsPropertyInherited(property.Name)) 
                 return PropertyXSDType.Inherited;
-
-            if (property.Ignore())
+            if (property.Ignore()) 
                 return PropertyXSDType.Ignored;
-
-            if (property.IsAttribute())
+            if (property.IsAttribute()) 
                 return PropertyXSDType.Attribute;
-
             if (property.IsElement())
-            {
-                if (property.IsChoiceElement())
-                    return PropertyXSDType.Choice;
-
-                return PropertyXSDType.Class;
-            }
-
-            if (property.IsArray())
+                return property.IsChoiceElement() ? PropertyXSDType.Choice : PropertyXSDType.Class;
+            if (property.IsArray()) 
                 return PropertyXSDType.Array;
-
-            if (!property.IsPublic())
+            if (!property.IsPublic()) 
                 return PropertyXSDType.Private;
 
             return PropertyXSDType.Invalid;
         }
 
-        public static bool IsPublic(this PropertyInfo property)
-        {
-            if ((property.GetSetMethod() is null) &&
-                (property.GetGetMethod() is null))
-                return false;
+        public static bool IsPublic(this PropertyInfo property) =>
+            (property.GetSetMethod() is not null) || (property.GetGetMethod() is not null);
 
-            return true;
-        }
+        public static bool Ignore(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlIgnoreAttribute>() is not null;
 
-        public static bool Ignore(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttribute<XmlIgnoreAttribute>() != null;
-        }
-
-        public static bool IsAttribute(this PropertyInfo property)
-        {
-            if (property is null)
-                return false;
-
-            return property.GetCustomAttribute<XmlAttributeAttribute>() != null;
-        }
+        public static bool IsAttribute(this PropertyInfo property) =>
+            property.GetCustomAttribute<XmlAttributeAttribute>() is not null;
 
         public static string GetAttributeName(this PropertyInfo property)
         {
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
 
             if (property.GetCustomAttribute<XmlAttributeAttribute>() is XmlAttributeAttribute attribute)
             {
