@@ -41,6 +41,18 @@ namespace Inventors.Xml.Serialization
             return writer.ToString() ?? throw new InvalidOperationException("Serialization of {x} returned a null string");
         }
 
+        public static string TrySerialize(this Type type) =>
+            Activator.CreateInstance(type).TrySerialize();
+
+        public static string TrySerialize(this object obj) 
+        {
+            using StringWriter writer = new StringWriter();
+            XmlSerializer serializer = new XmlSerializer(obj.GetType());
+            serializer.Serialize(writer, obj);
+
+            return writer.ToString();
+        }
+
         public static string Base64Encode(this string self)
         {
             var plainTextBytes = Encoding.UTF8.GetBytes(self);
