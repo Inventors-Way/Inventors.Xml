@@ -125,7 +125,7 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T08_ValidationTestPassingValidation()
         {
-            var xsdSchema = new XSDGenerator(ObjectDocument.Parse(typeof(Company))).Run();
+            var xsdSchema = typeof(Company).GetSchema(); 
 
             Company acmeCompany = GetData("AcmeCorp.xml").ToObject<Company>(xsdSchema)
                 .OnSuccess(company => Console.WriteLine($"Loaded company {company.Name}"))
@@ -135,7 +135,7 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T09_ValidationTestFailingValidation()
         {
-            var xsdSchema = new XSDGenerator(ObjectDocument.Parse(typeof(Company))).Run();
+            var xsdSchema = typeof(Company).GetSchema();
 
             var result = GetData("InvalidCompany.xml").ToObject<Company>(xsdSchema)
                 .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
