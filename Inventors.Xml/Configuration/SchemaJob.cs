@@ -34,7 +34,7 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(false)]    
         public bool EncapsulateCharacterData { get; set; } = false;
 
-        public override void Run(string path, IJobConfiguration configuration)
+        public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
         {
             var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             "Check that type can be XML serialized".Run(() => type.TrySerialize());

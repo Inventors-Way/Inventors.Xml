@@ -18,7 +18,7 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(false)]
         public DocumentationFormat DocumentationFileFormat { get; set; } = DocumentationFormat.MarkDown;
 
-        public override void Run(string path, IJobConfiguration configuration)
+        public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
         {
             var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             "Check that type can be XML serialized".Run(() => type.TrySerialize()); 

@@ -17,6 +17,10 @@ namespace xsdg
                 HelpText = "The working path")]
         public string Path { get; set; } = string.Empty;
 
+        [Option(longName: "verbose", shortName: 'v', Required = false,
+            HelpText = "Enable verbose output")]
+        public bool Verbose { get; set; } = false;
+
         [Value(0, Required = true, HelpText = "Configuration file")]
         public string ConfigFile { get; set; } = string.Empty;
 
@@ -51,7 +55,7 @@ namespace xsdg
                 .OnSuccess(config =>
                 {
                     Console.WriteLine("done");
-                    config.Run(Path);
+                    config.Run(Path, Verbose);
                 })
                 .OnError(errors =>
                 {

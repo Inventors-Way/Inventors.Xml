@@ -41,6 +41,6 @@ namespace Inventors.Xml.Configuration
                     c.OutputPath
                 });
 
-        public abstract void Run(string path, IJobConfiguration configuration);
+        public abstract void Run(string path, IJobConfiguration configuration, bool verbose = false);
     }
 }
