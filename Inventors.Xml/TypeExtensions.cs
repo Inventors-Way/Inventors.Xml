@@ -57,8 +57,9 @@ namespace Inventors.Xml
 
             var element = document.Add(new ClassElement(
                 name: type.GetXSDTypeName(),
-                baseType: type.BaseType.ParseBaseType(document, reporter).Name,
                 isAbstract: type.IsAbstract));
+
+            element.BaseType = type.BaseType.ParseBaseType(document, reporter).Name;
 
             foreach (var property in type.GetProperties())
             {
@@ -95,9 +96,9 @@ namespace Inventors.Xml
 
         private static ElementDescriptor ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
-            var choices = from choice in property.GetChoiceTypes()
-                          select new Choice(choice.Item1, choice.Item2.ParseClass(document, reporter));
-            var element = document.Add(new ChoiceElement(name, choices, property.IsEnumerable()));
+            var element = document.Add(new ChoiceElement(name, property.IsEnumerable()));
+            element.SetChoices(from choice in property.GetChoiceTypes()
+                               select new Choice(choice.Item1, choice.Item2.ParseClass(document, reporter)));
 
             return new ElementDescriptor(Name: property.Name,
                                          Type: element,
@@ -107,9 +108,9 @@ namespace Inventors.Xml
 
         private static ElementDescriptor ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
-            var items = from item in property.GetArrayItems()
-                        select new ArrayItem(item.Item1, item.Item2.ParseClass(document, reporter));
-            var element = document.Add(new ArrayElement(name, items));
+            var element = document.Add(new ArrayElement(name));
+            element.SetItems(from item in property.GetArrayItems()
+                             select new ArrayItem(item.Item1, item.Item2.ParseClass(document, reporter)));
 
             return new ElementDescriptor(Name: property.GetArrayName(),
                                          Type: element,

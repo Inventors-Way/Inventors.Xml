@@ -9,13 +9,17 @@ namespace Inventors.Xml.Content
     public class ArrayElement :
         Element
     {
-        public ArrayElement(string name, IEnumerable<ArrayItem> items) :
-            base(name: name, baseType: "", false)
+        public ArrayElement(string name) :
+            base(name: name, false)
         {
-            Items = items.ToList();
         }
 
-        public IList<ArrayItem> Items { get; }
+        internal void SetItems(IEnumerable<ArrayItem> items)
+        {
+            _items.AddRange(items); 
+        }
+
+        public IList<ArrayItem> Items => _items;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
 
@@ -35,5 +39,7 @@ namespace Inventors.Xml.Content
 
             return builder.ToString();
         }
+
+        private readonly List<ArrayItem> _items = new(); 
     }
 }

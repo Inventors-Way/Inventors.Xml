@@ -10,7 +10,7 @@ namespace Inventors.Xml.Content
         Element
     {
         public NullElement() :
-            base("", "", false)
+            base("", false)
         {
 
         }
@@ -23,16 +23,16 @@ namespace Inventors.Xml.Content
     public abstract class Element
     {
         private static readonly Element _empty = new NullElement();
-        public Element(string name, string baseType, bool isAbstract)
+        public Element(string name, bool isAbstract)
         {
             Name = name;
-            BaseType = baseType;
+            BaseType = string.Empty;
             IsAbstract = isAbstract;
         }
 
         public string Name { get; }
 
-        public string BaseType { get; }
+        public string BaseType { get; internal set; }
 
         public bool IsAbstract { get; }
 

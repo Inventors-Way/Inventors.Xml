@@ -9,16 +9,20 @@ namespace Inventors.Xml.Content
     public class ChoiceElement :
         Element
     {
-        public ChoiceElement(string name, IEnumerable<Choice> choices, bool multiple) :
-            base(name: name, baseType: "", false)
+        public ChoiceElement(string name, bool multiple) :
+            base(name: name, false)
         {
-            Choices = choices.ToList();
             Multiple = multiple;
+        }
+
+        public void SetChoices(IEnumerable<Choice> choices)
+        {
+            _choices.AddRange(choices);
         }
 
         public bool Multiple { get; }
 
-        public IList<Choice> Choices { get; }
+        public IList<Choice> Choices => _choices;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
 
@@ -37,5 +41,7 @@ namespace Inventors.Xml.Content
 
             return builder.ToString();
         }
+
+        private readonly List<Choice> _choices = new();
     }
 }

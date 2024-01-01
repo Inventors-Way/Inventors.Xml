@@ -24,6 +24,10 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlArrayItem("employee", typeof(Employee))]
         public List<Employee> Employees { get; } = new List<Employee>();
 
+        [XmlArray("projects")]
+        [XmlArrayItem("project", typeof(Project))]
+        public List<Project> Projects { get; } = new List<Project>();
+
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -47,6 +51,16 @@ namespace Inventors.Xml.Test.TestObjects
                 foreach (var employee in Employees)
                 {
                     builder.AppendLine($"- {employee}");
+                }
+            }
+
+            if (Projects.Count > 0) 
+            {
+                builder.AppendLine("PROJECTS:");
+
+                foreach (var project in Projects)
+                {
+                    builder.AppendLine(project.ToString());
                 }
             }
 
