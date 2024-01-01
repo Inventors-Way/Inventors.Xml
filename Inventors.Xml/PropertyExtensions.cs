@@ -46,7 +46,7 @@ namespace Inventors.Xml
         }
 
         public static bool IsPublic(this PropertyInfo property) =>
-            (property.GetSetMethod() is not null) || (property.GetGetMethod() is not null);
+            (property.GetSetMethod() is not null) && (property.GetGetMethod() is not null);
 
         public static bool Ignore(this PropertyInfo property) =>
             property.GetCustomAttribute<XmlIgnoreAttribute>() is not null;
