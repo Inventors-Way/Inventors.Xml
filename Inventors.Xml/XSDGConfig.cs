@@ -65,7 +65,8 @@ namespace Inventors.Xml
                 }
                 catch (Exception ex) 
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
+                    Console.WriteLine($"Error:");
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
