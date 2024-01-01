@@ -52,6 +52,9 @@ namespace Inventors.Xml
         {
             type.Throw().IfFalse(type => type.IsClass);
 
+            reporter.Report($"Parsing of class [ name: {type.Name} ]:");
+            reporter.Report($"   XSD Name: {type.GetXSDTypeName()}");
+
             var element = document.Add(new ClassElement(
                 name: type.GetXSDTypeName(),
                 baseType: type.BaseType.ParseBaseType(document, reporter).Name,
