@@ -15,7 +15,7 @@ namespace Inventors.Xml
     {
         public static string GetSchema(this Type type)
         {
-            return new XSDGenerator(ObjectDocument.Parse(type)).Run();
+            return new XSDGenerator(ObjectDocument.Parse(type, NullReporter.Instance)).Run();
         }
 
         public static string RootElementName(this Type input) =>
@@ -48,13 +48,13 @@ namespace Inventors.Xml
             return false;
         }
 
-        public static Element ParseClass(this Type type, ObjectDocument document)
+        public static Element ParseClass(this Type type, ObjectDocument document, Reporter reporter)
         {
             type.Throw().IfFalse(type => type.IsClass);
 
             var element = document.Add(new ClassElement(
                 name: type.GetXSDTypeName(),
-                baseType: type.BaseType.ParseBaseType(document).Name,
+                baseType: type.BaseType.ParseBaseType(document, reporter).Name,
                 isAbstract: type.IsAbstract));
 
             foreach (var property in type.GetProperties())
@@ -66,15 +66,15 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Class:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
-                                                          Type: ParseClass(property.PropertyType, document),
+                                                          Type: ParseClass(property.PropertyType, document, reporter),
                                                           Required: property.IsPropertyRequired(),
                                                           PropertyName: property.Name));
                         break;
                     case PropertyXSDType.Choice:
-                        element.Add(ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document));
+                        element.Add(ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document, reporter));
                         break;
                     case PropertyXSDType.Array:
-                        element.Add(ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document));
+                        element.Add(ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document, reporter));
                         break;
 
                     case PropertyXSDType.Private:
@@ -90,10 +90,10 @@ namespace Inventors.Xml
             return element;
         }
 
-        private static ElementDescriptor ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document)
+        private static ElementDescriptor ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             var choices = from choice in property.GetChoiceTypes()
-                          select new Choice(choice.Item1, choice.Item2.ParseClass(document));
+                          select new Choice(choice.Item1, choice.Item2.ParseClass(document, reporter));
             var element = document.Add(new ChoiceElement(name, choices, property.IsEnumerable()));
 
             return new ElementDescriptor(Name: property.Name,
@@ -102,10 +102,10 @@ namespace Inventors.Xml
                                          PropertyName: property.Name);
         }
 
-        private static ElementDescriptor ParseArrayElement(string name, PropertyInfo property, ObjectDocument document)
+        private static ElementDescriptor ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             var items = from item in property.GetArrayItems()
-                        select new ArrayItem(item.Item1, item.Item2.ParseClass(document));
+                        select new ArrayItem(item.Item1, item.Item2.ParseClass(document, reporter));
             var element = document.Add(new ArrayElement(name, items));
 
             return new ElementDescriptor(Name: property.GetArrayName(),
@@ -114,13 +114,13 @@ namespace Inventors.Xml
                                          PropertyName: property.Name); ;
         }
 
-        private static Element ParseBaseType(this Type? baseType, ObjectDocument document)
+        private static Element ParseBaseType(this Type? baseType, ObjectDocument document, Reporter reporter)
         {
             if (baseType is null) return Element.Empty;
             if (baseType == typeof(Object)) return Element.Empty;
             if (document.Exists(baseType.GetXSDTypeName())) return document[baseType.GetXSDTypeName()];
 
-            return baseType.ParseClass(document);
+            return baseType.ParseClass(document, reporter);
         }
 
         public static IEnumerable<EnumValue> ParseEnumValues(this Type type)

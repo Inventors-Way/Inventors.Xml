@@ -20,15 +20,16 @@ namespace Inventors.Xml.Configuration
 
         public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
         {
+            var reporter = new ConsoleReporter(verbose);
             var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             "Check that type can be XML serialized".Run(() => type.TrySerialize()); 
-            var document = "Parsing type".Run(() => ObjectDocument.Parse(type));
+            var document = "Parsing type".Run(() => ObjectDocument.Parse(type, reporter));
             var docPath = GetDocumentationPath(path, configuration);
             var source = "Setting up documentation source".Run(() =>
                 DocumentationSource.Create(document, docPath)
                     .SetInputFormat(DocumentationFileFormat)
                     .Build());
-            var generator = "Creating documentation generator".Run(() => new DocumentationGenerator(document, source));
+            var generator = "Creating documentation generator".Run(() => new DocumentationGenerator(document, source, reporter));
 
             generator.Run();
         }

@@ -36,9 +36,10 @@ namespace Inventors.Xml.Configuration
 
         public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
         {
+            var reporter = new ConsoleReporter(verbose);
             var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             "Check that type can be XML serialized".Run(() => type.TrySerialize());
-            var document = "Parsing type".Run(() => ObjectDocument.Parse(type));
+            var document = "Parsing type".Run(() => ObjectDocument.Parse(type, reporter));
             var outputPath = "Output path".Run(() => GetOutputPath(path, configuration));
 
             if (IncludeDocumentation)

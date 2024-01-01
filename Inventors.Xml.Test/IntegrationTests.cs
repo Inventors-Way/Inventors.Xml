@@ -34,7 +34,7 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T01_ObjectDocument()
         {
-            var document = ObjectDocument.Parse(typeof(Company));
+            var document = ObjectDocument.Parse(typeof(Company), NullReporter.Instance);
 
             Console.WriteLine(document);
         }
@@ -42,7 +42,7 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T02_GenerateSchema()
         {
-            var document = ObjectDocument.Parse(typeof(Company));
+            var document = ObjectDocument.Parse(typeof(Company), NullReporter.Instance);
             var documentation = DocumentationSource.Create(document, DocumentationDirectory)
                 .SetInputFormat(DocumentationFormat.MarkDown)
                 .SetOutputFormat(DocumentationFormat.Html)
@@ -69,24 +69,26 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T04_GenerateMarkdownDocumentation()
         {
-            var document = ObjectDocument.Parse(typeof(Company));
+            var reporter = new ConsoleReporter(true);
+            var document = ObjectDocument.Parse(typeof(Company), reporter);
             var source = DocumentationSource.Create(document, DocumentationDirectory)
                 .SetInputFormat(DocumentationFormat.MarkDown)
                 .SetOutputFormat(DocumentationFormat.Html)
                 .Build();
-            var generator = new DocumentationGenerator(document, source);
+            var generator = new DocumentationGenerator(document, source, reporter);
             generator.Run();
         }
 
         [TestMethod]
         public void T05_GenerateTextDocumentation()
         {
-            var document = ObjectDocument.Parse(typeof(Company));
+            var reporter = new ConsoleReporter(true);
+            var document = ObjectDocument.Parse(typeof(Company), reporter);
             var source = DocumentationSource.Create(document, DocumentationDirectory)
                 .SetInputFormat(DocumentationFormat.Text)
                 .SetOutputFormat(DocumentationFormat.Html)
                 .Build();
-            var generator = new DocumentationGenerator(document, source);
+            var generator = new DocumentationGenerator(document, source, reporter);
             generator.Run();
         }
 
@@ -101,19 +103,21 @@ namespace Inventors.Xml.Test
 
             Directory.CreateDirectory(DisposableDocumentationDirectory);
 
-            var document = ObjectDocument.Parse(typeof(Company));
+            var reporter = new ConsoleReporter(true);
+            var document = ObjectDocument.Parse(typeof(Company), reporter);
             var source = DocumentationSource.Create(document, DisposableDocumentationDirectory)
                 .SetInputFormat(DocumentationFormat.MarkDown)
                 .SetOutputFormat(DocumentationFormat.Text)
                 .Build();
-            var generator = new DocumentationGenerator(document, source);
+            var generator = new DocumentationGenerator(document, source, reporter);
             generator.Run();
         }
 
         [TestMethod]
         public void T07_GenerateXsdgSchema()
         {
-            var document = ObjectDocument.Parse(typeof(XSDGConfig));
+            var reporter = new ConsoleReporter(true);
+            var document = ObjectDocument.Parse(typeof(XSDGConfig), reporter);
             var generator = new XSDGenerator(document);
             var content = generator.Run();
 

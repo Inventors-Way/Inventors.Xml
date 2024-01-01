@@ -9,15 +9,15 @@ namespace Inventors.Xml
 {
     public class ObjectDocument
     {
-        public static ObjectDocument Parse(Type type) => new(type);
+        public static ObjectDocument Parse(Type type, Reporter reporter) => new(type, reporter);
 
-        private ObjectDocument(Type type)
+        private ObjectDocument(Type type, Reporter reporter)
         {
             if (type.Namespace is null)
                 throw new ArgumentException("Has no Namespace", nameof(type));
 
             Namespace = type.Namespace;
-            Root = new ElementDescriptor(Name: type.RootElementName(), type.ParseClass(this), false, "");
+            Root = new ElementDescriptor(Name: type.RootElementName(), type.ParseClass(this, reporter), false, "");
         }
 
         public Element this[string id]
