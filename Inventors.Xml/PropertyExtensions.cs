@@ -113,11 +113,26 @@ namespace Inventors.Xml
             if (!property.IsArray())
                 throw new ArgumentException("Is not a array element", nameof(property));
 
+            Type? defaultType = null;
+
+            if (property.PropertyType.GenericTypeArguments.Length > 0)
+            {
+                defaultType = property.PropertyType.GenericTypeArguments[0];
+            }
+
             foreach (var item in property.GetCustomAttributes<XmlArrayItemAttribute>())
             {
                 if (item.Type is not null)
                 {
                     yield return (item.ElementName, item.Type);
+                }
+                else if (defaultType is not null)
+                {
+                    yield return (item.ElementName, defaultType);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"No type is specified for ArrayItem {item.ElementName} and Generic type is specified");
                 }
             }
         }

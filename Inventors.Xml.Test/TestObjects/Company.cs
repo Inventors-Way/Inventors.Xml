@@ -18,7 +18,7 @@ namespace Inventors.Xml.Test.TestObjects
         public string Name { get; set; } = string.Empty;
 
         [XmlArray("departments")]
-        [XmlArrayItem("department", typeof(Department))]
+        [XmlArrayItem("department")]
         public List<Department> Departments { get; } = new List<Department>();
 
         [XmlArray("employees")]
