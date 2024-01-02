@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -27,8 +28,14 @@ namespace Inventors.Xml
                 .IfTrue(root => root.ElementName is null)
                 .Value.ElementName;
 
-        public static string GetXSDTypeName(this Type type) =>
-            type.FullName is not null ? type.FullName : type.Name;
+        public static string SanitizeXSDName(string name) =>
+            name.Replace("+", ".");
+
+        public static string GetXSDTypeName(this Type type)
+        {
+            var name = type.FullName is not null ? type.FullName : type.Name;
+            return SanitizeXSDName(name);            
+        }
 
         public static bool IsPropertyInherited(this Type type, string name)
         {
@@ -76,7 +83,8 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Choice:
                         {
-                            var choiceElement = ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document, reporter);
+                            var name = SanitizeXSDName($"{element.Name}.{property.Name}.ChoiceSet");
+                            var choiceElement = ParseChoiceElement(name, property, document, reporter);
 
                             element.Add(new ElementDescriptor(Name: property.Name,
                                          Type: choiceElement,
@@ -86,11 +94,19 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Array:
                         {
-                            var arrayElement = ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document, reporter);
-                            element.Add(new ElementDescriptor(Name: property.GetArrayName(),
-                                         Type: arrayElement,
-                                         Required: property.IsPropertyRequired(),
-                                         PropertyName: property.Name));
+                            try
+                            {
+                                var name = SanitizeXSDName($"{element.Name}.{property.Name}.Array");
+                                var arrayElement = ParseArrayElement(name, property, document, reporter);
+                                element.Add(new ElementDescriptor(Name: property.GetArrayName(),
+                                             Type: arrayElement,
+                                             Required: property.IsPropertyRequired(),
+                                             PropertyName: property.Name));
+                            }
+                            catch (InvalidOperationException ioe)
+                            {
+                                throw new InvalidOperationException($"Error in reflecting class {element.Name}", ioe);
+                            }
                         }
                         break;
 
@@ -136,10 +152,18 @@ namespace Inventors.Xml
         {
             List<ArrayItem> retValue = new List<ArrayItem>();
 
-            foreach (var item in property.GetArrayItems())
+            try
             {
-                var instance = item.Item2.ParseClass(document, reporter);
-                retValue.Add(new ArrayItem(item.Item1, instance));
+
+                foreach (var item in property.GetArrayItems())
+                {
+                    var instance = item.Item2.ParseClass(document, reporter);
+                    retValue.Add(new ArrayItem(item.Item1, instance));
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                throw new InvalidOperationException($"Error in reflecting property {property.Name}", ioe);
             }
 
             return retValue;
@@ -157,10 +181,16 @@ namespace Inventors.Xml
             return element; 
         }
 
+        private static bool IsSystemType(string name)
+        {
+            return name.StartsWith("System");
+        }
+
         private static Element ParseBaseType(this Type? baseType, ObjectDocument document, Reporter reporter)
         {
             if (baseType is null) return Element.Empty;
-            if (baseType == typeof(Object)) return Element.Empty;
+            if (baseType.FullName is null) return Element.Empty; 
+            if (IsSystemType(baseType.FullName)) return Element.Empty;
             if (document.Exists(baseType.GetXSDTypeName())) return document[baseType.GetXSDTypeName()];
 
             return baseType.ParseClass(document, reporter);

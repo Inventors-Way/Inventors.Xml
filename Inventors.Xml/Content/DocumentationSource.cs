@@ -85,29 +85,16 @@ namespace Inventors.Xml.Content
 
             public string Path => path;
 
-            public int PathOffset => pathOffset;
-
             public bool CDATA => cdata;
 
             public bool Encoding => encoding;
 
-            private static int GetPathOffset(ObjectDocument document)
-            {
-                var parts = document.Namespace.Split('.');
-                return parts.Length;
-            }
-
-            public DocumentationSource Build()
-            {
-                pathOffset = GetPathOffset(document);
-                return new DocumentationSource(this);
-            }
+            public DocumentationSource Build() => new DocumentationSource(this);
 
             private DocumentationFormat inputFormat;
             private DocumentationFormat outputFormat;
             private readonly ObjectDocument document;
             private readonly string path;
-            private int pathOffset;
             private bool cdata = false;
             private bool encoding = false;
         }
@@ -132,20 +119,16 @@ namespace Inventors.Xml.Content
 
         public string[] GetPaths(string name)
         {
-            var parts = name.Split('.')
-                .Throw()
-                .IfTrue(parts => parts.Length < options.PathOffset + 1)
-                .Value;
+            var parts = name.Split('.');
 
-            if (parts.Length == options.PathOffset + 1)
+            if (parts.Length == 1)
                 return new string[] { options.Path };
 
-            string[] retValue = new string[parts.Length - options.PathOffset];
-
+            string[] retValue = new string[parts.Length];
             retValue[0] = options.Path;
 
-            for (int i = options.PathOffset; i < parts.Length - 1; ++i)
-                retValue[i - options.PathOffset + 1] = parts[i];
+            for (int i = 0; i < parts.Length - 1; ++i)
+                retValue[i + 1] = parts[i];
 
             return retValue;
         }
