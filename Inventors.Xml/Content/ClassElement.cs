@@ -9,8 +9,8 @@ namespace Inventors.Xml.Content
     public class ClassElement :
         Element
     {
-        public ClassElement(string name, string baseType, bool isAbstract) :
-            base(name: name, baseType: baseType, isAbstract: isAbstract)
+        public ClassElement(string name, bool isAbstract) :
+            base(name: name, isAbstract: isAbstract)
         {
         }
 

@@ -10,19 +10,15 @@ namespace Inventors.Xml.Generators.Documentation
 {
     public class DocumentationGenerator : IElementVisitor
     {
-        public DocumentationGenerator(ObjectDocument document, DocumentationSource source) 
+        public DocumentationGenerator(ObjectDocument document, DocumentationSource source, Reporter reporter) 
         {
             this.document = document;
             this.source = source;
-            reporter = new NullReporter();
+            this.reporter = reporter;
         }
 
-        public void Run() =>
-            Run(new ConsoleReporter());
-
-        public void Run(IProgress<string> reporter)
+        public void Run()
         {
-            this.reporter = reporter;
             reporter.Report($"Generating documentation [ {document.Root.Name} ]");
 
             document.Run(this);
@@ -97,6 +93,6 @@ namespace Inventors.Xml.Generators.Documentation
 
         private readonly ObjectDocument document;
         private readonly DocumentationSource source;
-        private IProgress<string> reporter;
+        private Reporter reporter;
     }
 }

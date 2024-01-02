@@ -24,6 +24,8 @@
 </xs:documentation>
 </xs:annotation>
 </xs:element>
+<xs:element minOccurs="0" maxOccurs="1" name="projects" type="Inventors.Xml.Test.TestObjects.Company.Projects.Array">
+</xs:element>
 </xs:sequence>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
@@ -34,19 +36,10 @@
 </xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Identifiable" abstract="true">
-<xs:annotation>
-<xs:documentation>
-&lt;p&gt;ID of the object, which is used to refer to it from other objects.&lt;/p&gt;
-</xs:documentation>
-</xs:annotation>
-<xs:attribute name="id" type="xs:string" use="required">
-<xs:annotation>
-<xs:documentation>
-&lt;p&gt;&lt;strong&gt;ID&lt;/strong&gt; of the object, which is used to refer to it from other objects.&lt;/p&gt;
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Departments.Array">
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="1" maxOccurs="1" name="department" nillable="true" type="Inventors.Xml.Test.TestObjects.Data.Department" />
+</xs:choice>
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Department">
@@ -83,6 +76,21 @@
 </xs:complexContent>
 </xs:complexType>
 
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Identifiable" abstract="true">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;ID of the object, which is used to refer to it from other objects.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
+<xs:attribute name="id" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;&lt;strong&gt;ID&lt;/strong&gt; of the object, which is used to refer to it from other objects.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+</xs:complexType>
+
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Position">
 <xs:annotation>
 <xs:documentation>
@@ -105,9 +113,9 @@
 </xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Departments.Array">
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Employees.Array">
 <xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="1" maxOccurs="1" name="department" nillable="true" type="Inventors.Xml.Test.TestObjects.Data.Department" />
+<xs:element minOccurs="1" maxOccurs="1" name="employee" nillable="true" type="Inventors.Xml.Test.TestObjects.Data.Employee" />
 </xs:choice>
 </xs:complexType>
 
@@ -175,9 +183,70 @@
 </xs:restriction>
 </xs:simpleType>
 
-<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Employees.Array">
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Company.Projects.Array">
 <xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="1" maxOccurs="1" name="employee" nillable="true" type="Inventors.Xml.Test.TestObjects.Data.Employee" />
+<xs:element minOccurs="1" maxOccurs="1" name="project" nillable="true" type="Inventors.Xml.Test.TestObjects.Data.Project" />
 </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Project">
+<xs:sequence>
+<xs:choice minOccurs="1" maxOccurs="1">
+<xs:element minOccurs="0" maxOccurs="1" name="task" type="Inventors.Xml.Test.TestObjects.Data.SingleTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="repeated" type="Inventors.Xml.Test.TestObjects.Data.RepeatedTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="combined" type="Inventors.Xml.Test.TestObjects.Data.CombinedTask" />
+</xs:choice>
+</xs:sequence>
+<xs:attribute name="project-type" type="Inventors.Xml.Test.TestObjects.Data.ProjectType" use="optional">
+</xs:attribute>
+<xs:attribute name="title" type="xs:string" use="required">
+</xs:attribute>
+</xs:complexType>
+
+<xs:simpleType name="Inventors.Xml.Test.TestObjects.Data.ProjectType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="internal">
+</xs:enumeration>
+<xs:enumeration value="external">
+</xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.SingleTask">
+<xs:complexContent mixed="false">
+<xs:extension base="Inventors.Xml.Test.TestObjects.Data.Task">
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.Task" abstract="true">
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.RepeatedTask">
+<xs:complexContent mixed="false">
+<xs:extension base="Inventors.Xml.Test.TestObjects.Data.Task">
+<xs:sequence>
+<xs:choice minOccurs="1" maxOccurs="1">
+<xs:element minOccurs="0" maxOccurs="1" name="task" type="Inventors.Xml.Test.TestObjects.Data.SingleTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="repeated" type="Inventors.Xml.Test.TestObjects.Data.RepeatedTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="combined" type="Inventors.Xml.Test.TestObjects.Data.CombinedTask" />
+</xs:choice>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Data.CombinedTask">
+<xs:complexContent mixed="false">
+<xs:extension base="Inventors.Xml.Test.TestObjects.Data.Task">
+<xs:sequence>
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="0" maxOccurs="1" name="task" type="Inventors.Xml.Test.TestObjects.Data.SingleTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="repeated" type="Inventors.Xml.Test.TestObjects.Data.RepeatedTask" />
+<xs:element minOccurs="0" maxOccurs="1" name="combined" type="Inventors.Xml.Test.TestObjects.Data.CombinedTask" />
+</xs:choice>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
 </xs:complexType>
 </xs:schema>

@@ -39,7 +39,7 @@ namespace Inventors.Xml
         [XmlIgnore]
         public Assembly? Assembly { get; private set; }
 
-        public void Run(string path)
+        public void Run(string path, bool verbose)
         {
             Stopwatch stopwatch = new();
 
@@ -60,7 +60,7 @@ namespace Inventors.Xml
                     Console.WriteLine();
                     Console.WriteLine($"Running: {job.Title}:");
                     stopwatch.Restart();
-                    job.Run(path, this);
+                    job.Run(path, this, verbose);
                     PrintRuntime(stopwatch);
                 }
                 catch (Exception ex) 

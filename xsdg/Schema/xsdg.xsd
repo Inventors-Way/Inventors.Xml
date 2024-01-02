@@ -66,25 +66,6 @@
 </xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
-<xs:attribute name="title" type="xs:string" use="required">
-<xs:annotation>
-<xs:documentation>
-&lt;h1&gt;Title&lt;/h1&gt;
-&lt;p&gt;Title of the job that will be displayed when the job is executed by the xsdg tool. This title has no functional importance, however, it can make it easier to identify the cause of any potential errors from logs.&lt;/p&gt;
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
-<xs:attribute name="type" type="xs:string" use="required">
-<xs:annotation>
-<xs:documentation>
-&lt;h1&gt;Type in the Assembly&lt;/h1&gt;
-&lt;p&gt;This attribute must be the fullname of a type in the Assembly, which will be the type that is analysed by the xsdg tool. Meaning it must include both the namespace and the name of the type.&lt;/p&gt;
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
-</xs:complexType>
-
 <xs:complexType name="Inventors.Xml.Configuration.DocumentationJob">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
@@ -106,6 +87,25 @@
 </xs:attribute>
 </xs:extension>
 </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
+<xs:attribute name="title" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Title&lt;/h1&gt;
+&lt;p&gt;Title of the job that will be displayed when the job is executed by the xsdg tool. This title has no functional importance, however, it can make it easier to identify the cause of any potential errors from logs.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+<xs:attribute name="type" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Type in the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute must be the fullname of a type in the Assembly, which will be the type that is analysed by the xsdg tool. Meaning it must include both the namespace and the name of the type.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
