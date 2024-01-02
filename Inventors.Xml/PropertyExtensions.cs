@@ -188,8 +188,32 @@ namespace Inventors.Xml
 
         public static bool IsPropertyRequired(this PropertyInfo property)
         {
-            if (property.GetCustomAttribute<XmlRequiredAttribute>() is XmlRequiredAttribute required)
-                return required.Required;
+            var required = property.GetCustomAttribute<XmlRequiredAttribute>();
+            var optional = property.GetCustomAttribute<XmlOptionalAttribute>();
+
+            if (required is not null)
+            {
+                if (optional is not null)
+                {
+                    throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
+                }
+                else
+                {
+                    return required.Required;
+                }
+            }
+
+            if (optional is not null)
+            {
+                if (required is not null)
+                {
+                    throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
+                }
+                else
+                {
+                    return optional.Optional;
+                }
+            }
 
             return false;
         }
