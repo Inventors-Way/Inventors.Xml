@@ -156,15 +156,16 @@ namespace Inventors.Xml
         {
             var type = property.PropertyType;
             type.FullName.ThrowIfNull();
+            var typeName = TypeExtensions.SanitizeXSDName(type.FullName);
 
             if (!document.Exists(type.GetXSDTypeName()))
             {
-                document.Add(new EnumElement(name: type.FullName, 
+                document.Add(new EnumElement(name: typeName, 
                                              values: type.ParseEnumValues()));
             }
 
             return new AttributeDescriptor(Name: property.GetAttributeName(),
-                                           Type: type.FullName,
+                                           Type: typeName,
                                            Required: property.IsPropertyRequired(),
                                            Primitive: false,
                                            PropertyName: property.Name);

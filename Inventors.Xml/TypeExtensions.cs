@@ -28,11 +28,13 @@ namespace Inventors.Xml
                 .IfTrue(root => root.ElementName is null)
                 .Value.ElementName;
 
+        public static string SanitizeXSDName(string name) =>
+            name.Replace("+", ".");
+
         public static string GetXSDTypeName(this Type type)
         {
             var name = type.FullName is not null ? type.FullName : type.Name;
-            return name.Replace('+', '.');
-            
+            return SanitizeXSDName(name);            
         }
 
         public static bool IsPropertyInherited(this Type type, string name)
@@ -81,7 +83,8 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Choice:
                         {
-                            var choiceElement = ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document, reporter);
+                            var name = SanitizeXSDName($"{element.Name}.{property.Name}.ChoiceSet");
+                            var choiceElement = ParseChoiceElement(name, property, document, reporter);
 
                             element.Add(new ElementDescriptor(Name: property.Name,
                                          Type: choiceElement,
@@ -91,7 +94,8 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Array:
                         {
-                            var arrayElement = ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document, reporter);
+                            var name = SanitizeXSDName($"{element.Name}.{property.Name}.Array");
+                            var arrayElement = ParseArrayElement(name, property, document, reporter);
                             element.Add(new ElementDescriptor(Name: property.GetArrayName(),
                                          Type: arrayElement,
                                          Required: property.IsPropertyRequired(),
