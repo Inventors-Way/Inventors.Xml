@@ -75,10 +75,23 @@ namespace Inventors.Xml
                                                           PropertyName: property.Name));
                         break;
                     case PropertyXSDType.Choice:
-                        element.Add(ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document, reporter));
+                        {
+                            var choiceElement = ParseChoiceElement($"{element.Name}.{property.Name}.ChoiceSet", property, document, reporter);
+
+                            element.Add(new ElementDescriptor(Name: property.Name,
+                                         Type: choiceElement,
+                                         Required: property.IsPropertyRequired(),
+                                         PropertyName: property.Name));
+                        }
                         break;
                     case PropertyXSDType.Array:
-                        element.Add(ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document, reporter));
+                        {
+                            var arrayElement = ParseArrayElement($"{element.Name}.{property.Name}.Array", property, document, reporter);
+                            element.Add(new ElementDescriptor(Name: property.GetArrayName(),
+                                         Type: arrayElement,
+                                         Required: property.IsPropertyRequired(),
+                                         PropertyName: property.Name));
+                        }
                         break;
 
                     case PropertyXSDType.Private:
@@ -107,16 +120,16 @@ namespace Inventors.Xml
             return retValue;
         }
 
-        private static ElementDescriptor ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
+        private static Element ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
+            if (document.Exists(name))
+                return document[name];
+
             var element = document.Add(new ChoiceElement(name, property.IsEnumerable()));
             var choices = property.ParseChoices(document, reporter);
             element.SetChoices(choices);
 
-            return new ElementDescriptor(Name: property.Name,
-                                         Type: element,
-                                         Required: property.IsPropertyRequired(),
-                                         PropertyName: property.Name);
+            return element;
         }
 
         private static List<ArrayItem> ParseArrayItems(this PropertyInfo property, ObjectDocument document, Reporter reporter)
@@ -132,16 +145,16 @@ namespace Inventors.Xml
             return retValue;
         }
 
-        private static ElementDescriptor ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
+        private static Element ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
+            if (document.Exists(name))
+                return document[name];
+
             var element = document.Add(new ArrayElement(name));
             var items = property.ParseArrayItems(document, reporter);
             element.SetItems(items);
 
-            return new ElementDescriptor(Name: property.GetArrayName(),
-                                         Type: element,
-                                         Required: property.IsPropertyRequired(),
-                                         PropertyName: property.Name); ;
+            return element; 
         }
 
         private static Element ParseBaseType(this Type? baseType, ObjectDocument document, Reporter reporter)
