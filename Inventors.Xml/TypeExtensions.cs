@@ -94,12 +94,19 @@ namespace Inventors.Xml
                         break;
                     case PropertyXSDType.Array:
                         {
-                            var name = SanitizeXSDName($"{element.Name}.{property.Name}.Array");
-                            var arrayElement = ParseArrayElement(name, property, document, reporter);
-                            element.Add(new ElementDescriptor(Name: property.GetArrayName(),
-                                         Type: arrayElement,
-                                         Required: property.IsPropertyRequired(),
-                                         PropertyName: property.Name));
+                            try
+                            {
+                                var name = SanitizeXSDName($"{element.Name}.{property.Name}.Array");
+                                var arrayElement = ParseArrayElement(name, property, document, reporter);
+                                element.Add(new ElementDescriptor(Name: property.GetArrayName(),
+                                             Type: arrayElement,
+                                             Required: property.IsPropertyRequired(),
+                                             PropertyName: property.Name));
+                            }
+                            catch (InvalidOperationException ioe)
+                            {
+                                throw new InvalidOperationException($"Error in reflecting class {element.Name}", ioe);
+                            }
                         }
                         break;
 
@@ -145,10 +152,18 @@ namespace Inventors.Xml
         {
             List<ArrayItem> retValue = new List<ArrayItem>();
 
-            foreach (var item in property.GetArrayItems())
+            try
             {
-                var instance = item.Item2.ParseClass(document, reporter);
-                retValue.Add(new ArrayItem(item.Item1, instance));
+
+                foreach (var item in property.GetArrayItems())
+                {
+                    var instance = item.Item2.ParseClass(document, reporter);
+                    retValue.Add(new ArrayItem(item.Item1, instance));
+                }
+            }
+            catch (InvalidOperationException ioe)
+            {
+                throw new InvalidOperationException($"Error in reflecting property {property.Name}", ioe);
             }
 
             return retValue;
