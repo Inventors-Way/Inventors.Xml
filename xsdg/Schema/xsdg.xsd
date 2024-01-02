@@ -3,6 +3,26 @@
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;XSDG Configuration File&lt;/h1&gt;
+&lt;p&gt;The xsdg tool is controlled by a configuration file, which specifies:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Defines paths to the Assembly, Documentation Files, and the Output Path for XSD Schemas. All paths within the configuration are relative to the working directory of the XSDG tool.&lt;/li&gt;
+&lt;li&gt;The name of the Assembly that contains the types to be analyzed.&lt;/li&gt;
+&lt;li&gt;A number of jobs to be performed. Two jobs can be configured:
+&lt;ol&gt;
+&lt;li&gt;Documentation jobs: which will generate templates for Documentation Files.&lt;/li&gt;
+&lt;li&gt;Schema jobs: which will generate XSD Schemas for selected types.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This configuration file is passed to the xsdg tool as a parameter:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;xsdg -p [working directory] [name of configuration file]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;-p [working directory]&lt;/code&gt; is optional and if specified will set the working directory of the xsdg tool. If it is not specied the working directory will be the directory from where the xsdg tool is invoked.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:sequence>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
 <xs:element minOccurs="0" maxOccurs="1" name="documentation" type="Inventors.Xml.Configuration.DocumentationJob" />
@@ -10,19 +30,60 @@
 </xs:choice>
 </xs:sequence>
 <xs:attribute name="assembly" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Assembly Name&lt;/h1&gt;
+&lt;p&gt;Name of the Assembly from which to load types. It is specified without the file extension of the assembly, which is assumed to be &lt;code&gt;dll&lt;/code&gt;.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Path to XSD documentation&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to the Documentation Files that will be included in &lt;code&gt;xsd:documention&lt;/code&gt; elements in generated XSD Schemas, or where templates for the Documentation Files will be generated. This attribute is optional. If it is not specified then the Documentation Files will be presumed located in the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="output-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Output path for generated XSD Schemas&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to which generated XSD Schemas will be written. This attribute is optional. If it is not specified then XSD Schemas will be written to the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="input-path" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Input path for the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute specifies the relative path to the Assembly which contains the types to be analysed by the xsdg tool. This attribute is optional. If it is not specified then the Assembly will be presumed located in the current working directory.&lt;/p&gt;
+&lt;p&gt;Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Configuration.DocumentationJob">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Generation of Documentation Files templates&lt;/h1&gt;
+&lt;p&gt;The xsdg tool can include documentation from Text, Markdown, or HTML files. Each the &lt;code&gt;xs:documention&lt;/code&gt; that will be included for classes and properties comes from one file for each entity. The documentation file for a class has the same name as the class and must be located in a folder structure matching the namespaces of the class. Documentation files for each property within the class have the name of [ClassName].[PropertyNAme] and must be located next to the class documentation file.&lt;/p&gt;
+&lt;p&gt;This job will create a full set of documentation files for all classes and properties in the class hirarchy of a class. All files be empty and have the correct extension for the selected input format.&lt;/p&gt;
+&lt;p&gt;Please note that this job will never overwrite files. If a documentation file for a class or property allready exists then this documentation job will not generate a documentation file for this entity. Consequently, there is no risk in running this job. Furthermore, this job will also never delete a documentation file. If a class or property has been deleted then any documentation file for this deleted entity will be left.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Format of the templates to generate.&lt;/h1&gt;
+&lt;p&gt;This attribute specified the format of the documentation template files that will be generated. The attribute is optional and if it is not specified then the documentation file templates will be generated in Markdown format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:extension>
 </xs:complexContent>
@@ -30,18 +91,45 @@
 
 <xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
 <xs:attribute name="title" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Title&lt;/h1&gt;
+&lt;p&gt;Title of the job that will be displayed when the job is executed by the xsdg tool. This title has no functional importance, however, it can make it easier to identify the cause of any potential errors from logs.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="type" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Type in the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute must be the fullname of a type in the Assembly, which will be the type that is analysed by the xsdg tool. Meaning it must include both the namespace and the name of the type.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
 <xs:restriction base="xs:string">
 <xs:enumeration value="text">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Plain text format&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="markdown">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Markdown formatted text&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="html">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Text in HTML format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 </xs:restriction>
 </xs:simpleType>
@@ -49,15 +137,58 @@
 <xs:complexType name="Inventors.Xml.Configuration.SchemaJob">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Generation of XSD Schema&lt;/h1&gt;
+&lt;p&gt;The xsdg tool can generate XSD Schemas from C# classes. The tool will parse a class and its class hierachy for all public properties that can be serialized by the XML serializer/deserializer in .NET. This works in the same way as the original xsd tool from Microsoft with some notable differences:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;It is more strict than the xsd tool. It required all serializable entities Properties and Enum values to be annotated with appropriate Attributes from the System.Xml.Serialization namespace, such as XmlAttribute, XmlElement, XmlEnum, XmlArray, XmlArrayItem etc. The root class of the class hirarchy must have the XmlRoot attribute.&lt;/li&gt;
+&lt;li&gt;It does not allow elements to be primitive types. Instead elements must be classes, meaning that primitive types must be attrinutes.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;use&lt;/code&gt; attribute for attributes and &lt;code&gt;minOccurs&lt;/code&gt; for elements can be controlled by an optional XmlRequired attribute in the Inventors.Xml.Serialization library. If XmlRequired is set to true for attributes the &lt;code&gt;use&lt;/code&gt; will be set to required, if it is set to false &lt;code&gt;use&lt;/code&gt; will be set to optionial. If XmlRequired is not provided for an attribute then xsdg will follow the conventions of the original xsd tool. For elements it will set  &lt;code&gt;minOccurs&lt;/code&gt; to 1 and 0, respectively. Consequently, with the xsdg tool it is possible to set value types to optional, and reference types to required, something, that was impossible with the old xsd tool.&lt;/li&gt;
+&lt;/ol&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:attribute name="include-documentation" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Include documentation in the XSD Schema&lt;/h1&gt;
+&lt;p&gt;This attribute controls if documentation is included in the generated XSD schema. The attribute is optional and if not specified then no documentation will be included in the generated XSD schema.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Format of the documentation files&lt;/h1&gt;
+&lt;p&gt;The xsdg can use documentation files in either Text, Markdown, or HTML format. This attribute is optional. If it is not specified the program will use documentation files Markdown format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-output-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Output format for the generated documentation&lt;/h1&gt;
+&lt;p&gt;This attribute controls the output format of the text that are placed in the xs:documentation elements. It is only relevant when the input format is Markdown. For all other input formats the text in the documentation files are not processed, other than possible enclosed in a CDATA section or special characters are escaped (encoded).&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="encode-data" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Encode data in the documentation elements&lt;/h1&gt;
+&lt;p&gt;If this attribute is set then the special characters such as &amp;lt;, &amp;gt; or other special characters will be encoded before they are written to a xs:documentation elements. This or enclosing HTML documentation in a CDATA section is usually required in order for the documentation to be displayed correctly.&lt;/p&gt;
+&lt;p&gt;Please note this attribute should be mutually exclusive with the  encapsulate-character-data attribute.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="encapsulate-character-data" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Encapsulate documentation text in CDATA section.&lt;/h1&gt;
+&lt;p&gt;If this attribute is set to true then the text in xs:documentation elements will be enclosed in a CDATA section. This is most likely required for HTML encoded documentation to displayed correctly.&lt;/p&gt;
+&lt;p&gt;Please note this attribute should be mutually exclusive with the encode-data attribute.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:extension>
 </xs:complexContent>

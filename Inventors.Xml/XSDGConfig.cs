@@ -17,19 +17,19 @@ namespace Inventors.Xml
         IJobConfiguration
     {
         [XmlAttribute("assembly")]
-        [XmlRequired(true)]
+        [XmlRequired]
         public string AssemblyName { get; set; } = string.Empty;
 
         [XmlAttribute("documentation-path")]
-        [XmlRequired(false)]
+        [XmlOptional]
         public string DocumentationPath { get; set; } = string.Empty;
 
         [XmlAttribute("output-path")]
-        [XmlRequired(false)]
+        [XmlOptional]
         public string OutputPath { get; set; } = string.Empty;
 
         [XmlAttribute("input-path")]
-        [XmlRequired(false)]
+        [XmlOptional]
         public string InputPath { get; set; } = string.Empty;
 
         [XmlElement("documentation", typeof(DocumentationJob))]
