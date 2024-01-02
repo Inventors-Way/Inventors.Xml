@@ -94,11 +94,24 @@ namespace Inventors.Xml
             return element;
         }
 
+        private static List<Choice> ParseChoices(this PropertyInfo property, ObjectDocument document, Reporter reporter)
+        {
+            List<Choice> retValue = new List<Choice>();
+
+            foreach (var choice in property.GetChoiceTypes())
+            {
+                var instance = choice.Item2.ParseClass(document, reporter);
+                retValue.Add(new Choice(choice.Item1, instance));
+            }
+
+            return retValue;
+        }
+
         private static ElementDescriptor ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             var element = document.Add(new ChoiceElement(name, property.IsEnumerable()));
-            element.SetChoices(from choice in property.GetChoiceTypes()
-                               select new Choice(choice.Item1, choice.Item2.ParseClass(document, reporter)));
+            var choices = property.ParseChoices(document, reporter);
+            element.SetChoices(choices);
 
             return new ElementDescriptor(Name: property.Name,
                                          Type: element,
@@ -106,11 +119,24 @@ namespace Inventors.Xml
                                          PropertyName: property.Name);
         }
 
+        private static List<ArrayItem> ParseArrayItems(this PropertyInfo property, ObjectDocument document, Reporter reporter)
+        {
+            List<ArrayItem> retValue = new List<ArrayItem>();
+
+            foreach (var item in property.GetArrayItems())
+            {
+                var instance = item.Item2.ParseClass(document, reporter);
+                retValue.Add(new ArrayItem(item.Item1, instance));
+            }
+
+            return retValue;
+        }
+
         private static ElementDescriptor ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             var element = document.Add(new ArrayElement(name));
-            element.SetItems(from item in property.GetArrayItems()
-                             select new ArrayItem(item.Item1, item.Item2.ParseClass(document, reporter)));
+            var items = property.ParseArrayItems(document, reporter);
+            element.SetItems(items);
 
             return new ElementDescriptor(Name: property.GetArrayName(),
                                          Type: element,

@@ -15,7 +15,7 @@ namespace Inventors.Xml.Content
             Multiple = multiple;
         }
 
-        public void SetChoices(IEnumerable<Choice> choices)
+        public void SetChoices(IList<Choice> choices)
         {
             _choices.AddRange(choices);
         }

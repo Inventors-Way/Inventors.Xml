@@ -14,7 +14,7 @@ namespace Inventors.Xml.Content
         {
         }
 
-        internal void SetItems(IEnumerable<ArrayItem> items)
+        internal void SetItems(IList<ArrayItem> items)
         {
             _items.AddRange(items); 
         }
