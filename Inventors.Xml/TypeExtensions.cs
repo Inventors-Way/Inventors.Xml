@@ -28,8 +28,12 @@ namespace Inventors.Xml
                 .IfTrue(root => root.ElementName is null)
                 .Value.ElementName;
 
-        public static string GetXSDTypeName(this Type type) =>
-            type.FullName is not null ? type.FullName : type.Name;
+        public static string GetXSDTypeName(this Type type)
+        {
+            var name = type.FullName is not null ? type.FullName : type.Name;
+            return name.Replace('+', '.');
+            
+        }
 
         public static bool IsPropertyInherited(this Type type, string name)
         {
