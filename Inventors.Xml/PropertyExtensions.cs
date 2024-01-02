@@ -211,7 +211,7 @@ namespace Inventors.Xml
                 }
                 else
                 {
-                    return optional.Optional;
+                    return !optional.Optional;
                 }
             }
 
