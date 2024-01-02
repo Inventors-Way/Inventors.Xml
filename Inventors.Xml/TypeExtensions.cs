@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -157,10 +158,16 @@ namespace Inventors.Xml
             return element; 
         }
 
+        private static bool IsSystemType(string name)
+        {
+            return name.StartsWith("System");
+        }
+
         private static Element ParseBaseType(this Type? baseType, ObjectDocument document, Reporter reporter)
         {
             if (baseType is null) return Element.Empty;
-            if (baseType == typeof(Object)) return Element.Empty;
+            if (baseType.FullName is null) return Element.Empty; 
+            if (IsSystemType(baseType.FullName)) return Element.Empty;
             if (document.Exists(baseType.GetXSDTypeName())) return document[baseType.GetXSDTypeName()];
 
             return baseType.ParseClass(document, reporter);
