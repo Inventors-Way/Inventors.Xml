@@ -16,7 +16,7 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlAttribute("name")]
         [XmlRequired(true)]
         public string Name { get; set; } = string.Empty;
-        /*
+
         [XmlArray("departments")]
         [XmlArrayItem("department", typeof(Department))]
         public List<Department> Departments { get; } = new List<Department>();
@@ -24,11 +24,10 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlArray("employees")]
         [XmlArrayItem("employee", typeof(Employee))]
         public List<Employee> Employees { get; } = new List<Employee>();
-        */
+
         [XmlArray("projects")]
         [XmlArrayItem("project", typeof(Project))]
         public List<Project> Projects { get; } = new List<Project>();
-        /*
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -66,6 +65,6 @@ namespace Inventors.Xml.Test.TestObjects
             }
 
             return builder.ToString();
-        }*/
+        }
     }
 }

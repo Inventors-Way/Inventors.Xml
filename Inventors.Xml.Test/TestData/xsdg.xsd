@@ -15,17 +15,17 @@
 <xs:attribute name="input-path" type="xs:string" use="optional" />
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
-<xs:attribute name="title" type="xs:string" use="required" />
-<xs:attribute name="type" type="xs:string" use="required" />
-</xs:complexType>
-
 <xs:complexType name="Inventors.Xml.Configuration.DocumentationJob">
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
 <xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional" />
 </xs:extension>
 </xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
+<xs:attribute name="title" type="xs:string" use="required" />
+<xs:attribute name="type" type="xs:string" use="required" />
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
