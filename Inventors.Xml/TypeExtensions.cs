@@ -46,8 +46,13 @@ namespace Inventors.Xml
 
             while (current is not null)
             {
-                if (current.GetProperty(name) is not null)
-                    return true;
+                if (current.GetProperty(name) is PropertyInfo property)
+                {
+                    bool isAbstract = (property.GetGetMethod()?.IsAbstract ?? false) || 
+                                      (property.GetSetMethod()?.IsAbstract ?? false);
+
+                    return !isAbstract;
+                }
 
                 current = current.BaseType;
             }
