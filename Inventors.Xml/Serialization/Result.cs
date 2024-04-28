@@ -20,9 +20,10 @@ namespace Inventors.Xml.Serialization
             _error = error;
         }
 
-        public static implicit operator Result<TValue, TError>(TValue value) => new Result<TValue, TError>(value);
-        public static implicit operator Result<TValue, TError>(TError error) => new Result<TValue, TError>(error);
+        public static implicit operator Result<TValue, TError>(TValue value) => new(value);
+        public static implicit operator Result<TValue, TError>(TError error) => new(error);
         public static implicit operator TValue(Result<TValue, TError> result) => result.Value;
+        public static implicit operator TError(Result<TValue, TError> result) => result.Error;
 
         public Result<TValue, TError> OnSuccess(Action<TValue> action)
         {
@@ -42,6 +43,10 @@ namespace Inventors.Xml.Serialization
             return this;
         }
 
+        public bool Success => _value is not null;
+
+        public bool Failed => _error is not null;
+
         public TValue Value
         {
             get
@@ -52,6 +57,18 @@ namespace Inventors.Xml.Serialization
                 return _value;
             }
         }
+
+        public TError Error
+        {
+            get
+            {
+                if (_error is null)
+                    throw new InvalidOperationException($"{_error}");
+
+                return _error;
+            }
+        }
+
 
         private readonly TValue? _value;
         private readonly TError? _error;

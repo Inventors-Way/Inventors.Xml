@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Inventors.Xml.Serialization\Inventors.Xml.Serialization.csproj" />
     <ProjectReference Include="..\Inventors.Xml\Inventors.Xml.csproj" />
   </ItemGroup>
 
