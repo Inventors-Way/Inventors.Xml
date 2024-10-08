@@ -84,7 +84,37 @@ namespace Inventors.Xml.Generators.Documentation
                     Directory.CreateDirectory(current);
                     reporter.Report($"- path: {current}");
                 }
+                else
+                {
+                    var files = GetFiles(current);
+
+                    foreach (var file in files)
+                    {
+                        var content = File.ReadAllText(file);
+
+                        if (string.IsNullOrEmpty(content))
+                        {
+                            reporter.Report($"Deleting: {file}");
+                            File.Delete(file);
+                        }
+                    }
+                }
             }
+        }
+
+        private string[] GetFiles(string path)
+        {
+            switch (source.InputFormat)
+            {
+                case DocumentationFormat.MarkDown:
+                    return Directory.GetFiles(path, "*.md");
+                case DocumentationFormat.Text:
+                    return Directory.GetFiles(path, "*.txt");
+                case DocumentationFormat.Html:
+                    return Directory.GetFiles(path, "*.html");
+            }
+
+            return Array.Empty<string>();
         }
 
         public void Visit(ArrayElement element) { }
