@@ -10,8 +10,6 @@ namespace Inventors.Xml.Generators.Documentation
 {
     public class DocumentationGenerator : IElementVisitor
     {
-        private List<string> _obsoleteFiles = new();
-
         public DocumentationGenerator(ObjectDocument document, DocumentationSource source, Reporter reporter) 
         {
             this.document = document;
@@ -24,22 +22,6 @@ namespace Inventors.Xml.Generators.Documentation
             reporter.Report($"Generating documentation [ {document.Root.Name} ]");
 
             document.Run(this);
-
-            reporter.Report($"Deleting obsolete documentation [ {document.Root.Name} ]");
-            DeleteObsoleFiles();
-        }
-
-        private void MarkNotObsolte(string file)
-        {
-            if (!_obsoleteFiles.Any(f => f == file))
-                return;
-
-            var item = _obsoleteFiles.Find(f => f == file);
-
-            if (item is null)
-                return;
-
-            _obsoleteFiles.Remove(item);
         }
 
         public void Visit(ClassElement element)
@@ -86,17 +68,6 @@ namespace Inventors.Xml.Generators.Documentation
                 File.WriteAllText(filename, "");
                 reporter.Report($"- file: {filename}");
             }
-
-            MarkNotObsolte(filename);
-        }
-
-        private void DeleteObsoleFiles()
-        {
-            foreach (var file in _obsoleteFiles)
-            {
-                reporter.Report(file);
-                File.Delete(file);
-            }
         }
 
         private void CreatePath(string name)
@@ -115,15 +86,16 @@ namespace Inventors.Xml.Generators.Documentation
                 }
                 else
                 {
+                    /*
                     var files = GetFiles(current);
 
                     foreach (var file in files)
                     {
                         FileInfo fileInfo = new (file);
-
+                        
                         if (fileInfo.Length == 0)
-                            _obsoleteFiles.Add(file);
-                    }
+                            File.Delete(file);  
+                    }*/
                 }
             }
         }
