@@ -186,6 +186,14 @@ namespace Inventors.Xml
                                            PropertyName: property.Name);
         }
 
+        public static string GetDocumentation(this PropertyInfo property)
+        {
+            if (property.GetCustomAttribute<XmlDocumentationAttribute>() is XmlDocumentationAttribute documentation)
+                return documentation.Documentation;
+
+            return string.Empty;
+        }
+
         public static bool IsPropertyRequired(this PropertyInfo property)
         {
             var required = property.GetCustomAttribute<XmlRequiredAttribute>();
@@ -194,25 +202,17 @@ namespace Inventors.Xml
             if (required is not null)
             {
                 if (optional is not null)
-                {
                     throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
-                }
-                else
-                {
-                    return required.Required;
-                }
+
+                return required.Required;
             }
 
             if (optional is not null)
             {
                 if (required is not null)
-                {
                     throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
-                }
-                else
-                {
-                    return !optional.Optional;
-                }
+
+                return !optional.Optional;
             }
 
             return false;
