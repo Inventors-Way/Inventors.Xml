@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,15 +11,17 @@ namespace Inventors.Xml.Serialization
     public class XmlDocumentationAttribute :
         Attribute
     {
-        public XmlDocumentationAttribute(string documentation) 
+        public XmlDocumentationAttribute(string id) 
         { 
-            Documentation = documentation;
+            ID = id;
         }
 
         public XmlDocumentationAttribute() 
         { 
         }
 
-        public string Documentation { get; } = string.Empty;
+        public string ID { get; } = string.Empty;
+
+        public bool IsDocumented => !string.IsNullOrEmpty(ID);
     }
 }

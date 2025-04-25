@@ -1,4 +1,6 @@
 ﻿using Inventors.Xml.Configuration;
+using Inventors.Xml.Content;
+using Inventors.Xml.Documentation;
 using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
@@ -13,57 +15,20 @@ using Throw;
 namespace Inventors.Xml
 {
     [XmlRoot("xsdg")]
-    [XmlDocumentation(@"
-# XSDG Configuration File
-
-The xsdg tool is controlled by a configuration file, which specifies:
-
-1. Defines paths to the Assembly, Documentation Files, and the Output Path for XSD Schemas. All paths within the configuration are relative to the working directory of the XSDG tool. 
-2. The name of the Assembly that contains the types to be analyzed.
-3. A number of jobs to be performed. Two jobs can be configured:
-	1. Documentation jobs: which will generate templates for Documentation Files.
-	2. Schema jobs: which will generate XSD Schemas for selected types.
-
-This configuration file is passed to the xsdg tool as a parameter:
-
-```
-xsdg -p [working directory] [name of configuration file]
-```
-
-The ```-p [working directory]``` is optional and if specified will set the working directory of the xsdg tool. If it is not specied the working directory will be the directory from where the xsdg tool is invoked. 
-")]
     public class XSDGConfig :
         IJobConfiguration
     {
         [XmlAttribute("assembly")]
         [XmlRequired]
-        [XmlDocumentation(@"
-# Assembly Name
-
-Name of the Assembly from which to load types. It is specified without the file extension of the assembly, which is assumed to be ```dll```.
-")]
+        [XmlDocumentation("XSDGConfig.AssemblyName")]
         public string AssemblyName { get; set; } = string.Empty;
 
         [XmlAttribute("documentation-path")]
         [XmlOptional]
-        [XmlDocumentation(@"
-# Path to XSD documentation
-
-This attribute specifies the relative path to the Documentation Files that will be included in ```xsd:documention``` elements in generated XSD Schemas, or where templates for the Documentation Files will be generated. This attribute is optional. If it is not specified then the Documentation Files will be presumed located in the current working directory.
-
-Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.
-")]
         public string DocumentationPath { get; set; } = string.Empty;
 
         [XmlAttribute("output-path")]
         [XmlOptional]
-        [XmlDocumentation(@"
-# Output path for generated XSD Schemas
-
-This attribute specifies the relative path to which generated XSD Schemas will be written. This attribute is optional. If it is not specified then XSD Schemas will be written to the current working directory.
-
-Please note, this path must not start with a path separator, as this will cause the working directory path to be discarded; most likely cause an error when running the program.
-")]
         public string OutputPath { get; set; } = string.Empty;
 
         [XmlAttribute("input-path")]
