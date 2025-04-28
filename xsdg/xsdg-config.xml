@@ -16,7 +16,6 @@ what is checked into the Git repository.
     xsi:noNamespaceSchemaLocation="Schema/xsdg.xsd"
     assembly="Inventors.Xml"
     input-path="Inventors.Xml/bin/Debug/net6.0/"
-    documentation-path="Inventors.Xml/Documentation/"
     output-path="xsdg/Schema/">
     
     <schema
