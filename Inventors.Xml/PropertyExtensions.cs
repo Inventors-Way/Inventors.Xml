@@ -157,7 +157,8 @@ namespace Inventors.Xml
                                                Type: _typeMapping[typeKey],
                                                Required: property.IsPropertyRequired(),
                                                Primitive: true,
-                                               PropertyName: property.Name);
+                                               PropertyName: property.Name,
+                                               Documentation: property.GetDocumentation());
             }
             else if (property.PropertyType.IsEnum)
             {
@@ -176,14 +177,16 @@ namespace Inventors.Xml
             if (!document.Exists(type.GetXSDTypeName()))
             {
                 document.Add(new EnumElement(name: typeName, 
-                                             values: type.ParseEnumValues()));
+                                             values: type.ParseEnumValues(),
+                                             documentation: property.GetDocumentation()));
             }
 
             return new AttributeDescriptor(Name: property.GetAttributeName(),
                                            Type: typeName,
                                            Required: property.IsPropertyRequired(),
                                            Primitive: false,
-                                           PropertyName: property.Name);
+                                           PropertyName: property.Name,
+                                           Documentation: property.GetDocumentation());
         }
 
         public static string GetDocumentation(this PropertyInfo property)

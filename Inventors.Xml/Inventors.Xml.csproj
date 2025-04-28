@@ -26,14 +26,6 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Documentation\Inventors\Xml\XSDGConfig.AssemblyName.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Documentation\Inventors\Xml\XSDGConfig.AssemblyName.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

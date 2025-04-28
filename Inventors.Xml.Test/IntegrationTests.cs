@@ -1,5 +1,4 @@
 using Inventors.Xml.Content;
-using Inventors.Xml.Generators.Documentation;
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Test.TestObjects;
 using Inventors.Xml.Serialization;
@@ -43,7 +42,7 @@ namespace Inventors.Xml.Test
         public void T02_GenerateSchema()
         {
             var document = ObjectDocument.Parse(typeof(Company), NullReporter.Instance);
-            var documentation = DocumentationSource.Create(document, DocumentationDirectory)
+            DocumentationProvider documentation = DocumentationProvider.Create(document, new XSDGConfigDocumentation())
                 .SetInputFormat(DocumentationFormat.MarkDown)
                 .SetOutputFormat(DocumentationFormat.Html)
                 .SetEncoding(true)
@@ -64,53 +63,6 @@ namespace Inventors.Xml.Test
             var company = text.ToObject<Company>();
 
             Console.WriteLine(company);
-        }
-
-        [TestMethod]
-        public void T04_GenerateMarkdownDocumentation()
-        {
-            var reporter = new ConsoleReporter(true);
-            var document = ObjectDocument.Parse(typeof(Company), reporter);
-            var source = DocumentationSource.Create(document, DocumentationDirectory)
-                .SetInputFormat(DocumentationFormat.MarkDown)
-                .SetOutputFormat(DocumentationFormat.Html)
-                .Build();
-            var generator = new DocumentationGenerator(document, source, reporter);
-            generator.Run();
-        }
-
-        [TestMethod]
-        public void T05_GenerateTextDocumentation()
-        {
-            var reporter = new ConsoleReporter(true);
-            var document = ObjectDocument.Parse(typeof(Company), reporter);
-            var source = DocumentationSource.Create(document, DocumentationDirectory)
-                .SetInputFormat(DocumentationFormat.Text)
-                .SetOutputFormat(DocumentationFormat.Html)
-                .Build();
-            var generator = new DocumentationGenerator(document, source, reporter);
-            generator.Run();
-        }
-
-        [TestMethod]
-        public void T06_GenerateDisposableDocumentation()
-        {
-            if (Directory.Exists(DisposableDocumentationDirectory))
-            {
-                Directory.Delete(DisposableDocumentationDirectory, true);
-                Console.WriteLine($"Deleted: {DisposableDocumentationDirectory}");
-            }
-
-            Directory.CreateDirectory(DisposableDocumentationDirectory);
-
-            var reporter = new ConsoleReporter(true);
-            var document = ObjectDocument.Parse(typeof(Company), reporter);
-            var source = DocumentationSource.Create(document, DisposableDocumentationDirectory)
-                .SetInputFormat(DocumentationFormat.MarkDown)
-                .SetOutputFormat(DocumentationFormat.Text)
-                .Build();
-            var generator = new DocumentationGenerator(document, source, reporter);
-            generator.Run();
         }
 
         [TestMethod]

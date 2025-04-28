@@ -1,7 +1,0 @@
-# Generation of XSD Schema
-
-The xsdg tool can generate XSD Schemas from C# classes. The tool will parse a class and its class hierachy for all public properties that can be serialized by the XML serializer/deserializer in .NET. This works in the same way as the original xsd tool from Microsoft with some notable differences:
-
-1. It is more strict than the xsd tool. It required all serializable entities Properties and Enum values to be annotated with appropriate Attributes from the System.Xml.Serialization namespace, such as XmlAttribute, XmlElement, XmlEnum, XmlArray, XmlArrayItem etc. The root class of the class hirarchy must have the XmlRoot attribute.
-2. It does not allow elements to be primitive types. Instead elements must be classes, meaning that primitive types must be attrinutes.
-3. The ```use``` attribute for attributes and ```minOccurs``` for elements can be controlled by an optional XmlRequired attribute in the Inventors.Xml.Serialization library. If XmlRequired is set to true for attributes the ```use``` will be set to required, if it is set to false ```use``` will be set to optionial. If XmlRequired is not provided for an attribute then xsdg will follow the conventions of the original xsd tool. For elements it will set  ```minOccurs``` to 1 and 0, respectively. Consequently, with the xsdg tool it is possible to set value types to optional, and reference types to required, something, that was impossible with the old xsd tool.

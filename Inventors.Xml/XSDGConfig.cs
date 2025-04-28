@@ -35,7 +35,6 @@ namespace Inventors.Xml
         [XmlOptional]
         public string InputPath { get; set; } = string.Empty;
 
-        [XmlElement("documentation", typeof(DocumentationJob))]
         [XmlElement("schema", typeof(SchemaJob))]
         public List<Job> Jobs { get; } = new List<Job>();
 

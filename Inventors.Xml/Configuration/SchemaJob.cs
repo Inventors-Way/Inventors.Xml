@@ -1,5 +1,4 @@
 ﻿using Inventors.Xml.Content;
-using Inventors.Xml.Generators.Documentation;
 using Inventors.Xml.Generators.Xsd;
 using Inventors.Xml.Serialization;
 using System;
@@ -45,7 +44,7 @@ namespace Inventors.Xml.Configuration
             if (IncludeDocumentation)
             {
                 var docPath = "Generating documentation path".Run(() => GetDocumentationPath(path, configuration));
-                var documentation = "Setting up documentation source".Run(() => DocumentationSource.Create(document, docPath)
+                var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, new XSDGConfigDocumentation())
                     .SetInputFormat(DocumentationFileFormat)
                     .SetOutputFormat(DocumentationOutputFormat)
                     .SetEncoding(EncodeData)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Serialization
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Enum)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Enum | AttributeTargets.Field)]
     public class XmlDocumentationAttribute :
         Attribute
     {
