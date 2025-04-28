@@ -27,13 +27,6 @@ namespace Inventors.Xml.Configuration
                 .ThrowIfNull()
                 .Value;
 
-        protected static string GetDocumentationPath(string path, IJobConfiguration c) =>
-            string.IsNullOrEmpty(c.DocumentationPath) ? path : Path.Combine(new string[]
-                {
-                    path,
-                    c.DocumentationPath
-                });
-
         protected static string GetOutputPath(string path, IJobConfiguration c) =>
             string.IsNullOrEmpty(c.OutputPath) ? path : Path.Combine(new string[]
                 {

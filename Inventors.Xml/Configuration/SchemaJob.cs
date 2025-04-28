@@ -43,7 +43,6 @@ namespace Inventors.Xml.Configuration
 
             if (IncludeDocumentation)
             {
-                var docPath = "Generating documentation path".Run(() => GetDocumentationPath(path, configuration));
                 var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, new XSDGConfigDocumentation())
                     .SetInputFormat(DocumentationFileFormat)
                     .SetOutputFormat(DocumentationOutputFormat)

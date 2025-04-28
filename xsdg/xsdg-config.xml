@@ -19,11 +19,6 @@ what is checked into the Git repository.
     documentation-path="Inventors.Xml/Documentation/"
     output-path="xsdg/Schema/">
     
-    <documentation
-        title="Creating Markdown Documentation"
-        type="Inventors.Xml.XSDGConfig"
-        documentation-file-format="markdown"/>
-
     <schema
         title="Generating XML Schema"
         type="Inventors.Xml.XSDGConfig"

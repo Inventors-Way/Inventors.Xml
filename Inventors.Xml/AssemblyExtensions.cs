@@ -11,8 +11,12 @@ namespace Inventors.Xml
     {
         public static string GetEmbeddedString(this Assembly self, string resourceName)
         {
-            using Stream? stream = self.GetManifestResourceStream(resourceName) ?? 
+            var name = $"{self.GetName().Name}.{resourceName}";
+            using Stream? stream = self.GetManifestResourceStream(name);
+
+            if (stream is null)
                 throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
+
             using StreamReader reader = new(stream);
             return reader.ReadToEnd();
         }
