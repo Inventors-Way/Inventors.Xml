@@ -4,8 +4,10 @@ using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Inventors.Xml.Configuration
@@ -33,6 +35,21 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(false)]    
         public bool EncapsulateCharacterData { get; set; } = false;
 
+        private XSDGenerator CreateGenerator(ObjectDocument document)
+        {
+            if (!IncludeDocumentation)
+                return "Creating XSD generator".Run(() => new XSDGenerator(document));
+
+            var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, new XSDGConfigDocumentation())
+                .SetInputFormat(DocumentationFileFormat)
+                .SetOutputFormat(DocumentationOutputFormat)
+                .SetEncoding(EncodeData)
+                .SetCharacterData(EncapsulateCharacterData)
+            .Build());
+
+            return "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
+        }
+
         public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
         {
             var reporter = new ConsoleReporter(verbose);
@@ -40,26 +57,9 @@ namespace Inventors.Xml.Configuration
             "Check that type can be XML serialized".Run(() => type.TrySerialize());
             var document = "Parsing type".Run(() => ObjectDocument.Parse(type, reporter));
             var outputPath = "Output path".Run(() => GetOutputPath(path, configuration));
-
-            if (IncludeDocumentation)
-            {
-                var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, new XSDGConfigDocumentation())
-                    .SetInputFormat(DocumentationFileFormat)
-                    .SetOutputFormat(DocumentationOutputFormat)
-                    .SetEncoding(EncodeData)
-                    .SetCharacterData(EncapsulateCharacterData)
-                    .Build());
-
-                var generator = "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
-                var content = "Generating XSD".Run(() => generator.Run());
-                File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
-            }
-            else
-            {
-                var generator = "Creating XSD generator".Run(() => new XSDGenerator(document));
-                var content = "Generating XSD".Run(() => generator.Run());
-                File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
-            }
+            var generator = CreateGenerator(document);
+            var content = "Generating XSD".Run(() => generator.Run());
+            File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
         }
     }
 }
