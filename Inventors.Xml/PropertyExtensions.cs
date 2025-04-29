@@ -13,7 +13,7 @@ namespace Inventors.Xml
 {
     public static class PropertyExtensions
     {
-        private static Dictionary<string, string> _typeMapping = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string> _typeMapping = new Dictionary<string, string>();
 
         static PropertyExtensions()
         {
@@ -176,41 +176,18 @@ namespace Inventors.Xml
 
             if (!document.Exists(type.GetXSDTypeName()))
             {
-                document.Add(new EnumElement(name: typeName, 
+                document.Add(new EnumElement(name: typeName,
                                              values: type.ParseEnumValues(),
                                              documentation: property.GetDocumentation()));
             }
 
-            return new AttributeDescriptor(Name: property.GetAttributeName(),
-                                           Type: typeName,
-                                           Required: property.IsPropertyRequired(),
-                                           Primitive: false,
-                                           PropertyName: property.Name,
-                                           Documentation: property.GetDocumentation());
-        }
-
-        public static bool IsPropertyRequired(this PropertyInfo property)
-        {
-            var required = property.GetCustomAttribute<XmlRequiredAttribute>();
-            var optional = property.GetCustomAttribute<XmlOptionalAttribute>();
-
-            if (required is not null)
-            {
-                if (optional is not null)
-                    throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
-
-                return required.Required;
-            }
-
-            if (optional is not null)
-            {
-                if (required is not null)
-                    throw new InvalidOperationException($"The XmlOptional and XmlRequired attribute is mutually exclusive. They are both specified for the {property.Name} property");
-
-                return !optional.Optional;
-            }
-
-            return false;
+            return new AttributeDescriptor(
+                Name: property.GetAttributeName(),
+                Type: typeName,
+                Required: property.IsPropertyRequired(),
+                Primitive: false,
+                PropertyName: property.Name,
+                Documentation: property.GetDocumentation());
         }
     }
 }
