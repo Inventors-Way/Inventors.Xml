@@ -1,4 +1,5 @@
 ﻿using Inventors.Xml.Documentation;
+using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Inventors.Xml
     public class XSDGConfigDocumentation : IDocumentationSource
     {
         public string GetItem(string id) =>
-            DocumentationContent.Assembly.GetEmbeddedString(id);
+            DocumentationContent.Assembly.ReadEmbeddedResourceString(id);
     }
 }
