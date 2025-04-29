@@ -189,14 +189,6 @@ namespace Inventors.Xml
                                            Documentation: property.GetDocumentation());
         }
 
-        public static string GetDocumentation(this PropertyInfo property)
-        {
-            if (property.GetCustomAttribute<XmlDocumentationAttribute>() is XmlDocumentationAttribute documentation)
-                return documentation.ID;
-
-            return string.Empty;
-        }
-
         public static bool IsPropertyRequired(this PropertyInfo property)
         {
             var required = property.GetCustomAttribute<XmlRequiredAttribute>();

@@ -37,5 +37,27 @@ namespace Inventors.Xml.Serialization
 
             return documentation.ID;
         }
+
+        public static bool IsDocumented(this PropertyInfo self) =>
+            self.GetCustomAttribute<XmlDocumentationAttribute>() is not null;
+
+        public static string GetDocumentation(this PropertyInfo self)
+        {
+            if (self.GetCustomAttribute<XmlDocumentationAttribute>() is not XmlDocumentationAttribute documentation)
+                return string.Empty;
+
+            return documentation.ID;
+        }
+
+        public static bool IsDocumented(this FieldInfo self) =>
+            self.GetCustomAttribute<XmlDocumentationAttribute>() is not null;
+
+        public static string GetDocumentation(this FieldInfo self)
+        {
+            if (self.GetCustomAttribute<XmlDocumentationAttribute>() is not XmlDocumentationAttribute documentation)
+                return string.Empty;
+
+            return documentation.ID;
+        }
     }
 }
