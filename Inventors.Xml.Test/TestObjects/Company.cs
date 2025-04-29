@@ -28,6 +28,7 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlArray("projects")]
         [XmlArrayItem("project", typeof(Project))]
         public List<Project> Projects { get; } = new List<Project>();
+
         public override string ToString()
         {
             var builder = new StringBuilder();
