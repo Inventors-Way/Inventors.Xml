@@ -220,13 +220,5 @@ namespace Inventors.Xml
                     yield return new EnumValue(Name: name, XSDName: name, Documentation: fieldInfo.GetDocumentation());
             }
         }
-
-        public static string GetDocumentation(this Type property)
-        {
-            if (property.GetCustomAttribute<XmlDocumentationAttribute>() is XmlDocumentationAttribute documentation)
-                return documentation.ID;
-
-            return string.Empty;
-        }
     }
 }
