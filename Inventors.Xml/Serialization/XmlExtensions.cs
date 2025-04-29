@@ -113,7 +113,7 @@ namespace Inventors.Xml.Serialization
             if (resourceStream is null)
                 throw new Exception($"Resource '{resourceName}' not found in assembly.");
 
-            using StreamReader reader = new StreamReader(resourceStream);
+            using StreamReader reader = new(resourceStream);
             return reader.ReadToEnd();
         }
     }
