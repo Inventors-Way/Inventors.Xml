@@ -22,6 +22,7 @@
     <None Remove="Content\DocumentationFormat.md" />
     <None Remove="Content\DocumentationFormat.Text.md" />
     <None Remove="XSDGConfig.AssemblyName.md" />
+    <None Remove="XSDGConfig.DocumentationGenerator.md" />
     <None Remove="XSDGConfig.DocumentationPath.md" />
     <None Remove="XSDGConfig.InputPath.md" />
     <None Remove="XSDGConfig.md" />
@@ -43,6 +44,7 @@
     <EmbeddedResource Include="Content\DocumentationFormat.MarkDown.md" />
     <EmbeddedResource Include="Content\DocumentationFormat.md" />
     <EmbeddedResource Include="Content\DocumentationFormat.Text.md" />
+    <EmbeddedResource Include="XSDGConfig.DocumentationGenerator.md" />
     <EmbeddedResource Include="XSDGConfig.AssemblyName.md" />
     <EmbeddedResource Include="XSDGConfig.DocumentationPath.md" />
     <EmbeddedResource Include="XSDGConfig.InputPath.md" />

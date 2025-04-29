@@ -26,10 +26,10 @@ namespace Inventors.Xml.Content
     {
         public class DocumentationSourceOptions
         {
-            internal DocumentationSourceOptions(ObjectDocument document, IDocumentationSource source)
+            internal DocumentationSourceOptions(ObjectDocument document, IDocumentationSource? source)
             {
                 this.document = document;
-                this.source = source;
+                this.source = source is null ? new NullDocumentationSource() : source;
             }
 
             public DocumentationSourceOptions SetOutputFormat(DocumentationFormat format) 
@@ -78,7 +78,7 @@ namespace Inventors.Xml.Content
             private bool encoding = false;
         }
 
-        public static DocumentationSourceOptions Create(ObjectDocument document, IDocumentationSource source) => new (document, source);
+        public static DocumentationSourceOptions Create(ObjectDocument document, IDocumentationSource? source) => new (document, source);
 
         private DocumentationProvider(DocumentationSourceOptions options)
         {

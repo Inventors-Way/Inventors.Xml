@@ -35,12 +35,12 @@ namespace Inventors.Xml.Configuration
         [XmlRequired(false)]    
         public bool EncapsulateCharacterData { get; set; } = false;
 
-        private XSDGenerator CreateGenerator(ObjectDocument document)
+        private XSDGenerator CreateGenerator(ObjectDocument document, IDocumentationSource? docSource)
         {
             if (!IncludeDocumentation)
                 return "Creating XSD generator".Run(() => new XSDGenerator(document));
 
-            var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, new XSDGConfigDocumentation())
+            var documentation = "Setting up documentation source".Run(() => DocumentationProvider.Create(document, docSource)
                 .SetInputFormat(DocumentationFileFormat)
                 .SetOutputFormat(DocumentationOutputFormat)
                 .SetEncoding(EncodeData)
@@ -50,14 +50,14 @@ namespace Inventors.Xml.Configuration
             return "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
         }
 
-        public override void Run(string path, IJobConfiguration configuration, bool verbose = false)
+        public override void Run(string path, IJobConfiguration configuration, IDocumentationSource? docSource = null, bool verbose = false)
         {
             var reporter = new ConsoleReporter(verbose);
             var type = $"Loading type: {Type}".Run(() => LoadType(configuration));
             "Check that type can be XML serialized".Run(() => type.TrySerialize());
             var document = "Parsing type".Run(() => ObjectDocument.Parse(type, reporter));
             var outputPath = "Output path".Run(() => GetOutputPath(path, configuration));
-            var generator = CreateGenerator(document);
+            var generator = CreateGenerator(document, docSource);
             var content = "Generating XSD".Run(() => generator.Run());
             File.WriteAllText(Path.Combine(outputPath, generator.FileName), content);
         }

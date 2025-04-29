@@ -36,6 +36,13 @@
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+<xs:attribute name="documentation-generator" type="xs:string" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Name of the documentation generator type.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
 <xs:attribute name="output-path" type="xs:string" use="optional">
 <xs:annotation>
 <xs:documentation>

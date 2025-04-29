@@ -1,0 +1,1 @@
+﻿Name of the documentation generator type.
