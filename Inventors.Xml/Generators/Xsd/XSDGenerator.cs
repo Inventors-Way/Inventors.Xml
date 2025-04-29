@@ -17,7 +17,7 @@ namespace Inventors.Xml.Generators.Xsd
             documentation = null;
         }
 
-        public XSDGenerator(ObjectDocument document, DocumentationSource documentation)
+        public XSDGenerator(ObjectDocument document, DocumentationProvider documentation)
         {
             this.document = document;
             this.documentation = documentation;
@@ -143,7 +143,7 @@ namespace Inventors.Xml.Generators.Xsd
                         else
                         {
                             builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
-                            Annotate(GetDocumentation(info, e.PropertyName));
+                            Annotate(GetDocumentation(e.Type.Documentation));
                             builder.AppendLine("</xs:element>");
                         }
                     }
@@ -163,27 +163,22 @@ namespace Inventors.Xml.Generators.Xsd
                     else
                     {
                         builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
-                        Annotate(GetDocumentation(info, a.PropertyName));
+                        Annotate(GetDocumentation(a.Documentation));
                         builder.AppendLine("</xs:attribute>");
                     }
                 }
             }
         }
 
-        public string? GetDocumentation(ElementDocumentationInfo? info, string propertyName)
+        public string GetDocumentation(string id)
         {
-            if (info is null)
-                return null;
+            if (string.IsNullOrEmpty(id))
+                return string.Empty;
 
             if (documentation is null)
-                return null;
+                return string.Empty;
 
-            var content = documentation[info.GetFilename(propertyName)];
-
-            if (string.IsNullOrEmpty(content))
-                return null;
-
-            return content;
+            return documentation[id];
         }
 
         public ElementDocumentationInfo? AnnotateElement(Element element)
@@ -191,12 +186,11 @@ namespace Inventors.Xml.Generators.Xsd
             if (documentation is null)
                 return null;
 
-            var info = documentation.GetElement(element.Name);
-            var content = documentation[info.GetFilename()];
+            var content = documentation[element.Documentation];
 
             Annotate(content);
 
-            return info;
+            return new ElementDocumentationInfo(element.Documentation, documentation.OutputFormat);
         }
 
         public void Annotate(string? content)
@@ -228,7 +222,7 @@ namespace Inventors.Xml.Generators.Xsd
                 else
                 {
                     builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\">");
-                    Annotate(GetDocumentation(info, value.Name));
+                    Annotate(GetDocumentation(value.Documentation));
                     builder.AppendLine($"</xs:enumeration>");
                 }
             }
@@ -239,7 +233,7 @@ namespace Inventors.Xml.Generators.Xsd
 
         private readonly StringBuilder builder = new();
         private readonly ObjectDocument document;
-        private readonly DocumentationSource? documentation;
+        private readonly DocumentationProvider? documentation;
         private bool executed = false;
     }
 }

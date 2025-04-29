@@ -17,7 +17,11 @@ namespace Inventors.Xml
                 throw new ArgumentException("Has no Namespace", nameof(type));
 
             Namespace = type.Namespace;
-            Root = new ElementDescriptor(Name: type.RootElementName(), type.ParseClass(this, reporter), false, "");
+            Root = new ElementDescriptor(
+                Name: type.RootElementName(), 
+                Type: type.ParseClass(this, reporter), 
+                Required: false, 
+                PropertyName: "");
         }
 
         public Element this[string id]

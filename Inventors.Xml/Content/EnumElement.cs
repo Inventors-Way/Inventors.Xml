@@ -9,8 +9,8 @@ namespace Inventors.Xml.Content
     public class EnumElement :
         Element
     {
-        public EnumElement(string name, IEnumerable<EnumValue> values) :
-            base(name: name, false)
+        public EnumElement(string name, IEnumerable<EnumValue> values, string documentation) :
+            base(name: name, false, documentation)
         {
             Values = values.ToList();
         }

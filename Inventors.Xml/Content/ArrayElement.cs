@@ -9,8 +9,8 @@ namespace Inventors.Xml.Content
     public class ArrayElement :
         Element
     {
-        public ArrayElement(string name) :
-            base(name: name, false)
+        public ArrayElement(string name, string documentation) :
+            base(name: name, false, documentation)
         {
         }
 

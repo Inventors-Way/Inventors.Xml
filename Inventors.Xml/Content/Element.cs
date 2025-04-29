@@ -10,7 +10,7 @@ namespace Inventors.Xml.Content
         Element
     {
         public NullElement() :
-            base("", false)
+            base("", false, "")
         {
 
         }
@@ -23,11 +23,13 @@ namespace Inventors.Xml.Content
     public abstract class Element
     {
         private static readonly Element _empty = new NullElement();
-        public Element(string name, bool isAbstract)
+
+        public Element(string name, bool isAbstract, string documentation)
         {
             Name = name;
             BaseType = string.Empty;
             IsAbstract = isAbstract;
+            Documentation = documentation;
         }
 
         public string Name { get; }
@@ -43,6 +45,10 @@ namespace Inventors.Xml.Content
         public abstract bool IsNested { get; }
 
         public static Element Empty => _empty;
+
+        public string Documentation { get; } = string.Empty;
+
+        public bool IsDocumented => !string.IsNullOrEmpty(Documentation);
 
         public abstract void Accept(IElementVisitor visitor);
     }

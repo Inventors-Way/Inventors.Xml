@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Configuration\Job.Title.md" />
+    <None Remove="Configuration\Job.Type.md" />
+    <None Remove="Configuration\SchemaJob.DocumentationFileFormat.md" />
+    <None Remove="Configuration\SchemaJob.DocumentationOutputFormat.md" />
+    <None Remove="Configuration\SchemaJob.EncapsulateCharacterData.md" />
+    <None Remove="Configuration\SchemaJob.EncodeData.md" />
+    <None Remove="Configuration\SchemaJob.IncludeDocumentation.md" />
+    <None Remove="Configuration\SchemaJob.md" />
+    <None Remove="Content\DocumentationFormat.Html.md" />
+    <None Remove="Content\DocumentationFormat.MarkDown.md" />
+    <None Remove="Content\DocumentationFormat.md" />
+    <None Remove="Content\DocumentationFormat.Text.md" />
+    <None Remove="XSDGConfig.AssemblyName.md" />
+    <None Remove="XSDGConfig.DocumentationGenerator.md" />
+    <None Remove="XSDGConfig.DocumentationPath.md" />
+    <None Remove="XSDGConfig.InputPath.md" />
+    <None Remove="XSDGConfig.md" />
+    <None Remove="XSDGConfig.OutputPath.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Job.Title.md" />
+    <EmbeddedResource Include="Configuration\Job.Type.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.DocumentationFileFormat.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.DocumentationOutputFormat.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.EncapsulateCharacterData.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.EncodeData.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.IncludeDocumentation.md" />
+    <EmbeddedResource Include="Configuration\SchemaJob.md" />
+    <EmbeddedResource Include="Content\DocumentationFormat.Html.md" />
+    <EmbeddedResource Include="Content\DocumentationFormat.MarkDown.md" />
+    <EmbeddedResource Include="Content\DocumentationFormat.md" />
+    <EmbeddedResource Include="Content\DocumentationFormat.Text.md" />
+    <EmbeddedResource Include="XSDGConfig.DocumentationGenerator.md" />
+    <EmbeddedResource Include="XSDGConfig.AssemblyName.md" />
+    <EmbeddedResource Include="XSDGConfig.DocumentationPath.md" />
+    <EmbeddedResource Include="XSDGConfig.InputPath.md" />
+    <EmbeddedResource Include="XSDGConfig.md" />
+    <EmbeddedResource Include="XSDGConfig.OutputPath.md" />
+  </ItemGroup>
+
+</Project>

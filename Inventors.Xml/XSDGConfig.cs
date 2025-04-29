@@ -1,4 +1,6 @@
 ﻿using Inventors.Xml.Configuration;
+using Inventors.Xml.Content;
+using Inventors.Xml.Documentation;
 using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
@@ -13,26 +15,30 @@ using Throw;
 namespace Inventors.Xml
 {
     [XmlRoot("xsdg")]
+    [XmlDocumentation("XSDGConfig.md")]
     public class XSDGConfig :
         IJobConfiguration
     {
         [XmlAttribute("assembly")]
         [XmlRequired]
+        [XmlDocumentation("XSDGConfig.AssemblyName.md")]
         public string AssemblyName { get; set; } = string.Empty;
 
-        [XmlAttribute("documentation-path")]
+        [XmlAttribute("documentation-generator")]
         [XmlOptional]
-        public string DocumentationPath { get; set; } = string.Empty;
+        [XmlDocumentation("XSDGConfig.DocumentationGenerator.md")]
+        public string DocumentationGenerator { get; set; } = string.Empty;
 
         [XmlAttribute("output-path")]
         [XmlOptional]
+        [XmlDocumentation("XSDGConfig.OutputPath.md")]
         public string OutputPath { get; set; } = string.Empty;
 
         [XmlAttribute("input-path")]
         [XmlOptional]
+        [XmlDocumentation("XSDGConfig.InputPath.md")]
         public string InputPath { get; set; } = string.Empty;
 
-        [XmlElement("documentation", typeof(DocumentationJob))]
         [XmlElement("schema", typeof(SchemaJob))]
         public List<Job> Jobs { get; } = new List<Job>();
 
@@ -57,10 +63,17 @@ namespace Inventors.Xml
             {
                 try
                 {
+                    IDocumentationSource? docGenerator = null;
+
                     Console.WriteLine();
                     Console.WriteLine($"Running: {job.Title}:");
+
+                    if (!string.IsNullOrEmpty(DocumentationGenerator))
+                        docGenerator = "Creating documentation generator: ...".Run(() => CreateDocumentationGenerator());
+
                     stopwatch.Restart();
-                    job.Run(path, this, verbose);
+
+                    job.Run(path, this, docGenerator, verbose);
                     PrintRuntime(stopwatch);
                 }
                 catch (Exception ex) 
@@ -85,6 +98,20 @@ namespace Inventors.Xml
                 .Value);
         }
 
+        private IDocumentationSource CreateDocumentationGenerator()
+        {
+            if (Assembly is null)
+                throw new InvalidOperationException("Assembly has not been loaded");
+
+            if (Assembly.GetType(DocumentationGenerator) is not Type type)
+                throw new InvalidOperationException($"Failed to get type {DocumentationGenerator} for the documentation generator");
+
+            if (Activator.CreateInstance(type) is not IDocumentationSource source)
+                throw new InvalidOperationException("Documentation generator does not implement the IDocumentationSource interface");
+
+            return source;
+        }
+
         private string GetAssemblyPath(string path) =>
             string.IsNullOrEmpty(InputPath) ? 
             Path.Combine(path, AssemblyName) :
@@ -94,6 +121,7 @@ namespace Inventors.Xml
                     InputPath,
                     $"{AssemblyName}.dll"
                 });
+
         private static void PrintRuntime(Stopwatch stopwatch)
         {
             if (stopwatch.ElapsedMilliseconds > 999)

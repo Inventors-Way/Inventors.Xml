@@ -15,15 +15,10 @@ what is checked into the Git repository.
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="Schema/xsdg.xsd"
     assembly="Inventors.Xml"
+    documentation-generator="Inventors.Xml.XSDGConfigDocumentation"
     input-path="Inventors.Xml/bin/Debug/net6.0/"
-    documentation-path="Inventors.Xml/Documentation/"
     output-path="xsdg/Schema/">
     
-    <documentation
-        title="Creating Markdown Documentation"
-        type="Inventors.Xml.XSDGConfig"
-        documentation-file-format="markdown"/>
-
     <schema
         title="Generating XML Schema"
         type="Inventors.Xml.XSDGConfig"

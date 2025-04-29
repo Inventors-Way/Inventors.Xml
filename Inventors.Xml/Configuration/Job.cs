@@ -14,10 +14,12 @@ namespace Inventors.Xml.Configuration
     {
         [XmlAttribute("title")]
         [XmlRequired(true)]
+        [XmlDocumentation("Configuration.Job.Title.md")]
         public string Title { get; set; } = string.Empty;
 
         [XmlAttribute("type")]
         [XmlRequired(true)]
+        [XmlDocumentation("Configuration.Job.Type.md")]
         public string Type { get; set; } = string.Empty;
 
         protected Type LoadType(IJobConfiguration configuration) => configuration.Assembly
@@ -27,13 +29,6 @@ namespace Inventors.Xml.Configuration
                 .ThrowIfNull()
                 .Value;
 
-        protected static string GetDocumentationPath(string path, IJobConfiguration c) =>
-            string.IsNullOrEmpty(c.DocumentationPath) ? path : Path.Combine(new string[]
-                {
-                    path,
-                    c.DocumentationPath
-                });
-
         protected static string GetOutputPath(string path, IJobConfiguration c) =>
             string.IsNullOrEmpty(c.OutputPath) ? path : Path.Combine(new string[]
                 {
@@ -41,6 +36,6 @@ namespace Inventors.Xml.Configuration
                     c.OutputPath
                 });
 
-        public abstract void Run(string path, IJobConfiguration configuration, bool verbose = false);
+        public abstract void Run(string path, IJobConfiguration configuration, IDocumentationSource? docSource = null, bool verbose = false);
     }
 }

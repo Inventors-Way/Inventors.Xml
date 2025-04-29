@@ -1,5 +1,6 @@
 ﻿using Inventors.Xml.Content;
 using Inventors.Xml.Generators.Xsd;
+using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +70,8 @@ namespace Inventors.Xml
 
             var element = document.Add(new ClassElement(
                 name: type.GetXSDTypeName(),
-                isAbstract: type.IsAbstract));
+                isAbstract: type.IsAbstract,
+                documentation: type.GetDocumentation()));
 
             element.BaseType = type.BaseType.ParseBaseType(document, reporter).Name;
 
@@ -146,7 +148,7 @@ namespace Inventors.Xml
             if (document.Exists(name))
                 return document[name];
 
-            var element = document.Add(new ChoiceElement(name, property.IsEnumerable()));
+            var element = document.Add(new ChoiceElement(name, property.IsEnumerable(), property.GetDocumentation()));
             var choices = property.ParseChoices(document, reporter);
             element.SetChoices(choices);
 
@@ -179,7 +181,7 @@ namespace Inventors.Xml
             if (document.Exists(name))
                 return document[name];
 
-            var element = document.Add(new ArrayElement(name));
+            var element = document.Add(new ArrayElement(name, property.GetDocumentation()));
             var items = property.ParseArrayItems(document, reporter);
             element.SetItems(items);
 
@@ -208,14 +210,14 @@ namespace Inventors.Xml
             foreach (var value in Enum.GetValues(type))
             {
                 var name = $"{value}";
-                var fieldInfo = type.GetField(name) ?? throw new InvalidOperationException($"No field into found for enum value {value}");
+                FieldInfo fieldInfo = type.GetField(name) ?? throw new InvalidOperationException($"No field into found for enum value {value}");
                 
                 if (Attribute.GetCustomAttribute(fieldInfo, typeof(XmlEnumAttribute)) is XmlEnumAttribute xmlEnum)
                     yield return xmlEnum.Name is null ?
-                                 new EnumValue(Name: name, XSDName: name) :
-                                 new EnumValue(Name: name, XSDName: xmlEnum.Name);
+                                 new EnumValue(Name: name, XSDName: name, Documentation: fieldInfo.GetDocumentation()) :
+                                 new EnumValue(Name: name, XSDName: xmlEnum.Name, Documentation: fieldInfo.GetDocumentation());
                 else
-                    yield return new EnumValue(Name: name, XSDName: name);
+                    yield return new EnumValue(Name: name, XSDName: name, Documentation: fieldInfo.GetDocumentation());
             }
         }
     }

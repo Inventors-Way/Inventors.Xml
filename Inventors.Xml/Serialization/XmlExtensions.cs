@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Reflection;
 using System.Xml.Schema;
-using System.Data.SqlTypes;
 
 namespace Inventors.Xml.Serialization
 {
@@ -72,8 +71,14 @@ namespace Inventors.Xml.Serialization
             }
         }
 
-        public static string TrySerialize(this Type type) =>
-            Activator.CreateInstance(type).TrySerialize();
+        public static string TrySerialize(this Type type)
+        {
+            var instance = Activator.CreateInstance(type);
+
+            return instance is null
+                ? throw new InvalidOperationException($"Failed to instantiate object of type {type}")
+                : instance.TrySerialize();
+        }
 
         public static string TrySerialize(this object obj) 
         {
@@ -98,14 +103,17 @@ namespace Inventors.Xml.Serialization
 
         public static string ReadEmbeddedResourceString(this Assembly assembly, string resourceName)
         {
+            if (assembly is null)
+                return "";
+
             string fullResourceName = $"{assembly.GetName().Name}.{resourceName}";
 
-            using Stream resourceStream = assembly.GetManifestResourceStream(fullResourceName);
+            using Stream? resourceStream = assembly.GetManifestResourceStream(fullResourceName);
 
             if (resourceStream is null)
                 throw new Exception($"Resource '{resourceName}' not found in assembly.");
 
-            using StreamReader reader = new StreamReader(resourceStream);
+            using StreamReader reader = new(resourceStream);
             return reader.ReadToEnd();
         }
     }

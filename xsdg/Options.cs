@@ -26,8 +26,6 @@ namespace xsdg
 
         public void Run()
         {
-            var xsdSchema = GetType().Assembly.ReadEmbeddedResourceString("Schema.xsdg.xsd");
-
             if (!File.Exists(ConfigFile))
             {
                 Console.WriteLine($"error, {ConfigFile} file not found!");
@@ -51,17 +49,8 @@ namespace xsdg
 
 
             var text = File.ReadAllText(ConfigFile);
-            text.ToObject<XSDGConfig>(xsdSchema)
-                .OnSuccess(config =>
-                {
-                    Console.WriteLine("done");
-                    config.Run(Path, Verbose);
-                })
-                .OnError(errors =>
-                {
-                    Console.WriteLine(("failed!"));
-                    Console.WriteLine($"{errors}");
-                });            
+            var config = text.ToObject<XSDGConfig>();
+            config.Run(Path, Verbose);
         }
     }
 }

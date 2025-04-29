@@ -9,8 +9,8 @@ namespace Inventors.Xml.Content
     public class ChoiceElement :
         Element
     {
-        public ChoiceElement(string name, bool multiple) :
-            base(name: name, false)
+        public ChoiceElement(string name, bool multiple, string documentation) :
+            base(name: name, false, documentation)
         {
             Multiple = multiple;
         }
