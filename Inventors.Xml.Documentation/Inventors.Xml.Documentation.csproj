@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Configuration\DocumentationJob.DocumentationFileFormat.md" />
-    <None Remove="Configuration\DocumentationJob.md" />
     <None Remove="Configuration\Job.Title.md" />
     <None Remove="Configuration\Job.Type.md" />
     <None Remove="Configuration\SchemaJob.DocumentationFileFormat.md" />
@@ -30,8 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\DocumentationJob.DocumentationFileFormat.md" />
-    <EmbeddedResource Include="Configuration\DocumentationJob.md" />
     <EmbeddedResource Include="Configuration\Job.Title.md" />
     <EmbeddedResource Include="Configuration\Job.Type.md" />
     <EmbeddedResource Include="Configuration\SchemaJob.DocumentationFileFormat.md" />

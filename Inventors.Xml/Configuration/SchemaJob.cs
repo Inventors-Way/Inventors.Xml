@@ -17,22 +17,27 @@ namespace Inventors.Xml.Configuration
     {
         [XmlAttribute("include-documentation")]
         [XmlRequired(false)]
+        [XmlDocumentation("Configuration.SchemaJob.IncludeDocumentation.md")]
         public bool IncludeDocumentation { get; set; } = true;
 
         [XmlAttribute("documentation-file-format")]
         [XmlRequired(false)]
+        [XmlDocumentation("Configuration.SchemaJob.DocumentationFileFormat.md")]
         public DocumentationFormat DocumentationFileFormat { get; set; } = DocumentationFormat.MarkDown;
 
         [XmlAttribute("documentation-output-format")]
         [XmlRequired(false)]
+        [XmlDocumentation("Configuration.SchemaJob.DocumentationOutputFormat.md")]
         public DocumentationFormat DocumentationOutputFormat { get; set; } = DocumentationFormat.Html;
 
         [XmlAttribute("encode-data")]
         [XmlRequired(false)]
+        [XmlDocumentation("Configuration.SchemaJob.EncodeData.md")]
         public bool EncodeData { get; set; } = true;
 
         [XmlAttribute("encapsulate-character-data")]
-        [XmlRequired(false)]    
+        [XmlRequired(false)]
+        [XmlDocumentation("Configuration.SchemaJob.EncapsulateCharacterData.md")]
         public bool EncapsulateCharacterData { get; set; } = false;
 
         private XSDGenerator CreateGenerator(ObjectDocument document, IDocumentationSource? docSource)

@@ -67,14 +67,46 @@
 <xs:complexContent mixed="false">
 <xs:extension base="Inventors.Xml.Configuration.Job">
 <xs:attribute name="include-documentation" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Include documentation in the XSD Schema&lt;/h1&gt;
+&lt;p&gt;This attribute controls if documentation is included in the generated XSD schema. The attribute is optional and if not specified then no documentation will be included in the generated XSD schema.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Format of the documentation files&lt;/h1&gt;
+&lt;p&gt;The xsdg can use documentation files in either Text, Markdown, or HTML format. This attribute is optional. If it is not specified the program will use documentation files Markdown format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="documentation-output-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Output format for the generated documentation&lt;/h1&gt;
+&lt;p&gt;This attribute controls the output format of the text that are placed in the xs:documentation elements. It is only relevant when the input format is Markdown. For all other input formats the text in the documentation files are not processed, other than possible enclosed in a CDATA section or special characters are escaped (encoded).&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="encode-data" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Encode data in the documentation elements&lt;/h1&gt;
+&lt;p&gt;If this attribute is set then the special characters such as &amp;lt;, &amp;gt; or other special characters will be encoded before they are written to a xs:documentation elements. This or enclosing HTML documentation in a CDATA section is usually required in order for the documentation to be displayed correctly.&lt;/p&gt;
+&lt;p&gt;Please note this attribute should be mutually exclusive with the  encapsulate-character-data attribute.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="encapsulate-character-data" type="xs:boolean" use="optional">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Encapsulate documentation text in CDATA section.&lt;/h1&gt;
+&lt;p&gt;If this attribute is set to true then the text in xs:documentation elements will be enclosed in a CDATA section. This is most likely required for HTML encoded documentation to displayed correctly.&lt;/p&gt;
+&lt;p&gt;Please note this attribute should be mutually exclusive with the encode-data attribute.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:extension>
 </xs:complexContent>
@@ -82,18 +114,51 @@
 
 <xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
 <xs:attribute name="title" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Title&lt;/h1&gt;
+&lt;p&gt;Title of the job that will be displayed when the job is executed by the xsdg tool. This title has no functional importance, however, it can make it easier to identify the cause of any potential errors from logs.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 <xs:attribute name="type" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Type in the Assembly&lt;/h1&gt;
+&lt;p&gt;This attribute must be the fullname of a type in the Assembly, which will be the type that is analysed by the xsdg tool. Meaning it must include both the namespace and the name of the type.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:attribute>
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
+<xs:annotation>
+<xs:documentation>
+&lt;h1&gt;Format of the documentation files&lt;/h1&gt;
+&lt;p&gt;The xsdg can use documentation files in either Text, Markdown, or HTML format. This attribute is optional. If it is not specified the program will use documentation files Markdown format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 <xs:restriction base="xs:string">
 <xs:enumeration value="text">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Plain text format&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="markdown">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Markdown formatted text&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 <xs:enumeration value="html">
+<xs:annotation>
+<xs:documentation>
+&lt;p&gt;Text in HTML format.&lt;/p&gt;
+</xs:documentation>
+</xs:annotation>
 </xs:enumeration>
 </xs:restriction>
 </xs:simpleType>

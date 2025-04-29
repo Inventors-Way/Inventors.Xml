@@ -1,4 +1,5 @@
-﻿using Markdig;
+﻿using Inventors.Xml.Serialization;
+using Markdig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,17 @@ namespace Inventors.Xml.Content
 {
     public record ElementDocumentationInfo(string IDDocumentationFormat, DocumentationFormat Format);
 
+    [XmlDocumentation("Content.DocumentationFormat.md")]
     public enum DocumentationFormat
     {
         [XmlEnum("text")]
+        [XmlDocumentation("Content.DocumentationFormat.Text.md")]
         Text,
         [XmlEnum("markdown")]
+        [XmlDocumentation("Content.DocumentationFormat.MarkDown.md")]
         MarkDown,
         [XmlEnum("html")]
+        [XmlDocumentation("Content.DocumentationFormat.Html.md")]
         Html
     }
 
