@@ -3,8 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="person.xsd"
     name="John Doe">
+    <children>
+        <child name="Kirsten" age="5"/>
+        <child name="Poul" age="12"/>
+    </children>    
     <home address="Vesterbro 20"/>
-    <spouse name="Jane Doe"/>
+    <spouse name="Jane Doe"/>    
 
 </person>
 
