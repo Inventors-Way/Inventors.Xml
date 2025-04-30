@@ -178,15 +178,20 @@ namespace Inventors.Xml.Generators.Xsd
             if (documentation is null)
                 return string.Empty;
 
-            return documentation[id];
+            if (id.StartsWith("@"))
+                return documentation[id.Substring(1)];
+            else
+                return id;
         }
 
         public ElementDocumentationInfo? AnnotateElement(Element element)
         {
             if (documentation is null)
                 return null;
-
-            var content = documentation[element.Documentation];
+            
+            var content = element.Documentation.StartsWith("@") ?
+                documentation[element.Documentation.Substring(1)] :
+                element.Documentation;
 
             Annotate(content);
 

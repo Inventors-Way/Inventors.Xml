@@ -29,7 +29,7 @@ Home
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-Person.Name
+The name of the person
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>

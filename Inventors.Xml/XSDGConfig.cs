@@ -15,28 +15,28 @@ using Throw;
 namespace Inventors.Xml
 {
     [XmlRoot("xsdg")]
-    [XmlDocumentation("XSDGConfig.md")]
+    [XmlDocumentation("@XSDGConfig.md")]
     public class XSDGConfig :
         IJobConfiguration
     {
         [XmlAttribute("assembly")]
         [XmlRequired]
-        [XmlDocumentation("XSDGConfig.AssemblyName.md")]
+        [XmlDocumentation("@XSDGConfig.AssemblyName.md")]
         public string AssemblyName { get; set; } = string.Empty;
 
         [XmlAttribute("documentation-generator")]
         [XmlOptional]
-        [XmlDocumentation("XSDGConfig.DocumentationGenerator.md")]
+        [XmlDocumentation("@XSDGConfig.DocumentationGenerator.md")]
         public string DocumentationGenerator { get; set; } = string.Empty;
 
         [XmlAttribute("output-path")]
         [XmlOptional]
-        [XmlDocumentation("XSDGConfig.OutputPath.md")]
+        [XmlDocumentation("@XSDGConfig.OutputPath.md")]
         public string OutputPath { get; set; } = string.Empty;
 
         [XmlAttribute("input-path")]
         [XmlOptional]
-        [XmlDocumentation("XSDGConfig.InputPath.md")]
+        [XmlDocumentation("@XSDGConfig.InputPath.md")]
         public string InputPath { get; set; } = string.Empty;
 
         [XmlElement("schema", typeof(SchemaJob))]

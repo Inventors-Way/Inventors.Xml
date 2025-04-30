@@ -14,12 +14,12 @@ namespace Inventors.Xml.Test.TestObjects
     {
         [XmlAttribute("name")]
         [XmlRequired]
-        [XmlDocumentation("Person.Name")]
+        [XmlDocumentation("The name of the person")]
         public string Name { get; set; } = string.Empty;
 
         [XmlElement("spouse")]
         [XmlOptional]
-        [XmlDocumentation("Person.Spouse")]
+        [XmlDocumentation("The spouse of the person")]
         public Spouse? Spouse { get; set; }
 
         [XmlElement("home")]

@@ -8,6 +8,6 @@ namespace Inventors.Xml.Test.TestObjects
 {
     public class PersonDocumentation : IDocumentationSource
     {
-        public string GetItem(string id) => id;
+        public string GetItem(string id) => $"PersonDocumentation: {id}";
     }
 }
