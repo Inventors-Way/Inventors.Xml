@@ -8,12 +8,12 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
 {
-    [XmlDocumentation("Spouse")]
+    [XmlDocumentation("@Spouse")]
     public class Spouse
     {
         [XmlAttribute("name")]
         [XmlRequired]
-        [XmlDocumentation("Spouse.Name")]
+        [XmlDocumentation("The spouse's name")]
         public string Name { get; set; } = string.Empty;
 
         public override string ToString() => $"Spouse: {Name}";

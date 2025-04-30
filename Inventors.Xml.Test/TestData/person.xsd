@@ -5,21 +5,21 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Person">
 <xs:annotation>
 <xs:documentation>
-Person
+PersonDocumentation: Person
 </xs:documentation>
 </xs:annotation>
 <xs:all>
 <xs:element minOccurs="0" maxOccurs="1" name="spouse" type="Inventors.Xml.Test.TestObjects.Spouse">
 <xs:annotation>
 <xs:documentation>
-Spouse
+PersonDocumentation: Spouse
 </xs:documentation>
 </xs:annotation>
 </xs:element>
 <xs:element minOccurs="0" maxOccurs="1" name="home" type="Inventors.Xml.Test.TestObjects.Home">
 <xs:annotation>
 <xs:documentation>
-Home
+PersonDocumentation: Home
 </xs:documentation>
 </xs:annotation>
 </xs:element>
@@ -38,13 +38,13 @@ The name of the person
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Spouse">
 <xs:annotation>
 <xs:documentation>
-Spouse
+PersonDocumentation: Spouse
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-Spouse.Name
+The spouse's name
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -53,13 +53,13 @@ Spouse.Name
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Home">
 <xs:annotation>
 <xs:documentation>
-Home
+PersonDocumentation: Home
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="address" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-Home.Address
+PersonDocumentation: Home.Address
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -74,20 +74,20 @@ Home.Address
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Child">
 <xs:annotation>
 <xs:documentation>
-Child
+PersonDocumentation: Child
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-Child.Name
+PersonDocumentation: Child.Name
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="age" type="xs:integer" use="optional">
 <xs:annotation>
 <xs:documentation>
-Child.Age
+PersonDocumentation: Child.Age
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>

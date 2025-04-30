@@ -9,12 +9,12 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
 {
-    [XmlDocumentation("Home")]
+    [XmlDocumentation("@Home")]
     public class Home
     {
         [XmlAttribute("address")]
         [XmlRequired]
-        [XmlDocumentation("Home.Address")]
+        [XmlDocumentation("@Home.Address")]
         public string Address { get; set; } = string.Empty;
 
         public override string ToString() => $"Home: {Address}";

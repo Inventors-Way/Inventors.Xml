@@ -8,17 +8,17 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
 {
-    [XmlDocumentation("Child")]
+    [XmlDocumentation("@Child")]
     public class Child
     {
         [XmlAttribute("name")]
         [XmlRequired]
-        [XmlDocumentation("Child.Name")]
+        [XmlDocumentation("@Child.Name")]
         public string Name { get; set; } = string.Empty;
 
         [XmlAttribute("age")]
         [XmlOptional]
-        [XmlDocumentation("Child.Age")]
+        [XmlDocumentation("@Child.Age")]
         public int Age { get; set; } = 0;
 
         public override string ToString() => $"Child: {Name}, Age: {Age}";

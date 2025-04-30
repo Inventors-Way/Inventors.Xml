@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace Inventors.Xml.Test.TestObjects
 {
     [XmlRoot("person")]
-    [XmlDocumentation("Person")]
+    [XmlDocumentation("@Person")]
     public class Person
     {
         [XmlAttribute("name")]
@@ -24,7 +24,7 @@ namespace Inventors.Xml.Test.TestObjects
 
         [XmlElement("home")]
         [XmlOptional]
-        [XmlDocumentation("Person.Home")]
+        [XmlDocumentation("@Person.Home")]
         public Home? Home { get; set; }
 
         [XmlArray("children")]
