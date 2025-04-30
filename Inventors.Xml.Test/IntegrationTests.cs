@@ -26,14 +26,10 @@ namespace Inventors.Xml.Test
 
         public static string GetData(string filename) => File.ReadAllText(Path.Combine(DataDirectory, filename));
 
-        public static string DocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentation");
-
-        public static string DisposableDocumentationDirectory => Path.Combine(ProjectDir, "TestDocumentationDisposable");
-
         [TestMethod]
         public void T01_ObjectDocument()
         {
-            var document = ObjectDocument.Parse(typeof(Company), NullReporter.Instance);
+            var document = ObjectDocument.Parse(typeof(Person), NullReporter.Instance);
 
             Console.WriteLine(document);
         }
@@ -41,10 +37,10 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T02_GenerateSchema()
         {
-            var document = ObjectDocument.Parse(typeof(Company), NullReporter.Instance);
-            DocumentationProvider documentation = DocumentationProvider.Create(document, new XSDGConfigDocumentation())
-                .SetInputFormat(DocumentationFormat.MarkDown)
-                .SetOutputFormat(DocumentationFormat.Html)
+            var document = ObjectDocument.Parse(typeof(Person), NullReporter.Instance);
+            DocumentationProvider documentation = DocumentationProvider.Create(document, new PersonDocumentation())
+                .SetInputFormat(DocumentationFormat.Text)
+                .SetOutputFormat(DocumentationFormat.Text)
                 .SetEncoding(true)
                 .Build();
 
@@ -59,8 +55,8 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T03_LoadData()
         {
-            var text = File.ReadAllText(Path.Combine(DataDirectory, "AcmeCorp.xml"));
-            var company = text.ToObject<Company>();
+            var text = File.ReadAllText(Path.Combine(DataDirectory, "person.xml"));
+            var company = text.ToObject<Person>();
 
             Console.WriteLine(company);
         }
@@ -81,19 +77,19 @@ namespace Inventors.Xml.Test
         [TestMethod]
         public void T08_ValidationTestPassingValidation()
         {
-            var xsdSchema = typeof(Company).GetSchema(); 
+            var xsdSchema = typeof(Person).GetSchema(); 
 
-            Company acmeCompany = GetData("AcmeCorp.xml").ToObject<Company>(xsdSchema)
-                .OnSuccess(company => Console.WriteLine($"Loaded company {company.Name}"))
+            Person acmeCompany = GetData("Person.xml").ToObject<Person>(xsdSchema)
+                .OnSuccess(person => Console.WriteLine($"Loaded company {person.Name}"))
                 .OnError(errors => Assert.IsTrue(false)); // We should not get an error
         }
 
         [TestMethod]
         public void T09_ValidationTestFailingValidation()
         {
-            var xsdSchema = typeof(Company).GetSchema();
+            var xsdSchema = typeof(Person).GetSchema();
 
-            var result = GetData("InvalidCompany.xml").ToObject<Company>(xsdSchema)
+            var result = GetData("InvalidPerson.xml").ToObject<Person>(xsdSchema)
                 .OnSuccess(company => Assert.IsTrue(false)) // We should not have a success
                 .OnError(errors => Console.WriteLine($"{errors}"));
         }

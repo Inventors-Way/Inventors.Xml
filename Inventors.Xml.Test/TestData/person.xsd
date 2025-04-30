@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="person" nillable="true" type="Inventors.Xml.Test.TestObjects.Person" />
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Person">
+<xs:annotation>
+<xs:documentation>
+Person
+</xs:documentation>
+</xs:annotation>
+<xs:sequence>
+<xs:element minOccurs="0" maxOccurs="1" name="spouse" type="Inventors.Xml.Test.TestObjects.Spouse">
+<xs:annotation>
+<xs:documentation>
+Spouse
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element minOccurs="0" maxOccurs="1" name="home" type="Inventors.Xml.Test.TestObjects.Home">
+<xs:annotation>
+<xs:documentation>
+Home
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element minOccurs="0" maxOccurs="1" name="children" type="Inventors.Xml.Test.TestObjects.Person.Children.Array">
+</xs:element>
+</xs:sequence>
+<xs:attribute name="name" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+Person.Name
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Spouse">
+<xs:annotation>
+<xs:documentation>
+Spouse
+</xs:documentation>
+</xs:annotation>
+<xs:attribute name="name" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+Spouse.Name
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Home">
+<xs:annotation>
+<xs:documentation>
+Home
+</xs:documentation>
+</xs:annotation>
+<xs:attribute name="address" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+Home.Address
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Person.Children.Array">
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="1" maxOccurs="1" name="child" nillable="true" type="Inventors.Xml.Test.TestObjects.Child" />
+</xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Child">
+<xs:annotation>
+<xs:documentation>
+Child
+</xs:documentation>
+</xs:annotation>
+<xs:attribute name="name" type="xs:string" use="required">
+<xs:annotation>
+<xs:documentation>
+Child.Name
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+<xs:attribute name="age" type="xs:integer" use="optional">
+<xs:annotation>
+<xs:documentation>
+Child.Age
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
+</xs:complexType>
+</xs:schema>

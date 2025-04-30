@@ -1,1 +1,0 @@
-A description of the departments of the company.

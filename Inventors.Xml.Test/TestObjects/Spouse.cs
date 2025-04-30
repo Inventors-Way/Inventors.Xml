@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Inventors.Xml.Test.TestObjects.Data
+namespace Inventors.Xml.Test.TestObjects
 {
-    public class Organization :
-        Identifiable
+    [XmlDocumentation("Spouse")]
+    public class Spouse
     {
         [XmlAttribute("name")]
-        [XmlRequired(true)]
-        public string Name { get; set; } = "";
-
-
+        [XmlRequired]
+        [XmlDocumentation("Spouse.Name")]
+        public string Name { get; set; } = string.Empty;
     }
 }
