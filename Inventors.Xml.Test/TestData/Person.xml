@@ -3,7 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="person.xsd"
     name="John Doe">
-
+    <home address="Vesterbro 20"/>
+    <spouse name="Jane Doe"/>
 
 </person>
 

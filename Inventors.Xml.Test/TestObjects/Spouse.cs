@@ -15,5 +15,7 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlRequired]
         [XmlDocumentation("Spouse.Name")]
         public string Name { get; set; } = string.Empty;
+
+        public override string ToString() => $"Spouse: {Name}";
     }
 }

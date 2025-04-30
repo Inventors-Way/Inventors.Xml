@@ -20,5 +20,8 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlOptional]
         [XmlDocumentation("Child.Age")]
         public int Age { get; set; } = 0;
+
+        public override string ToString() => $"Child: {Name}, Age: {Age}";
+
     }
 }

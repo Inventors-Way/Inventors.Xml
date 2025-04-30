@@ -56,9 +56,9 @@ namespace Inventors.Xml.Test
         public void T03_LoadData()
         {
             var text = File.ReadAllText(Path.Combine(DataDirectory, "person.xml"));
-            var company = text.ToObject<Person>();
+            var person = text.ToObject<Person>();
 
-            Console.WriteLine(company);
+            Console.WriteLine(person);
         }
 
         [TestMethod]

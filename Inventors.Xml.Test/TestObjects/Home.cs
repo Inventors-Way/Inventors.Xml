@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
@@ -15,5 +16,8 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlRequired]
         [XmlDocumentation("Home.Address")]
         public string Address { get; set; } = string.Empty;
+
+        public override string ToString() => $"Home: {Address}";
+
     }
 }

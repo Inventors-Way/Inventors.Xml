@@ -31,5 +31,28 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlArrayItem("child")]
         public List<Child> Children { get; } = new();
 
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"PERSON [ {Name} ]");
+
+            if (Spouse is not null)
+                builder.AppendLine($"   Spouse: {Spouse}");
+
+            if (Home is not null)
+                builder.AppendLine($"   Home: {Home}");
+
+            if (Children.Count > 0)
+            {
+                builder.AppendLine("CHILDREN");
+
+                foreach (var child in Children) 
+                    builder.AppendLine(child.ToString());
+            }
+
+            return builder.ToString();
+        }
+
     }
 }
