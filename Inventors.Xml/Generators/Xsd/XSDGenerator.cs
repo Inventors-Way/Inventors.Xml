@@ -126,7 +126,7 @@ namespace Inventors.Xml.Generators.Xsd
             
             if (element.Elements.Count > 0)
             {
-                builder.AppendLine("<xs:sequence>");
+                builder.AppendLine("<xs:all>");
 
                 foreach (var e in element.Elements)
                 {
@@ -149,7 +149,7 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                 }
 
-                builder.AppendLine("</xs:sequence>");
+                builder.AppendLine("</xs:all>");
             }
 
             if (element.Attributes.Count > 0)

@@ -8,7 +8,7 @@
 Person
 </xs:documentation>
 </xs:annotation>
-<xs:sequence>
+<xs:all>
 <xs:element minOccurs="0" maxOccurs="1" name="spouse" type="Inventors.Xml.Test.TestObjects.Spouse">
 <xs:annotation>
 <xs:documentation>
@@ -25,7 +25,7 @@ Home
 </xs:element>
 <xs:element minOccurs="0" maxOccurs="1" name="children" type="Inventors.Xml.Test.TestObjects.Person.Children.Array">
 </xs:element>
-</xs:sequence>
+</xs:all>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>

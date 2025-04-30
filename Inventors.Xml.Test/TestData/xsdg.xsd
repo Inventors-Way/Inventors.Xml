@@ -3,11 +3,11 @@
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
-<xs:sequence>
+<xs:all>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
 <xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
 </xs:choice>
-</xs:sequence>
+</xs:all>
 <xs:attribute name="assembly" type="xs:string" use="required" />
 <xs:attribute name="documentation-generator" type="xs:string" use="optional" />
 <xs:attribute name="output-path" type="xs:string" use="optional" />
