@@ -20,14 +20,19 @@ namespace Inventors.Xml
             return new XSDGenerator(ObjectDocument.Parse(type, NullReporter.Instance)).Run();
         }
 
-        public static string RootElementName(this Type input) =>
-            (input.GetCustomAttributes(typeof(XmlRootAttribute), false)
-                .ThrowIfNull()
-                .IfEmpty()
-                .Value[0] as XmlRootAttribute)
-                .ThrowIfNull()
-                .IfTrue(root => root.ElementName is null)
-                .Value.ElementName;
+        public static string RootElementName(this Type input)
+        {
+            if (input.GetCustomAttributes(typeof(XmlRootAttribute)) is not object[] attributes)
+                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
+
+            if (attributes.Length == 0)
+                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
+
+            if (attributes[0] is not XmlRootAttribute root)
+                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
+
+            return root.ElementName;
+        }
 
         public static string SanitizeXSDName(string name) =>
             name.Replace("+", ".");
@@ -63,10 +68,10 @@ namespace Inventors.Xml
 
         public static Element ParseClass(this Type type, ObjectDocument document, Reporter reporter)
         {
-            type.Throw().IfFalse(type => type.IsClass);
+            if (!type.IsClass)
+                throw new ArgumentException($"{type} is not a class");
 
-            reporter.Report($"Parsing of class [ name: {type.Name} ]:");
-            reporter.Report($"   XSD Name: {type.GetXSDTypeName()}");
+            reporter.Report($"Parsing of class [ name: {type.Name}, xsd name: {type.GetXSDTypeName()} ]:");
 
             var element = document.Add(new ClassElement(
                 name: type.GetXSDTypeName(),
@@ -132,7 +137,7 @@ namespace Inventors.Xml
 
         private static List<Choice> ParseChoices(this PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
-            List<Choice> retValue = new List<Choice>();
+            List<Choice> retValue = new();
 
             foreach (var choice in property.GetChoiceTypes())
             {
