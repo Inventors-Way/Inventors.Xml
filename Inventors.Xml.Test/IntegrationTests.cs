@@ -35,7 +35,7 @@ namespace Inventors.Xml.Test
         }
 
         [TestMethod]
-        public void T02_GenerateSchema()
+        public void T020_GenerateSchema()
         {
             var document = ObjectDocument.Parse(typeof(Person), NullReporter.Instance);
             DocumentationProvider documentation = DocumentationProvider.Create(document, new PersonDocumentation())
@@ -52,6 +52,21 @@ namespace Inventors.Xml.Test
             Console.WriteLine(content);
         }
 
+        [TestMethod]
+        public void T021_GenerateUndocumentedSchema()
+        {
+            var document = ObjectDocument.Parse(typeof(Person), NullReporter.Instance);
+            DocumentationProvider documentation = DocumentationProvider.Create(document, new UndocumentedPersonDocumentation())
+                .SetInputFormat(DocumentationFormat.Text)
+                .SetOutputFormat(DocumentationFormat.Text)
+                .SetEncoding(true)
+                .Build();
+
+            var generator = new XSDGenerator(document, documentation);
+            var content = generator.Run();
+
+            Console.WriteLine(content);
+        }
         [TestMethod]
         public void T03_LoadData()
         {
