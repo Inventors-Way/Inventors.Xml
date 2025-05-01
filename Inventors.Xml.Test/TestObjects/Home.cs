@@ -9,6 +9,17 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Test.TestObjects
 {
+    [XmlDocumentation("Type of home")]
+    public enum HomeType
+    {
+        [XmlEnum("appartment")]
+        [XmlDocumentation("In a multi residence building")]
+        Appartment,
+        [XmlEnum("house")]
+        [XmlDocumentation("A self-contrained unit")]
+        House
+    }
+
     [XmlDocumentation("@Home")]
     public class Home
     {
@@ -16,6 +27,11 @@ namespace Inventors.Xml.Test.TestObjects
         [XmlRequired]
         [XmlDocumentation("@Home.Address")]
         public string Address { get; set; } = string.Empty;
+
+        [XmlAttribute("home-type")]
+        [XmlRequired]
+        [XmlDocumentation("The type of home")]
+        public HomeType HomeType { get; set; } = HomeType.Appartment;
 
         public override string ToString() => $"Home: {Address}";
 

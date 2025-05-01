@@ -68,7 +68,38 @@ PersonDocumentation: Home.Address
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+<xs:attribute name="home-type" type="Inventors.Xml.Test.TestObjects.HomeType" use="required">
+<xs:annotation>
+<xs:documentation>
+The type of home
+</xs:documentation>
+</xs:annotation>
+</xs:attribute>
 </xs:complexType>
+
+<xs:simpleType name="Inventors.Xml.Test.TestObjects.HomeType">
+<xs:annotation>
+<xs:documentation>
+The type of home
+</xs:documentation>
+</xs:annotation>
+<xs:restriction base="xs:string">
+<xs:enumeration value="appartment">
+<xs:annotation>
+<xs:documentation>
+In a multi residence building
+</xs:documentation>
+</xs:annotation>
+</xs:enumeration>
+<xs:enumeration value="house">
+<xs:annotation>
+<xs:documentation>
+A self-contrained unit
+</xs:documentation>
+</xs:annotation>
+</xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Person.Children.Array">
 <xs:choice minOccurs="0" maxOccurs="unbounded">
