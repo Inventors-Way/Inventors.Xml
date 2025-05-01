@@ -29,6 +29,7 @@ namespace Inventors.Xml.Test.TestObjects
 
         [XmlArray("children")]
         [XmlArrayItem("child")]
+        [XmlDocumentation("A list of the children of the person")]
         public List<Child> Children { get; } = new();
 
         public override string ToString()

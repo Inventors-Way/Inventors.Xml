@@ -24,6 +24,11 @@ PersonDocumentation: Home
 </xs:annotation>
 </xs:element>
 <xs:element minOccurs="0" maxOccurs="1" name="children" type="Inventors.Xml.Test.TestObjects.Person.Children.Array">
+<xs:annotation>
+<xs:documentation>
+A list of the children of the person
+</xs:documentation>
+</xs:annotation>
 </xs:element>
 </xs:all>
 <xs:attribute name="name" type="xs:string" use="required">

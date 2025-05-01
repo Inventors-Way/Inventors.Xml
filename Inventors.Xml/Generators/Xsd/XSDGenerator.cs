@@ -48,6 +48,7 @@ namespace Inventors.Xml.Generators.Xsd
         {
             builder.AppendLine();
             builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
+
             builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
 
             foreach (var item in element.Items)
@@ -126,7 +127,10 @@ namespace Inventors.Xml.Generators.Xsd
             
             if (element.Elements.Count > 0)
             {
-                builder.AppendLine("<xs:all>");
+                if (element.Elements.Count > 1)
+                    builder.AppendLine("<xs:all>");
+                else
+                    builder.AppendLine("<xs:sequence>");
 
                 foreach (var e in element.Elements)
                 {
@@ -149,7 +153,10 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                 }
 
-                builder.AppendLine("</xs:all>");
+                if (element.Elements.Count > 1)
+                    builder.AppendLine("</xs:all>");
+                else
+                    builder.AppendLine("</xs:sequence>");
             }
 
             if (element.Attributes.Count > 0)
