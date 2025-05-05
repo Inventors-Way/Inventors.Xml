@@ -62,6 +62,9 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void Visit(ChoiceElement element)
         {
+            builder.AppendLine();
+            builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
+
             if (element.Multiple)
             {
                 builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
@@ -71,12 +74,13 @@ namespace Inventors.Xml.Generators.Xsd
                 builder.AppendLine($"<xs:choice minOccurs=\"1\" maxOccurs=\"1\">");
             }
 
-            foreach (var choice in element.Choices)
+            foreach (var item in element.Choices)
             {
-                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{choice.Name}\" type=\"{choice.Type.Name}\" />");
+                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type.Name}\" />");
             }
 
-            builder.AppendLine("</xs:choice>");
+            builder.AppendLine($"</xs:choice>");
+            builder.AppendLine($"</xs:complexType>");
         }
 
         public void Visit(ClassElement element)
@@ -127,10 +131,7 @@ namespace Inventors.Xml.Generators.Xsd
             
             if (element.Elements.Count > 0)
             {
-                if (element.Elements.Count > 1)
-                    builder.AppendLine("<xs:all>");
-                else
-                    builder.AppendLine("<xs:sequence>");
+                builder.AppendLine("<xs:all>");
 
                 foreach (var e in element.Elements)
                 {
@@ -153,10 +154,7 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                 }
 
-                if (element.Elements.Count > 1)
-                    builder.AppendLine("</xs:all>");
-                else
-                    builder.AppendLine("</xs:sequence>");
+                builder.AppendLine("</xs:all>");
             }
 
             if (element.Attributes.Count > 0)

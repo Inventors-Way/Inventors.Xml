@@ -102,6 +102,8 @@ namespace Inventors.Xml
                                          Type: choiceElement,
                                          Required: property.IsPropertyRequired(),
                                          PropertyName: property.Name));
+
+                            document.Add(choiceElement);
                         }
                         break;
                     case PropertyXSDType.Array:

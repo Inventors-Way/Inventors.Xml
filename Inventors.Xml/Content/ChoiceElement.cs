@@ -26,7 +26,7 @@ namespace Inventors.Xml.Content
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
 
-        public override bool IsNested => true;
+        public override bool IsNested => false;
 
         public override string ToString()
         {
