@@ -54,6 +54,7 @@ namespace Inventors.Xml.Configuration
             .Build());
 
             return "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
+
         }
 
         public override void Run(string path, IJobConfiguration configuration, IDocumentationSource? docSource = null, bool verbose = false)

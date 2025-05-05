@@ -4,6 +4,11 @@
       "commandName": "Project",
       "commandLineArgs": "-v ./xsdg/xsdg-config.xml",
       "workingDirectory": "C:\\Source\\Inventors\\Inventors.Xml"
+    },
+    "LabBench": {
+      "commandName": "Project",
+      "commandLineArgs": "-v C:\\Source\\Inventors\\Inventors.Xml\\xsdg\\xsdg-config-labbench.xml",
+      "workingDirectory": "C:\\Source\\Inventors\\LabBench"
     }
   }
 }

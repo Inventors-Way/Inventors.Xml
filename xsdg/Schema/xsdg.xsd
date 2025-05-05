@@ -23,11 +23,11 @@
 &lt;p&gt;The &lt;code&gt;-p [working directory]&lt;/code&gt; is optional and if specified will set the working directory of the xsdg tool. If it is not specied the working directory will be the directory from where the xsdg tool is invoked.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
-<xs:all>
+<xs:sequence>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
 <xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
 </xs:choice>
-</xs:all>
+</xs:sequence>
 <xs:attribute name="assembly" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>

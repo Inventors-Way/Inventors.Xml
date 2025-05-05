@@ -24,6 +24,11 @@ namespace Inventors.Xml
         [XmlDocumentation("@XSDGConfig.AssemblyName.md")]
         public string AssemblyName { get; set; } = string.Empty;
 
+        [XmlAttribute("documentation-assembly")]
+        [XmlOptional]
+        [XmlDocumentation("Assembly for the documentation generator")]
+        public string DocumentationAssemblyName { get; set; } = string.Empty;
+
         [XmlAttribute("documentation-generator")]
         [XmlOptional]
         [XmlDocumentation("@XSDGConfig.DocumentationGenerator.md")]
