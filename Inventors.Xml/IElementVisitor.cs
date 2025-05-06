@@ -18,7 +18,5 @@ namespace Inventors.Xml
         void Visit(EnumElement element);
 
         void Visit(NullElement element);
-
-        void Visit(AttributeElement element);
     }
 }

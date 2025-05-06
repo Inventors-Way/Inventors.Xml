@@ -42,6 +42,8 @@ namespace Inventors.Xml.Generators.Xsd
             return builder.ToString();
         }
 
+        public void Visit(NullElement element) { }
+
         public void Visit(TypeElement element)
         {
             builder.AppendLine();
@@ -52,21 +54,43 @@ namespace Inventors.Xml.Generators.Xsd
             {
                 builder.AppendLine("<xs:all>");
 
+                foreach (var e in element.Elements)
+                {
+
+                    if (string.IsNullOrEmpty(e.Documentation))
+                    {
+                        builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\" />");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\">");
+                        Annotate(GetDocumentation(e.Documentation));
+                        builder.AppendLine("</xs:element>");
+                    }
+                }
+
                 builder.AppendLine("</xs:all>");
             }
 
             if (element.Attributes.Count > 0)
             {
-
+                foreach (var a in element.Attributes)
+                {
+                    if (string.IsNullOrEmpty(a.Documentation))
+                    {
+                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
+                    }
+                    else
+                    {
+                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
+                        Annotate(GetDocumentation(a.Documentation));
+                        builder.AppendLine("</xs:attribute>");
+                    }
+                }
             }
-
-
 
             builder.AppendLine("</xs:complexType>");
         }
-
-
-        public void Visit(NullElement element) { }
 
         public void Visit(ArrayElement element)
         {
@@ -107,118 +131,17 @@ namespace Inventors.Xml.Generators.Xsd
             builder.AppendLine($"</xs:complexType>");
         }
 
-        private void CreateDerivedType(TypeElement element)
-        {
-            builder.AppendLine("<xs:complexContent mixed=\"false\">");
-            builder.AppendLine($"<xs:extension base=\"{element.BaseType}\">");
-
-            CreateNonderivedType(element);
-
-            builder.AppendLine("</xs:extension>");
-            builder.AppendLine("</xs:complexContent>");
-        }
-
-        private static string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
-
-        private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
-
-        private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
-
-        public void CreateNonderivedType(TypeElement element)
-        {
-            var info = AnnotateElement(element);
-            
-            if (element.Elements.Count > 0)
-            {
-                builder.AppendLine("<xs:all>");
-
-                foreach (var e in element.Elements)
-                {
-                    if (e.Type.IsNested)
-                    {
-                        e.Type.Accept(this);
-                    }
-                    else
-                    {
-                        if (info is null)
-                        {
-                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\" />");
-                        }
-                        else
-                        {
-                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
-                            Annotate(GetDocumentation(e.Type.Documentation));
-                            builder.AppendLine("</xs:element>");
-                        }
-                    }
-                }
-
-                builder.AppendLine("</xs:all>");
-            }
-
-            if (element.Attributes.Count > 0)
-            {
-                foreach (var a in element.Attributes)
-                {
-                    if (info is null)
-                    {
-                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
-                    }
-                    else
-                    {
-                        builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\">");
-                        Annotate(GetDocumentation(a.Documentation));
-                        builder.AppendLine("</xs:attribute>");
-                    }
-                }
-            }
-        }
-
-        public string GetDocumentation(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                return string.Empty;
-
-            if (documentation is null)
-                return string.Empty;
-
-            if (id.StartsWith("@"))
-                return documentation[id.Substring(1)];
-            else
-                return id;
-        }
-
-        public void AnnotateElement(Element element)
-        {
-            if (documentation is null)
-                return;
-
-            Annotate(GetDocumentation(element.Documentation));
-        }
-
-        public void Annotate(string? content)
-        {
-            if (string.IsNullOrEmpty(content))
-                return;
-
-            builder.AppendLine("<xs:annotation>");
-            builder.AppendLine("<xs:documentation>");
-            builder.AppendLine(content);
-            builder.AppendLine("</xs:documentation>");
-            builder.AppendLine("</xs:annotation>");
-        }
-
         public void Visit(EnumElement element)
         {
             builder.AppendLine();
             builder.AppendLine($"<xs:simpleType name=\"{element.Name}\">");
-            var info = AnnotateElement(element);
+            Annotate(GetDocumentation(element.Documentation));
             builder.AppendLine($"<xs:restriction base=\"xs:string\">");
 
 
             foreach (var value in element.Values)
             {
-                if (info is null)
+                if (string.IsNullOrEmpty(value.Documentation))
                 {
                     builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\" />");
                 }
@@ -234,9 +157,37 @@ namespace Inventors.Xml.Generators.Xsd
             builder.AppendLine("</xs:simpleType>");
         }
 
-        public void Visit(AttributeElement element)
+
+        private static string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
+
+        private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
+
+        private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
+
+        public string GetDocumentation(string id)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(id))
+                return string.Empty;
+
+            if (documentation is null)
+                return string.Empty;
+
+            if (id.StartsWith("@"))
+                return documentation[id.Substring(1)];
+            else
+                return id;
+        }
+
+        public void Annotate(string? content)
+        {
+            if (string.IsNullOrEmpty(content))
+                return;
+
+            builder.AppendLine("<xs:annotation>");
+            builder.AppendLine("<xs:documentation>");
+            builder.AppendLine(content);
+            builder.AppendLine("</xs:documentation>");
+            builder.AppendLine("</xs:annotation>");
         }
 
         private readonly StringBuilder builder = new();
