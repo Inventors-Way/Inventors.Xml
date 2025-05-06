@@ -7,25 +7,37 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Inventors.Xml.Analysis
 {
     public class TypeAnalyser : Analyser
     {
+        private readonly Dictionary<string, string> _typeMapping = new();
+
         public TypeAnalyser(ObjectDocument document, Reporter reporter) :
             base(document, reporter)
         {
-            AttributeAnalyser = new AttributeAnalyser(document, reporter);
             ChoiceAnalyser = new ChoiceAnalyser(document, reporter);
             ArrayAnalyser = new ArrayAnalyser(document, reporter);
-        }
+            EnumAnalyser = new(document, reporter);
 
-        private AttributeAnalyser AttributeAnalyser { get; }
+            _typeMapping.Add(typeof(double).ToString(), "double");
+            _typeMapping.Add(typeof(float).ToString(), "float");
+            _typeMapping.Add(typeof(string).ToString(), "string");
+            _typeMapping.Add(typeof(int).ToString(), "integer");
+            _typeMapping.Add(typeof(bool).ToString(), "boolean");
+            _typeMapping.Add(typeof(long).ToString(), "long");
+            _typeMapping.Add(typeof(short).ToString(), "short");
+            _typeMapping.Add(typeof(byte).ToString(), "byte");
+
+        }
 
         private ChoiceAnalyser ChoiceAnalyser { get; }
 
         private ArrayAnalyser ArrayAnalyser { get; }
 
+        private EnumAnalyser EnumAnalyser { get; }
 
         public string Analyze(Type type)
         {
@@ -56,6 +68,26 @@ namespace Inventors.Xml.Analysis
             ParseProperties(type, element);
         }
 
+        public string ParseAttribute(PropertyInfo property)
+        {
+            string typeKey = property.PropertyType.ToString();
+
+            if (_typeMapping.ContainsKey(typeKey))
+            {
+                var name = property.GetAttributeName();
+                var element = new AttributeElement(name, _typeMapping[typeKey], property.GetDocumentation());
+
+                return name;
+            }
+            else if (property.PropertyType.IsEnum)
+            {
+                return property.ParseEnum(document);
+            }
+
+            throw new InvalidOperationException($"Unsupported attribute type: {property.PropertyType}");
+
+        }
+
         private void ParseProperties(Type type, TypeElement element)
         {
             foreach (var property in type.GetProperties())
@@ -69,7 +101,8 @@ namespace Inventors.Xml.Analysis
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
                                                           Type: Analyze(property.PropertyType),
                                                           Required: property.IsPropertyRequired(),
-                                                          PropertyName: property.Name));
+                                                          PropertyName: property.Name,
+                                                          Documentation: property.GetDocumentation()));
                         break;
                     case PropertyXSDType.Choice:
                         {
