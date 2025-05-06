@@ -42,6 +42,30 @@ namespace Inventors.Xml.Generators.Xsd
             return builder.ToString();
         }
 
+        public void Visit(TypeElement element)
+        {
+            builder.AppendLine();
+            builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
+            Annotate(GetDocumentation(element.Documentation));
+
+            if (element.Elements.Count > 0)
+            {
+                builder.AppendLine("<xs:all>");
+
+                builder.AppendLine("</xs:all>");
+            }
+
+            if (element.Attributes.Count > 0)
+            {
+
+            }
+
+
+
+            builder.AppendLine("</xs:complexType>");
+        }
+
+
         public void Visit(NullElement element) { }
 
         public void Visit(ArrayElement element)
@@ -83,32 +107,7 @@ namespace Inventors.Xml.Generators.Xsd
             builder.AppendLine($"</xs:complexType>");
         }
 
-        public void Visit(ClassElement element)
-        {
-            builder.AppendLine();
-
-            if (element.IsAbstract)
-            {
-                builder.AppendLine($"<xs:complexType name=\"{element.Name}\" abstract=\"true\">");
-            }
-            else
-            {
-                builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
-            }
-
-            if (element.IsDerived)
-            {
-                CreateDerivedType(element);
-            }
-            else
-            {
-                CreateNonderivedType(element);
-            }
-
-            builder.AppendLine("</xs:complexType>");
-        }
-
-        private void CreateDerivedType(ClassElement element)
+        private void CreateDerivedType(TypeElement element)
         {
             builder.AppendLine("<xs:complexContent mixed=\"false\">");
             builder.AppendLine($"<xs:extension base=\"{element.BaseType}\">");
@@ -125,7 +124,7 @@ namespace Inventors.Xml.Generators.Xsd
 
         private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
 
-        public void CreateNonderivedType(ClassElement element)
+        public void CreateNonderivedType(TypeElement element)
         {
             var info = AnnotateElement(element);
             
@@ -189,18 +188,12 @@ namespace Inventors.Xml.Generators.Xsd
                 return id;
         }
 
-        public ElementDocumentationInfo? AnnotateElement(Element element)
+        public void AnnotateElement(Element element)
         {
             if (documentation is null)
-                return null;
-            
-            var content = element.Documentation.StartsWith("@") ?
-                documentation[element.Documentation.Substring(1)] :
-                element.Documentation;
+                return;
 
-            Annotate(content);
-
-            return new ElementDocumentationInfo(element.Documentation, documentation.OutputFormat);
+            Annotate(GetDocumentation(element.Documentation));
         }
 
         public void Annotate(string? content)
@@ -239,6 +232,11 @@ namespace Inventors.Xml.Generators.Xsd
 
             builder.AppendLine($"</xs:restriction>");
             builder.AppendLine("</xs:simpleType>");
+        }
+
+        public void Visit(AttributeElement element)
+        {
+            throw new NotImplementedException();
         }
 
         private readonly StringBuilder builder = new();

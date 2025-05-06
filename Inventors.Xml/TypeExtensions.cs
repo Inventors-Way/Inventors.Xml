@@ -73,9 +73,8 @@ namespace Inventors.Xml
 
             reporter.Report($"Parsing of class [ name: {type.Name}, xsd name: {type.GetXSDTypeName()} ]:");
 
-            var element = document.Add(new ClassElement(
+            var element = document.Add(new TypeElement(
                 name: type.GetXSDTypeName(),
-                isAbstract: type.IsAbstract,
                 documentation: type.GetDocumentation()));
 
             element.BaseType = type.BaseType.ParseBaseType(document, reporter).Name;
@@ -87,7 +86,7 @@ namespace Inventors.Xml
                     case PropertyXSDType.Attribute:
                         element.Add(property.ParseAttribute(document));
                         break;
-                    case PropertyXSDType.Class:
+                    case PropertyXSDType.Element:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
                                                           Type: ParseClass(property.PropertyType, document, reporter),
                                                           Required: property.IsPropertyRequired(),

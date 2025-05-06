@@ -13,10 +13,12 @@ namespace Inventors.Xml
 
         void Visit(ChoiceElement element);
 
-        void Visit(ClassElement element);
+        void Visit(TypeElement element);
 
         void Visit(EnumElement element);
 
         void Visit(NullElement element);
+
+        void Visit(AttributeElement element);
     }
 }

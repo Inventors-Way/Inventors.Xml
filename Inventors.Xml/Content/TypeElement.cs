@@ -6,16 +6,13 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
-    public class ClassElement :
+    public class TypeElement :
         Element
     {
-        public ClassElement(string name, bool isAbstract, string documentation) :
-            base(name: name, isAbstract: isAbstract, documentation: documentation)
+        public TypeElement(string name, string documentation) :
+            base(name: name, documentation: documentation)
         {
         }
-
-        public override bool IsNested => false;
-
 
         public IList<ElementDescriptor> Elements => _elements;
 
