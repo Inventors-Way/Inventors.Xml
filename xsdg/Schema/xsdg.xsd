@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
@@ -23,10 +24,11 @@
 &lt;p&gt;The &lt;code&gt;-p [working directory]&lt;/code&gt; is optional and if specified will set the working directory of the xsdg tool. If it is not specied the working directory will be the directory from where the xsdg tool is invoked.&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
-<xs:all>
-<xs:element minOccurs="0" maxOccurs="1" name="Jobs" type="Inventors.Xml.XSDGConfig.Jobs.ChoiceSet">
-</xs:element>
-</xs:all>
+<xs:sequence>
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
+</xs:choice>
+</xs:sequence>
 <xs:attribute name="assembly" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
@@ -69,15 +71,7 @@ Assembly for the documentation generator
 </xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.XSDGConfig.Jobs.ChoiceSet">
-<xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
-</xs:choice>
-</xs:complexType>
-
 <xs:complexType name="Inventors.Xml.Configuration.SchemaJob">
-<xs:complexContent mixed="false">
-<xs:extension base="Inventors.Xml.Configuration.Job">
 <xs:annotation>
 <xs:documentation>
 &lt;h1&gt;Generation of XSD Schema&lt;/h1&gt;
@@ -131,32 +125,12 @@ Assembly for the documentation generator
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
-</xs:extension>
-</xs:complexContent>
-</xs:complexType>
-
-<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
-<xs:attribute name="title" type="xs:string" use="required">
-<xs:annotation>
-<xs:documentation>
-Configuration.Job.Title.md
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
-<xs:attribute name="type" type="xs:string" use="required">
-<xs:annotation>
-<xs:documentation>
-Configuration.Job.Type.md
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
 <xs:annotation>
 <xs:documentation>
-&lt;h1&gt;Format of the documentation files&lt;/h1&gt;
-&lt;p&gt;The xsdg can use documentation files in either Text, Markdown, or HTML format. This attribute is optional. If it is not specified the program will use documentation files Markdown format.&lt;/p&gt;
+Content.DocumentationFormat.md
 </xs:documentation>
 </xs:annotation>
 <xs:restriction base="xs:string">

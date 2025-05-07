@@ -27,8 +27,8 @@ namespace Inventors.Xml
             Root = new ElementDescriptor(
                 Name: RootElementName(type), 
                 Type: rootName, 
+                Choice: false,
                 Required: false, 
-                PropertyName: "",
                 Documentation: type.GetDocumentation());
         }
 

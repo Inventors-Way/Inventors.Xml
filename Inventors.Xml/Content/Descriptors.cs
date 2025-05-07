@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Inventors.Xml.Content
 {
-    public record AttributeDescriptor(string Name, string Type, bool Required, bool Primitive, string PropertyName, string Documentation);
-    public record ElementDescriptor(string Name, string Type, bool Required, string PropertyName, string Documentation);
+    public record AttributeDescriptor(string Name, string Type, bool Required, bool Primitive, string Documentation);
+    public record ElementDescriptor(string Name, string Type, bool Choice, bool Required, string Documentation);
     public record EnumValue(string Name, string Documentation);
     public record ArrayItem(string Name, string Type);
     public record Choice(string Name, string Type);

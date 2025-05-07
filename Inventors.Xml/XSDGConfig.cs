@@ -4,6 +4,7 @@ using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -70,8 +71,8 @@ namespace Inventors.Xml
 
             try
             {
-                if (!string.IsNullOrEmpty(DocumentationGenerator))
-                    docGenerator = "Creating documentation generator: ...".Run(() => CreateDocumentationGenerator());
+                if (!string.IsNullOrEmpty(DocumentationGenerator) && !string.IsNullOrEmpty(DocumentationAssemblyName))
+                    docGenerator = "Creating documentation generator: ...".Run(() => CreateDocumentationGenerator(path));
             }
             catch (Exception ex)
             {
@@ -110,19 +111,22 @@ namespace Inventors.Xml
             if (AppDomain.CurrentDomain.GetAssemblies().Any(a => GetName(a.FullName) == assemblyName))
                 return Assembly.Load(assemblyName);
 
-            return Assembly.LoadFrom(GetAssemblyPath(path)
-                .Throw()
-                .IfFalse(filename => File.Exists(filename))
-                .Value);
+            var assemblyPath = GetAssemblyPath(path, assemblyName);
+
+            if (!File.Exists(assemblyPath))
+                throw new InvalidOperationException($"Did not find assembly [ {assemblyPath} ]");
+
+            return Assembly.LoadFrom(assemblyPath);
         }
 
-        private IDocumentationSource CreateDocumentationGenerator()
+        private IDocumentationSource CreateDocumentationGenerator(string path)
         {
+            DocumentationAssembly = $"Loading documentation assembly [ {DocumentationAssemblyName} ]".Run(() => LoadAssembly(path, DocumentationAssemblyName));
 
-            if (Assembly is null)
-                throw new InvalidOperationException("Assembly has not been loaded");
+            if (DocumentationAssembly is null)
+                throw new InvalidOperationException($"Assembly {DocumentationAssemblyName} has not been loaded");
 
-            if (Assembly.GetType(DocumentationGenerator) is not Type type)
+            if (DocumentationAssembly.GetType(DocumentationGenerator) is not Type type)
                 throw new InvalidOperationException($"Failed to get type {DocumentationGenerator} for the documentation generator");
 
             if (Activator.CreateInstance(type) is not IDocumentationSource source)
@@ -131,14 +135,12 @@ namespace Inventors.Xml
             return source;
         }
 
-        private string GetAssemblyPath(string path) =>
-            string.IsNullOrEmpty(InputPath) ? 
-            Path.Combine(path, AssemblyName) :
+        private string GetAssemblyPath(string path, string name) =>
             Path.Combine(new string[]
                 {
                     path,
                     InputPath,
-                    $"{AssemblyName}.dll"
+                    $"{name}.dll"
                 });
 
         private static void PrintRuntime(Stopwatch stopwatch)

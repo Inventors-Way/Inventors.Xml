@@ -50,15 +50,8 @@ namespace Inventors.Xml.Analysis
 
             TypeElement element = new(name, type.GetDocumentation());
 
-            try
-            {
-                Document.Add(element);
-                ParseProperties(type, element);
-            }
-            catch
-            {
-                throw;
-            }
+            Document.Add(element);
+            ParseProperties(type, element);
 
             return element.Name;
         }
@@ -74,7 +67,6 @@ namespace Inventors.Xml.Analysis
                                                          Type: _typeMapping[typeKey],
                                                          Required: property.IsPropertyRequired(),
                                                          Primitive: true,
-                                                         PropertyName: property.Name,
                                                          Documentation: property.GetDocumentation());
                 element.Add(descriptor);
                 return;
@@ -86,7 +78,6 @@ namespace Inventors.Xml.Analysis
                                                          Type: EnumAnalyser.Analyse(property),
                                                          Required: property.IsPropertyRequired(),
                                                          Primitive: false,
-                                                         PropertyName: property.Name,
                                                          Documentation: property.GetDocumentation());
                 element.Add(descriptor);
                 return;
@@ -101,50 +92,43 @@ namespace Inventors.Xml.Analysis
             {
                 var schemaType = property.GetSchemaType(type);
 
-                try
+                switch (schemaType)
                 {
-                    switch (schemaType)
-                    {
-                        case PropertyXSDType.Attribute:
-                            ParseAttribute(property, element);
-                            break;
+                    case PropertyXSDType.Attribute:
+                        ParseAttribute(property, element);
+                        break;
 
-                        case PropertyXSDType.Element:
-                            element.Add(new ElementDescriptor(Name: property.GetElementName(),
-                                                              Type: Analyze(property.PropertyType),
-                                                              Required: property.IsPropertyRequired(),
-                                                              PropertyName: property.Name,
-                                                              Documentation: property.GetDocumentation()));
-                            break;
+                    case PropertyXSDType.Element:
+                        element.Add(new ElementDescriptor(Name: property.GetElementName(),
+                                                            Type: Analyze(property.PropertyType),
+                                                            Choice: false,
+                                                            Required: property.IsPropertyRequired(),
+                                                            Documentation: property.GetDocumentation()));
+                        break;
 
-                        case PropertyXSDType.Choice:
-                            element.Add(new ElementDescriptor(Name: property.Name,
-                                                              Type: ChoiceAnalyser.Analyse(element.Name, property),
-                                                              Required: property.IsPropertyRequired(),
-                                                              PropertyName: property.Name,
-                                                              Documentation: property.GetDocumentation()));
-                            break;
+                    case PropertyXSDType.Choice:
+                        element.Add(new ElementDescriptor(Name: property.Name,
+                                                            Type: ChoiceAnalyser.Analyse(element.Name, property),
+                                                            Choice: true,
+                                                            Required: property.IsPropertyRequired(),
+                                                            Documentation: property.GetDocumentation()));
+                        break;
 
-                        case PropertyXSDType.Array:
-                            element.Add(new ElementDescriptor(Name: property.GetArrayName(),
-                                                              Type: ArrayAnalyser.Analyse(element.Name, property),
-                                                              Required: property.IsPropertyRequired(),
-                                                              PropertyName: property.Name,
-                                                              Documentation: property.GetDocumentation()));
-                            break;
+                    case PropertyXSDType.Array:
+                        element.Add(new ElementDescriptor(Name: property.GetArrayName(),
+                                                            Type: ArrayAnalyser.Analyse(element.Name, property),
+                                                            Choice: false,
+                                                            Required: property.IsPropertyRequired(),
+                                                            Documentation: property.GetDocumentation()));
+                        break;
 
-                        case PropertyXSDType.Private:
-                        case PropertyXSDType.Inherited:
-                        case PropertyXSDType.Ignored:
-                            break;
+                    case PropertyXSDType.Private:
+                    case PropertyXSDType.Inherited:
+                    case PropertyXSDType.Ignored:
+                        break;
 
-                        case PropertyXSDType.Invalid:
-                            throw new InvalidOperationException($"Parsing aborted as property [ {property.Name} ] in class [ {type.Name} ] has a public getter and setter but no information as how to serialize this property in XML. The XSDG tool requires all XML serialization to be explicit.");
-                    }
-                }
-                catch 
-                {
-                    throw;
+                    case PropertyXSDType.Invalid:
+                        throw new InvalidOperationException($"Parsing aborted as property [ {property.Name} ] in class [ {type.Name} ] has a public getter and setter but no information as how to serialize this property in XML. The XSDG tool requires all XML serialization to be explicit.");
                 }
             }
         }        

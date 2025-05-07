@@ -50,30 +50,56 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void Visit(TypeElement element)
         {
+            var orderOperator = element.Elements.Any(e => e.Choice) ? "sequence" : "all";
+
             builder.AppendLine();
             builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
             Annotate(GetDocumentation(element.Documentation));
 
             if (element.Elements.Count > 0)
             {
-                builder.AppendLine("<xs:all>");
+                builder.AppendLine($"<xs:{orderOperator}>");
 
                 foreach (var e in element.Elements)
                 {
-
-                    if (string.IsNullOrEmpty(e.Documentation))
+                    if (e.Choice)
                     {
-                        builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\" />");
+                        if (document[e.Type] is not ChoiceElement choice)
+                            throw new InvalidOperationException("Element is not a choice element");
+
+                        if (choice.Multiple)
+                        {
+                            builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
+                        }
+                        else
+                        {
+                            builder.AppendLine($"<xs:choice minOccurs=\"1\" maxOccurs=\"1\">");
+                        }
+
+                        foreach (var item in choice.Choices)
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type}\" />");
+                        }
+
+                        builder.AppendLine($"</xs:choice>");
+
                     }
                     else
                     {
-                        builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\">");
-                        Annotate(GetDocumentation(e.Documentation));
-                        builder.AppendLine("</xs:element>");
+                        if (string.IsNullOrEmpty(e.Documentation))
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\" />");
+                        }
+                        else
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\">");
+                            Annotate(GetDocumentation(e.Documentation));
+                            builder.AppendLine("</xs:element>");
+                        }
                     }
                 }
 
-                builder.AppendLine("</xs:all>");
+                builder.AppendLine($"</xs:{orderOperator}>");
             }
 
             if (element.Attributes.Count > 0)
@@ -114,25 +140,6 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void Visit(ChoiceElement element)
         {
-            builder.AppendLine();
-            builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
-
-            if (element.Multiple)
-            {
-                builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
-            }
-            else
-            {
-                builder.AppendLine($"<xs:choice minOccurs=\"1\" maxOccurs=\"1\">");
-            }
-
-            foreach (var item in element.Choices)
-            {
-                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type}\" />");
-            }
-
-            builder.AppendLine($"</xs:choice>");
-            builder.AppendLine($"</xs:complexType>");
         }
 
         public void Visit(EnumElement element)
