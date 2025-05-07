@@ -26,30 +26,29 @@ namespace Inventors.Xml.Analysis
             if (Document.Exists(name))
                 return name;
 
-            Document.Add(new ArrayElement(name, ParseArrayItems(property), property.GetDocumentation()));
+            try
+            {
+                Document.Add(new ArrayElement(name, ParseArrayItems(property), property.GetDocumentation()));
 
-            return name;
+                return name;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error while parsing array: {name}, error: {ex.Message}", ex);
+            }
         }
 
         private IEnumerable<ArrayItem> ParseArrayItems(PropertyInfo property)
         {
+            List<ArrayItem> retValue = new();
 
-            try
+            foreach (var item in property.GetArrayItems())
             {
-                List<ArrayItem> retValue = new();
-
-                foreach (var item in property.GetArrayItems())
-                {
-                    var name = Analyser.Analyze(item.Item2);
-                    retValue.Add(new ArrayItem(item.Item1, name));
-                }
-
-                return retValue;
+                var name = Analyser.Analyze(item.Item2);
+                retValue.Add(new ArrayItem(item.Item1, name));
             }
-            catch
-            {
-                throw;
-            }
+
+            return retValue;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Inventors.Xml
 {
     public static class PropertyExtensions
     {
-        public static PropertyXSDType GetXSDType(this PropertyInfo property, Type type)
+        public static PropertyXSDType GetSchemaType(this PropertyInfo property, Type type)
         {
             if (type.IsPropertyInherited(property.Name)) 
                 return PropertyXSDType.Inherited;

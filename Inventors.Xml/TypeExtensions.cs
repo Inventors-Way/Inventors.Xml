@@ -59,7 +59,7 @@ namespace Inventors.Xml
 
             foreach (var property in type.GetProperties())
             {
-                switch (property.GetXSDType(type))
+                switch (property.GetSchemaType(type))
                 {
                     case PropertyXSDType.Attribute:
                         element.Add(property.ParseAttribute(document));
