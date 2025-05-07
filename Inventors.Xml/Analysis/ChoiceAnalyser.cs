@@ -26,15 +26,8 @@ namespace Inventors.Xml.Analysis
             if (Document.Exists(name))
                 return name;
 
-            try
-            {
-                var element = ParseChoiceElement(name, property);
-                Document.Add(element);
-            }
-            catch
-            {
-                throw;
-            }
+            var element = ParseChoiceElement(name, property);
+            Document.Add(element);
 
             return name;
         }
