@@ -17,8 +17,5 @@ namespace Inventors.Xml.Analysis
         public ObjectDocument Document { get; }
 
         protected Reporter Reporter { get; }
-
-        public static string SanitizeXSDName(string name) =>
-            name.Replace("+", ".");
     }
 }

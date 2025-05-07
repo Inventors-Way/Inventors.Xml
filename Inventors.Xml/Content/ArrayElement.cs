@@ -9,14 +9,10 @@ namespace Inventors.Xml.Content
     public class ArrayElement :
         Element
     {
-        public ArrayElement(string name, string documentation) :
+        public ArrayElement(string name, IEnumerable<ArrayItem> items, string documentation) :
             base(name: name, documentation)
         {
-        }
-
-        internal void SetItems(IList<ArrayItem> items)
-        {
-            _items.AddRange(items); 
+            _items.AddRange(items);
         }
 
         public IList<ArrayItem> Items => _items;

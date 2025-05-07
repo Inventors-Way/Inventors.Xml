@@ -19,7 +19,7 @@ namespace Inventors.Xml.Analysis
             base(document, reporter)
         {
             ChoiceAnalyser = new ChoiceAnalyser(this, document, reporter);
-            ArrayAnalyser = new ArrayAnalyser(document, reporter);
+            ArrayAnalyser = new ArrayAnalyser(this, document, reporter);
             EnumAnalyser = new(document, reporter);
 
             _typeMapping.Add(typeof(double).ToString(), "double");
@@ -30,7 +30,6 @@ namespace Inventors.Xml.Analysis
             _typeMapping.Add(typeof(long).ToString(), "long");
             _typeMapping.Add(typeof(short).ToString(), "short");
             _typeMapping.Add(typeof(byte).ToString(), "byte");
-
         }
 
         private ChoiceAnalyser ChoiceAnalyser { get; }
@@ -128,7 +127,7 @@ namespace Inventors.Xml.Analysis
 
                     case PropertyXSDType.Array:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
-                                                          Type: ArrayAnalyser.Analyse(element.Name, property.PropertyType),
+                                                          Type: ArrayAnalyser.Analyse(element.Name, property),
                                                           Required: property.IsPropertyRequired(),
                                                           PropertyName: property.Name,
                                                           Documentation: property.GetDocumentation()));

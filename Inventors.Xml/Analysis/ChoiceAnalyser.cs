@@ -21,13 +21,13 @@ namespace Inventors.Xml.Analysis
 
         public string Analyse(string elementName, PropertyInfo property)
         {
-            var name = SanitizeXSDName($"{elementName}.{property.Name}.ChoiceSet");
+            var name = $"{elementName}.{property.Name}.ChoiceSet".Replace("+", ".");
 
             if (Document.Exists(name))
                 return name;
 
-            var choiceElement = ParseChoiceElement(name, property);
-            Document.Add(choiceElement);
+            var element = ParseChoiceElement(name, property);
+            Document.Add(element);
 
             return name;
         }
