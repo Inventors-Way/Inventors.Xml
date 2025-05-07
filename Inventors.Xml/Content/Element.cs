@@ -10,12 +10,10 @@ namespace Inventors.Xml.Content
         Element
     {
         public NullElement() :
-            base("", false, "")
+            base("", "")
         {
 
         }
-
-        public override bool IsNested => false;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
     }

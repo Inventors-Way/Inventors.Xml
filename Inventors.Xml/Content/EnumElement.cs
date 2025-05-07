@@ -10,12 +10,10 @@ namespace Inventors.Xml.Content
         Element
     {
         public EnumElement(string name, IEnumerable<EnumValue> values, string documentation) :
-            base(name: name, false, documentation)
+            base(name: name, documentation)
         {
             Values = values.ToList();
         }
-
-        public override bool IsNested => false;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
 

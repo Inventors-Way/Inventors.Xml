@@ -50,17 +50,34 @@ namespace Inventors.Xml
         [XmlIgnore]
         public Assembly? Assembly { get; private set; }
 
+        [XmlIgnore]
+        public Assembly? DocumentationAssembly { get; private set; }
+
         public void Run(string path, bool verbose)
         {
             Stopwatch stopwatch = new();
+            IDocumentationSource? docGenerator = null;
 
             try
             {
-                Assembly = $"Loading assembly [ {AssemblyName} ]".Run(() => LoadAssembly(path));
+                Assembly = $"Loading assembly [ {AssemblyName} ]".Run(() => LoadAssembly(path, AssemblyName));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"failed: {ex}");
+                Console.WriteLine("failed!");
+                Console.WriteLine($" {ex}");
+                return;
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(DocumentationGenerator))
+                    docGenerator = "Creating documentation generator: ...".Run(() => CreateDocumentationGenerator());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("failed!");
+                Console.WriteLine($" {ex}");
                 return;
             }
 
@@ -68,17 +85,14 @@ namespace Inventors.Xml
             {
                 try
                 {
-                    IDocumentationSource? docGenerator = null;
-
                     Console.WriteLine();
                     Console.WriteLine($"Running: {job.Title}:");
-
-                    if (!string.IsNullOrEmpty(DocumentationGenerator))
-                        docGenerator = "Creating documentation generator: ...".Run(() => CreateDocumentationGenerator());
 
                     stopwatch.Restart();
 
                     job.Run(path, this, docGenerator, verbose);
+
+                    Console.WriteLine();
                     PrintRuntime(stopwatch);
                 }
                 catch (Exception ex) 
@@ -92,10 +106,10 @@ namespace Inventors.Xml
         private static string GetName(string? fullname) =>
             fullname is null ? string.Empty : fullname.Split(',')[0];
 
-        private Assembly LoadAssembly(string path)
+        private Assembly LoadAssembly(string path, string assemblyName)
         {
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => GetName(a.FullName) == AssemblyName))
-                return Assembly.Load(AssemblyName);
+            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => GetName(a.FullName) == assemblyName))
+                return Assembly.Load(assemblyName);
 
             return Assembly.LoadFrom(GetAssemblyPath(path)
                 .Throw()
@@ -105,6 +119,7 @@ namespace Inventors.Xml
 
         private IDocumentationSource CreateDocumentationGenerator()
         {
+
             if (Assembly is null)
                 throw new InvalidOperationException("Assembly has not been loaded");
 

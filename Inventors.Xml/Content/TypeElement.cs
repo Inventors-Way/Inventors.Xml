@@ -30,12 +30,7 @@ namespace Inventors.Xml.Content
         {
             StringBuilder builder = new();
 
-            builder.AppendLine($"CLASS ELEMENT [ name: {Name}, abstract: {IsAbstract} ]");
-
-            if (!string.IsNullOrEmpty(BaseType))
-            {
-                builder.AppendLine($" - BASETYPE: {BaseType}");
-            }
+            builder.AppendLine($"CLASS ELEMENT [ name: {Name} ]");
 
             if (Elements.Count > 0)
             {

@@ -65,7 +65,7 @@ namespace Inventors.Xml
 
             return false;
         }
-
+        /*
         public static Element ParseClass(this Type type, ObjectDocument document, Reporter reporter)
         {
             if (!type.IsClass)
@@ -135,7 +135,8 @@ namespace Inventors.Xml
 
             return element;
         }
-
+        */
+        /*
         private static List<Choice> ParseChoices(this PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             List<Choice> retValue = new();
@@ -147,8 +148,8 @@ namespace Inventors.Xml
             }
 
             return retValue;
-        }
-
+        }*/
+        /*
         private static Element ParseChoiceElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             if (document.Exists(name))
@@ -160,7 +161,8 @@ namespace Inventors.Xml
 
             return element;
         }
-
+        */
+        /*
         private static List<ArrayItem> ParseArrayItems(this PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             List<ArrayItem> retValue = new List<ArrayItem>();
@@ -181,7 +183,8 @@ namespace Inventors.Xml
 
             return retValue;
         }
-
+        */
+        /*
         private static Element ParseArrayElement(string name, PropertyInfo property, ObjectDocument document, Reporter reporter)
         {
             if (document.Exists(name))
@@ -193,7 +196,7 @@ namespace Inventors.Xml
 
             return element; 
         }
-
+        */
         private static bool IsSystemType(string name)
         {
             return name.StartsWith("System");

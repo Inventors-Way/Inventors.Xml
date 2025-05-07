@@ -11,5 +11,10 @@ namespace Inventors.Xml.Analysis
         public ArrayAnalyser(ObjectDocument document, Reporter reporter) : base(document, reporter)
         {
         }
+
+        public string Analyse(Type property)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

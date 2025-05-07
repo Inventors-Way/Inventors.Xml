@@ -10,7 +10,7 @@ namespace Inventors.Xml.Content
         Element
     {
         public ArrayElement(string name, string documentation) :
-            base(name: name, false, documentation)
+            base(name: name, documentation)
         {
         }
 
@@ -22,9 +22,6 @@ namespace Inventors.Xml.Content
         public IList<ArrayItem> Items => _items;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
-
-        public override bool IsNested => false;
-
 
         public override string ToString()
         {

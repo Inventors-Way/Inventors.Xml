@@ -58,7 +58,7 @@ namespace Inventors.Xml.Analysis
 
             return element.Name;
         }
-
+        
         private void Parse(Type? type, TypeElement element)
         {
             if (type is null)
@@ -67,25 +67,37 @@ namespace Inventors.Xml.Analysis
             Parse(type.BaseType, element);
             ParseProperties(type, element);
         }
-
-        public string ParseAttribute(PropertyInfo property)
+        
+        public void ParseAttribute(PropertyInfo property, TypeElement element)
         {
             string typeKey = property.PropertyType.ToString();
 
             if (_typeMapping.ContainsKey(typeKey))
             {
                 var name = property.GetAttributeName();
-                var element = new AttributeElement(name, _typeMapping[typeKey], property.GetDocumentation());
-
-                return name;
+                var descriptor = new AttributeDescriptor(Name: name,
+                                                         Type: _typeMapping[typeKey],
+                                                         Required: property.IsPropertyRequired(),
+                                                         Primitive: true,
+                                                         PropertyName: property.Name,
+                                                         Documentation: property.GetDocumentation());
+                element.Add(descriptor);
+                return;
             }
             else if (property.PropertyType.IsEnum)
             {
-                return property.ParseEnum(document);
+                var name = property.GetAttributeName();
+                var descriptor = new AttributeDescriptor(Name: name,
+                                                         Type: EnumAnalyser.Analyse(property),
+                                                         Required: property.IsPropertyRequired(),
+                                                         Primitive: false,
+                                                         PropertyName: property.Name,
+                                                         Documentation: property.GetDocumentation());
+                element.Add(descriptor);
+                return;
             }
 
             throw new InvalidOperationException($"Unsupported attribute type: {property.PropertyType}");
-
         }
 
         private void ParseProperties(Type type, TypeElement element)
@@ -95,7 +107,7 @@ namespace Inventors.Xml.Analysis
                 switch (property.GetXSDType(type))
                 {
                     case PropertyXSDType.Attribute:
-                        element.Add(property.ParseAttribute(Document));
+                        ParseAttribute(property, element);
                         break;
                     case PropertyXSDType.Element:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
@@ -105,34 +117,18 @@ namespace Inventors.Xml.Analysis
                                                           Documentation: property.GetDocumentation()));
                         break;
                     case PropertyXSDType.Choice:
-                        {
-                            var name = SanitizeXSDName($"{element.Name}.{property.Name}.ChoiceSet");
-                            var choiceElement = ParseChoiceElement(name, property, document, reporter);
-
-                            element.Add(new ElementDescriptor(Name: property.Name,
-                                         Type: choiceElement,
-                                         Required: property.IsPropertyRequired(),
-                            PropertyName: property.Name));
-
-                            document.Add(choiceElement);
-                        }
+                        element.Add(new ElementDescriptor(Name: property.GetElementName(),
+                                                          Type: ChoiceAnalyser.Analyse(property.PropertyType),
+                                                          Required: property.IsPropertyRequired(),
+                                                          PropertyName: property.Name,
+                                                          Documentation: property.GetDocumentation()));
                         break;
                     case PropertyXSDType.Array:
-                        {
-                            try
-                            {
-                                var name = SanitizeXSDName($"{element.Name}.{property.Name}.Array");
-                                var arrayElement = ParseArrayElement(name, property, document, reporter);
-                                element.Add(new ElementDescriptor(Name: property.GetArrayName(),
-                                             Type: arrayElement,
-                                             Required: property.IsPropertyRequired(),
-                                             PropertyName: property.Name));
-                            }
-                            catch (InvalidOperationException ioe)
-                            {
-                                throw new InvalidOperationException($"Error in reflecting class {element.Name}", ioe);
-                            }
-                        }
+                        element.Add(new ElementDescriptor(Name: property.GetElementName(),
+                                                          Type: ArrayAnalyser.Analyse(property.PropertyType),
+                                                          Required: property.IsPropertyRequired(),
+                                                          PropertyName: property.Name,
+                                                          Documentation: property.GetDocumentation()));
                         break;
 
                     case PropertyXSDType.Private:
@@ -144,6 +140,6 @@ namespace Inventors.Xml.Analysis
                         throw new InvalidOperationException($"Parsing aborted as property [ {property.Name} ] in class [ {type.Name} ] has a public getter and setter but no information as how to serialize this property in XML. The XSDG tool requires all XML serialization to be explicit.");
                 }
             }
-        }
+        }        
     }
 }
