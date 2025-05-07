@@ -126,7 +126,7 @@ namespace Inventors.Xml.Analysis
                         break;
 
                     case PropertyXSDType.Array:
-                        element.Add(new ElementDescriptor(Name: property.GetElementName(),
+                        element.Add(new ElementDescriptor(Name: property.GetArrayName(),
                                                           Type: ArrayAnalyser.Analyse(element.Name, property),
                                                           Required: property.IsPropertyRequired(),
                                                           PropertyName: property.Name,

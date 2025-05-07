@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
 <xs:element name="person" nillable="true" type="Inventors.Xml.Test.TestObjects.Person" />
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Person">
@@ -12,14 +13,14 @@ PersonDocumentation: Person
 <xs:element minOccurs="0" maxOccurs="1" name="spouse" type="Inventors.Xml.Test.TestObjects.Spouse">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Spouse
+The spouse of the person
 </xs:documentation>
 </xs:annotation>
 </xs:element>
 <xs:element minOccurs="0" maxOccurs="1" name="home" type="Inventors.Xml.Test.TestObjects.Home">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Home
+PersonDocumentation: Person.Home
 </xs:documentation>
 </xs:annotation>
 </xs:element>
@@ -80,18 +81,18 @@ The type of home
 <xs:simpleType name="Inventors.Xml.Test.TestObjects.HomeType">
 <xs:annotation>
 <xs:documentation>
-The type of home
+Type of home
 </xs:documentation>
 </xs:annotation>
 <xs:restriction base="xs:string">
-<xs:enumeration value="appartment">
+<xs:enumeration value="Appartment">
 <xs:annotation>
 <xs:documentation>
 In a multi residence building
 </xs:documentation>
 </xs:annotation>
 </xs:enumeration>
-<xs:enumeration value="house">
+<xs:enumeration value="House">
 <xs:annotation>
 <xs:documentation>
 A self-contrained unit
@@ -100,12 +101,6 @@ A self-contrained unit
 </xs:enumeration>
 </xs:restriction>
 </xs:simpleType>
-
-<xs:complexType name="Inventors.Xml.Test.TestObjects.Person.Children.Array">
-<xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="1" maxOccurs="1" name="child" nillable="true" type="Inventors.Xml.Test.TestObjects.Child" />
-</xs:choice>
-</xs:complexType>
 
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Child">
 <xs:annotation>
@@ -127,5 +122,11 @@ PersonDocumentation: Child.Age
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
+</xs:complexType>
+
+<xs:complexType name="Inventors.Xml.Test.TestObjects.Person.Children.Array">
+<xs:choice minOccurs="0" maxOccurs="unbounded">
+<xs:element minOccurs="1" maxOccurs="1" name="child" nillable="true" type="Inventors.Xml.Test.TestObjects.Child" />
+</xs:choice>
 </xs:complexType>
 </xs:schema>
