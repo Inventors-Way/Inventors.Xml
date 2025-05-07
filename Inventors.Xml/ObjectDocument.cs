@@ -4,8 +4,10 @@ using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Inventors.Xml
 {
@@ -23,12 +25,21 @@ namespace Inventors.Xml
             Namespace = type.Namespace;
             var rootName = analyser.Analyze(type);
             Root = new ElementDescriptor(
-                Name: type.RootElementName(), 
+                Name: RootElementName(type), 
                 Type: rootName, 
                 Required: false, 
                 PropertyName: "",
                 Documentation: type.GetDocumentation());
         }
+
+        public string RootElementName(Type input)
+        {
+            if (input.GetCustomAttribute<XmlRootAttribute>() is not XmlRootAttribute root)
+                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
+
+            return root.ElementName;
+        }
+
 
         public Element this[string id]
         {

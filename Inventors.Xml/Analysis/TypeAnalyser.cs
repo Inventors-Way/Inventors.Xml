@@ -44,7 +44,7 @@ namespace Inventors.Xml.Analysis
             if (!type.IsClass)
                 throw new ArgumentException($"{type} is not a class");
 
-            var name = type.GetXSDTypeName();
+            var name = type.GetSchemaTypeName();
 
             if (Document.Exists(name))
                 return name;

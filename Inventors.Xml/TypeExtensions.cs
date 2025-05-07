@@ -15,33 +15,11 @@ namespace Inventors.Xml
 {
     public static class TypeExtensions
     {
-        public static string GetSchema(this Type type)
-        {
-            return new XSDGenerator(ObjectDocument.Parse(type, NullReporter.Instance)).Run();
-        }
+        public static string GetSchema(this Type type) =>
+            new XSDGenerator(ObjectDocument.Parse(type, NullReporter.Instance)).Run();
 
-        public static string RootElementName(this Type input)
-        {
-            if (input.GetCustomAttributes(typeof(XmlRootAttribute)) is not object[] attributes)
-                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
-
-            if (attributes.Length == 0)
-                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
-
-            if (attributes[0] is not XmlRootAttribute root)
-                throw new ArgumentException($"The root class {input} does not have an XmlRootAttribute");
-
-            return root.ElementName;
-        }
-
-        public static string SanitizeXSDName(string name) =>
-            name.Replace("+", ".");
-
-        public static string GetXSDTypeName(this Type type)
-        {
-            var name = type.FullName is not null ? type.FullName : type.Name;
-            return SanitizeXSDName(name);            
-        }
+        public static string GetSchemaTypeName(this Type type) =>
+            (type.FullName is not null ? type.FullName : type.Name).Replace("+", ".");
 
         public static bool IsPropertyInherited(this Type type, string name)
         {
@@ -71,10 +49,10 @@ namespace Inventors.Xml
             if (!type.IsClass)
                 throw new ArgumentException($"{type} is not a class");
 
-            reporter.Report($"Parsing of class [ name: {type.Name}, xsd name: {type.GetXSDTypeName()} ]:");
+            reporter.Report($"Parsing of class [ name: {type.Name}, xsd name: {type.GetSchemaTypeName()} ]:");
 
             var element = document.Add(new TypeElement(
-                name: type.GetXSDTypeName(),
+                name: type.GetSchemaTypeName(),
                 documentation: type.GetDocumentation()));
 
             element.BaseType = type.BaseType.ParseBaseType(document, reporter).Name;
@@ -209,7 +187,7 @@ namespace Inventors.Xml
             if (baseType is null) return Element.Empty;
             if (baseType.FullName is null) return Element.Empty; 
             if (IsSystemType(baseType.FullName)) return Element.Empty;
-            if (document.Exists(baseType.GetXSDTypeName())) return document[baseType.GetXSDTypeName()];
+            if (document.Exists(baseType.GetSchemaTypeName())) return document[baseType.GetSchemaTypeName()];
 
             return baseType.ParseClass(document, reporter);
         }
