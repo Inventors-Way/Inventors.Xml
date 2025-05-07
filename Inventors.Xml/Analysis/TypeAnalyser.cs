@@ -51,9 +51,21 @@ namespace Inventors.Xml.Analysis
             TypeElement element = new(name, type.GetDocumentation());
 
             Document.Add(element);
+
+            if (type.BaseType is Type baseType)
+                Parse(baseType, element);
+
             ParseProperties(type, element);
 
             return element.Name;
+        }
+
+        public void Parse(Type type, TypeElement element)
+        {
+            if (type.BaseType is Type baseType)
+                Parse(baseType, element);
+
+            ParseProperties(type, element);
         }
                
         public void ParseAttribute(PropertyInfo property, TypeElement element)
