@@ -10,7 +10,7 @@ namespace Inventors.Xml.Content
         Element
     {
         public ChoiceElement(string name, bool multiple, string documentation) :
-            base(name: name, documentation)
+            base(name, documentation)
         {
             Multiple = multiple;
         }
@@ -34,7 +34,7 @@ namespace Inventors.Xml.Content
 
             foreach (var choice in Choices)
             {
-                builder.AppendLine($"- {choice.Name} [ {choice.Type.Name} ]");
+                builder.AppendLine($"- {choice.Name} [ {choice.Type} ]");
             }
 
             return builder.ToString();

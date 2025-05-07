@@ -1,4 +1,6 @@
-﻿using Inventors.Xml.Content;
+﻿using Inventors.Xml.Analysis;
+using Inventors.Xml.Content;
+using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +18,16 @@ namespace Inventors.Xml
             if (type.Namespace is null)
                 throw new ArgumentException("Has no Namespace", nameof(type));
 
+            TypeAnalyser analyser = new(this, reporter);
+
             Namespace = type.Namespace;
+            var rootName = analyser.Analyze(type);
             Root = new ElementDescriptor(
                 Name: type.RootElementName(), 
-                Type: type.ParseClass(this, reporter), 
+                Type: rootName, 
                 Required: false, 
-                PropertyName: "");
+                PropertyName: "",
+                Documentation: type.GetDocumentation());
         }
 
         public Element this[string id]
@@ -39,10 +45,7 @@ namespace Inventors.Xml
         {
             foreach (var item in _types)
             {
-                if (!item.Value.IsNested || runNestedTypes)
-                {
-                    item.Value.Accept(visitor);
-                }
+                item.Value.Accept(visitor);
             }
         }
 
@@ -69,7 +72,7 @@ namespace Inventors.Xml
         {
             StringBuilder builder = new();
 
-            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Type.Name}, namespace: {Namespace}]");
+            builder.AppendLine($"ROOT ELEMENT [name: {Root.Name}, type: {Root.Name}, namespace: {Namespace}]");
             builder.AppendLine();
 
             foreach (var entry in _types)

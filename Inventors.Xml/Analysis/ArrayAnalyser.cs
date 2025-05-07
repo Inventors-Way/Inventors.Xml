@@ -12,7 +12,7 @@ namespace Inventors.Xml.Analysis
         {
         }
 
-        public string Analyse(Type property)
+        public string Analyse(string elementName, Type property)
         {
             throw new NotImplementedException();
         }

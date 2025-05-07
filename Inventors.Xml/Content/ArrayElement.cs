@@ -31,7 +31,7 @@ namespace Inventors.Xml.Content
 
             foreach (var item in Items)
             {
-                builder.AppendLine($"- {item.Name} [ {item.Type.Name} ]");
+                builder.AppendLine($"- {item.Name} [ {item.Type} ]");
             }
 
             return builder.ToString();

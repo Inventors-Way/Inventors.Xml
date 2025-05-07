@@ -18,7 +18,7 @@ namespace Inventors.Xml.Analysis
         public TypeAnalyser(ObjectDocument document, Reporter reporter) :
             base(document, reporter)
         {
-            ChoiceAnalyser = new ChoiceAnalyser(document, reporter);
+            ChoiceAnalyser = new ChoiceAnalyser(this, document, reporter);
             ArrayAnalyser = new ArrayAnalyser(document, reporter);
             EnumAnalyser = new(document, reporter);
 
@@ -109,6 +109,7 @@ namespace Inventors.Xml.Analysis
                     case PropertyXSDType.Attribute:
                         ParseAttribute(property, element);
                         break;
+
                     case PropertyXSDType.Element:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
                                                           Type: Analyze(property.PropertyType),
@@ -116,16 +117,18 @@ namespace Inventors.Xml.Analysis
                                                           PropertyName: property.Name,
                                                           Documentation: property.GetDocumentation()));
                         break;
+
                     case PropertyXSDType.Choice:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
-                                                          Type: ChoiceAnalyser.Analyse(property.PropertyType),
+                                                          Type: ChoiceAnalyser.Analyse(element.Name, property),
                                                           Required: property.IsPropertyRequired(),
                                                           PropertyName: property.Name,
                                                           Documentation: property.GetDocumentation()));
                         break;
+
                     case PropertyXSDType.Array:
                         element.Add(new ElementDescriptor(Name: property.GetElementName(),
-                                                          Type: ArrayAnalyser.Analyse(property.PropertyType),
+                                                          Type: ArrayAnalyser.Analyse(element.Name, property.PropertyType),
                                                           Required: property.IsPropertyRequired(),
                                                           PropertyName: property.Name,
                                                           Documentation: property.GetDocumentation()));

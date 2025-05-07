@@ -146,7 +146,7 @@ namespace Inventors.Xml
         public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property) =>
             from item in property.GetCustomAttributes<XmlArrayItemAttribute>()
             select item.Type;
-
+        /*
         public static AttributeDescriptor ParseAttribute(this PropertyInfo property, ObjectDocument document)
         {
             string typeKey = property.PropertyType.ToString();
@@ -189,5 +189,6 @@ namespace Inventors.Xml
                 PropertyName: property.Name,
                 Documentation: property.GetDocumentation());
         }
+        */
     }
 }

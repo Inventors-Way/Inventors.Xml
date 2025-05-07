@@ -197,11 +197,13 @@ namespace Inventors.Xml
             return element; 
         }
         */
+        /*
         private static bool IsSystemType(string name)
         {
             return name.StartsWith("System");
         }
-
+        */
+        /*
         private static Element ParseBaseType(this Type? baseType, ObjectDocument document, Reporter reporter)
         {
             if (baseType is null) return Element.Empty;
@@ -223,11 +225,11 @@ namespace Inventors.Xml
                 
                 if (Attribute.GetCustomAttribute(fieldInfo, typeof(XmlEnumAttribute)) is XmlEnumAttribute xmlEnum)
                     yield return xmlEnum.Name is null ?
-                                 new EnumValue(Name: name, XSDName: name, Documentation: fieldInfo.GetDocumentation()) :
-                                 new EnumValue(Name: name, XSDName: xmlEnum.Name, Documentation: fieldInfo.GetDocumentation());
+                                 new EnumValue(Name: name, Type: name, Documentation: fieldInfo.GetDocumentation()) :
+                                 new EnumValue(Name: name, Type: xmlEnum.Name, Documentation: fieldInfo.GetDocumentation());
                 else
-                    yield return new EnumValue(Name: name, XSDName: name, Documentation: fieldInfo.GetDocumentation());
+                    yield return new EnumValue(Name: name, Type: name, Documentation: fieldInfo.GetDocumentation());
             }
-        }
+        }*/
     }
 }

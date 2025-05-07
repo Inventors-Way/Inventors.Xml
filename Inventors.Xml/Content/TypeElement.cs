@@ -38,7 +38,7 @@ namespace Inventors.Xml.Content
 
                 foreach (var element in Elements)
                 {
-                    builder.AppendLine($"- {element.Name} [ type: {element.Type.Name}, required: {element.Required} ]");
+                    builder.AppendLine($"- {element.Name} [ type: {element.Type}, required: {element.Required} ]");
                 }
             }
 

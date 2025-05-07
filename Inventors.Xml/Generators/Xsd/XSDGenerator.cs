@@ -30,11 +30,15 @@ namespace Inventors.Xml.Generators.Xsd
             if (executed)
                 return builder.ToString();
 
+            if (document?.Root is null)
+                throw new InvalidOperationException("No root type found in the document");
+
             executed = true;
 
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             builder.AppendLine("<xs:schema elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">");
-            builder.AppendLine($"<xs:element name=\"{document.Root.Name}\" nillable=\"true\" type=\"{document.Root.Type.Name}\" />");
+            builder.AppendLine();
+            builder.AppendLine($"<xs:element name=\"{document.Root.Name}\" nillable=\"true\" type=\"{document.Root.Type}\" />");
 
             document.Run(this);
 
@@ -101,7 +105,7 @@ namespace Inventors.Xml.Generators.Xsd
 
             foreach (var item in element.Items)
             {
-                builder.AppendLine($"<xs:element minOccurs=\"1\" maxOccurs=\"1\" name=\"{item.Name}\" nillable=\"true\" type=\"{item.Type.Name}\" />");
+                builder.AppendLine($"<xs:element minOccurs=\"1\" maxOccurs=\"1\" name=\"{item.Name}\" nillable=\"true\" type=\"{item.Type}\" />");
             }
 
             builder.AppendLine($"</xs:choice>");
@@ -124,7 +128,7 @@ namespace Inventors.Xml.Generators.Xsd
 
             foreach (var item in element.Choices)
             {
-                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type.Name}\" />");
+                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type}\" />");
             }
 
             builder.AppendLine($"</xs:choice>");
@@ -143,11 +147,11 @@ namespace Inventors.Xml.Generators.Xsd
             {
                 if (string.IsNullOrEmpty(value.Documentation))
                 {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\" />");
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Name}\" />");
                 }
                 else
                 {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\">");
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Name}\">");
                     Annotate(GetDocumentation(value.Documentation));
                     builder.AppendLine($"</xs:enumeration>");
                 }
