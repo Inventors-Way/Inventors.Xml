@@ -33,10 +33,22 @@ namespace Inventors.Xml.Analysis
 
         private IEnumerable<ArrayItem> ParseArrayItems(PropertyInfo property)
         {
-            foreach (var item in property.GetArrayItems())
+
+            try
             {
-                var name = Analyser.Analyze(item.Item2);
-                yield return new ArrayItem(item.Item1, name);
+                List<ArrayItem> retValue = new();
+
+                foreach (var item in property.GetArrayItems())
+                {
+                    var name = Analyser.Analyze(item.Item2);
+                    retValue.Add(new ArrayItem(item.Item1, name));
+                }
+
+                return retValue;
+            }
+            catch
+            {
+                throw;
             }
         }
     }

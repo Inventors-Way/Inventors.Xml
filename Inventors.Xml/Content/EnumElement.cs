@@ -25,7 +25,7 @@ namespace Inventors.Xml.Content
 
             foreach (var value in Values)
             {
-                builder.AppendLine($"- {value.Name} [ {value.Type} ]");
+                builder.AppendLine($"- {value.Name} ");
             }
 
             return builder.ToString();

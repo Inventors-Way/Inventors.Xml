@@ -50,10 +50,10 @@ namespace Inventors.Xml.Analysis
 
                 if (Attribute.GetCustomAttribute(fieldInfo, typeof(XmlEnumAttribute)) is XmlEnumAttribute xmlEnum)
                     yield return xmlEnum.Name is null ?
-                                 new EnumValue(Name: name, Type: name, Documentation: fieldInfo.GetDocumentation()) :
-                                 new EnumValue(Name: name, Type: xmlEnum.Name, Documentation: fieldInfo.GetDocumentation());
+                                 new EnumValue(Name: name, Documentation: fieldInfo.GetDocumentation()) :
+                                 new EnumValue(Name: xmlEnum.Name, Documentation: fieldInfo.GetDocumentation());
                 else
-                    yield return new EnumValue(Name: name, Type: name, Documentation: fieldInfo.GetDocumentation());
+                    yield return new EnumValue(Name: name, Documentation: fieldInfo.GetDocumentation());
             }
         }
     }
