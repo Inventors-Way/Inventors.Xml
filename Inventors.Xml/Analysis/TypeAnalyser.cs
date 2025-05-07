@@ -43,6 +43,7 @@ namespace Inventors.Xml.Analysis
             if (!type.IsClass)
                 throw new ArgumentException($"{type} is not a class");
 
+            var generator = new OrderGenerator();
             var name = type.GetSchemaTypeName();
 
             if (Document.Exists(name))
@@ -53,22 +54,23 @@ namespace Inventors.Xml.Analysis
             Document.Add(element);
 
             if (type.BaseType is Type baseType)
-                Parse(baseType, element);
+                Parse(baseType, element, generator);
 
-            ParseProperties(type, element);
+            ParseProperties(type, element, generator);
+            element.SortAttributes();
 
             return element.Name;
         }
 
-        public void Parse(Type type, TypeElement element)
+        public void Parse(Type type, TypeElement element, OrderGenerator generator)
         {
             if (type.BaseType is Type baseType)
-                Parse(baseType, element);
+                Parse(baseType, element, generator);
 
-            ParseProperties(type, element);
+            ParseProperties(type, element, generator);
         }
                
-        public void ParseAttribute(PropertyInfo property, TypeElement element)
+        public void ParseAttribute(PropertyInfo property, TypeElement element, OrderGenerator generator)
         {
             string typeKey = property.PropertyType.ToString();
 
@@ -79,6 +81,7 @@ namespace Inventors.Xml.Analysis
                                                          Type: _typeMapping[typeKey],
                                                          Required: property.IsPropertyRequired(),
                                                          Primitive: true,
+                                                         Order: property.GetAttributeOrder(generator),
                                                          Documentation: property.GetDocumentation());
                 element.Add(descriptor);
                 return;
@@ -90,6 +93,7 @@ namespace Inventors.Xml.Analysis
                                                          Type: EnumAnalyser.Analyse(property),
                                                          Required: property.IsPropertyRequired(),
                                                          Primitive: false,
+                                                         Order: property.GetAttributeOrder(generator),
                                                          Documentation: property.GetDocumentation());
                 element.Add(descriptor);
                 return;
@@ -98,7 +102,7 @@ namespace Inventors.Xml.Analysis
             throw new InvalidOperationException($"Unsupported attribute type: {property.PropertyType}");
         }
 
-        private void ParseProperties(Type type, TypeElement element)
+        private void ParseProperties(Type type, TypeElement element, OrderGenerator generator)
         {
             foreach (var property in type.GetProperties())
             {
@@ -107,7 +111,7 @@ namespace Inventors.Xml.Analysis
                 switch (schemaType)
                 {
                     case PropertyXSDType.Attribute:
-                        ParseAttribute(property, element);
+                        ParseAttribute(property, element, generator);
                         break;
 
                     case PropertyXSDType.Element:

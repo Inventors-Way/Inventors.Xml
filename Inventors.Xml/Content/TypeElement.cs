@@ -18,6 +18,11 @@ namespace Inventors.Xml.Content
 
         public IList<AttributeDescriptor> Attributes => _attributes;
 
+        public void SortAttributes()
+        {
+            _attributes.Sort((a,b) => a.Order.CompareTo(b.Order));
+        }
+
         public void Add(AttributeDescriptor attribute) =>
             _attributes.Add(attribute);
 
