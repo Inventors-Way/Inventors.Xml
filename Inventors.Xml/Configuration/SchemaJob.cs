@@ -51,7 +51,7 @@ namespace Inventors.Xml.Configuration
                 .SetOutputFormat(DocumentationOutputFormat)
                 .SetEncoding(EncodeData)
                 .SetCharacterData(EncapsulateCharacterData)
-            .Build());
+                .Build());
 
             return "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
 
