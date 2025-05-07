@@ -22,12 +22,17 @@ namespace Inventors.Xml.Configuration
         [XmlDocumentation("@Configuration.Job.Type.md")]
         public string Type { get; set; } = string.Empty;
 
-        protected Type LoadType(IJobConfiguration configuration) => configuration.Assembly
-                .ThrowIfNull()
-                .Value
-                .GetType(Type)
-                .ThrowIfNull()
-                .Value;
+        protected Type LoadType(IJobConfiguration configuration)
+        {
+            if (configuration.Assembly is not Assembly assembly)
+                throw new InvalidOperationException("Assembly not loaded");
+
+            if (assembly.GetType(Type) is not Type type)
+                throw new InvalidOperationException($"Did not get type [ {Type} ]");
+
+            return type;
+        }
+            
 
         protected static string GetOutputPath(string path, IJobConfiguration c) =>
             string.IsNullOrEmpty(c.OutputPath) ? path : Path.Combine(new string[]
