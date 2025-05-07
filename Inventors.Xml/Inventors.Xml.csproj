@@ -38,10 +38,6 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Inventors.Xml.Documentation\Inventors.Xml.Documentation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Logo128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

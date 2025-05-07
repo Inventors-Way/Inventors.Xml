@@ -4,9 +4,11 @@
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
-<xs:all>
-<xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.XSDGConfig.Jobs.ChoiceSet" />
-</xs:all>
+<xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
+    </xs:choice>
+</xs:sequence>
 <xs:attribute name="assembly" type="xs:string" use="required">
 </xs:attribute>
 <xs:attribute name="documentation-assembly" type="xs:string" use="optional">
@@ -19,11 +21,8 @@
 </xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.XSDGConfig.Jobs.ChoiceSet">
-<xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
-</xs:choice>
-</xs:complexType>
+<xs:element name="Inventors.Xml.XSDGConfig.Jobs.ChoiceSet">
+</xs:element>
 
 <xs:complexType name="Inventors.Xml.Configuration.SchemaJob">
 <xs:attribute name="include-documentation" type="xs:boolean" use="optional">

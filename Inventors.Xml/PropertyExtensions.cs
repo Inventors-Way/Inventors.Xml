@@ -25,7 +25,7 @@ namespace Inventors.Xml
                 return property.IsChoiceElement() ? PropertyXSDType.Choice : PropertyXSDType.Element;
             if (property.IsArray()) 
                 return PropertyXSDType.Array;
-            if (!property.IsPublic()) 
+            if (!property.IsPublic())
                 return PropertyXSDType.Private;
 
             return PropertyXSDType.Invalid;

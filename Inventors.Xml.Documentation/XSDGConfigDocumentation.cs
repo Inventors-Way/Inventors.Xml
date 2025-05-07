@@ -1,12 +1,11 @@
-﻿using Inventors.Xml.Documentation;
-using Inventors.Xml.Serialization;
+﻿using Inventors.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventors.Xml
+namespace Inventors.Xml.Documentation
 {
     public class XSDGConfigDocumentation : IDocumentationSource
     {

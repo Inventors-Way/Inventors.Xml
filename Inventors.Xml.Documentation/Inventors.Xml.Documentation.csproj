@@ -48,4 +48,8 @@
     <EmbeddedResource Include="XSDGConfig.OutputPath.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Inventors.Xml\Inventors.Xml.csproj" />
+  </ItemGroup>
+
 </Project>
