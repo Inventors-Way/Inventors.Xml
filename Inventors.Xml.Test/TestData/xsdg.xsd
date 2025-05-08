@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
 <xs:element name="xsdg" nillable="true" type="Inventors.Xml.XSDGConfig" />
 
 <xs:complexType name="Inventors.Xml.XSDGConfig">
 <xs:sequence>
 <xs:choice minOccurs="0" maxOccurs="unbounded">
-<xs:element minOccurs="0" maxOccurs="1" name="documentation" type="Inventors.Xml.Configuration.DocumentationJob" />
 <xs:element minOccurs="0" maxOccurs="1" name="schema" type="Inventors.Xml.Configuration.SchemaJob" />
 </xs:choice>
 </xs:sequence>
-<xs:attribute name="assembly" type="xs:string" use="required" />
-<xs:attribute name="documentation-path" type="xs:string" use="optional" />
-<xs:attribute name="output-path" type="xs:string" use="optional" />
-<xs:attribute name="input-path" type="xs:string" use="optional" />
+<xs:attribute name="assembly" type="xs:string" use="required">
+</xs:attribute>
+<xs:attribute name="documentation-assembly" type="xs:string" use="optional">
+</xs:attribute>
+<xs:attribute name="documentation-generator" type="xs:string" use="optional">
+</xs:attribute>
+<xs:attribute name="output-path" type="xs:string" use="optional">
+</xs:attribute>
+<xs:attribute name="input-path" type="xs:string" use="optional">
+</xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="Inventors.Xml.Configuration.DocumentationJob">
-<xs:complexContent mixed="false">
-<xs:extension base="Inventors.Xml.Configuration.Job">
-<xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional" />
-</xs:extension>
-</xs:complexContent>
-</xs:complexType>
-
-<xs:complexType name="Inventors.Xml.Configuration.Job" abstract="true">
-<xs:attribute name="title" type="xs:string" use="required" />
-<xs:attribute name="type" type="xs:string" use="required" />
+<xs:complexType name="Inventors.Xml.Configuration.SchemaJob">
+<xs:attribute name="title" type="xs:string" use="required">
+</xs:attribute>
+<xs:attribute name="type" type="xs:string" use="required">
+</xs:attribute>
+<xs:attribute name="include-documentation" type="xs:boolean" use="optional">
+</xs:attribute>
+<xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+</xs:attribute>
+<xs:attribute name="documentation-output-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional">
+</xs:attribute>
+<xs:attribute name="encode-data" type="xs:boolean" use="optional">
+</xs:attribute>
+<xs:attribute name="encapsulate-character-data" type="xs:boolean" use="optional">
+</xs:attribute>
 </xs:complexType>
 
 <xs:simpleType name="Inventors.Xml.Content.DocumentationFormat">
 <xs:restriction base="xs:string">
-<xs:enumeration value="text" />
-<xs:enumeration value="markdown" />
-<xs:enumeration value="html" />
+<xs:enumeration value="text">
+</xs:enumeration>
+<xs:enumeration value="markdown">
+</xs:enumeration>
+<xs:enumeration value="html">
+</xs:enumeration>
 </xs:restriction>
 </xs:simpleType>
-
-<xs:complexType name="Inventors.Xml.Configuration.SchemaJob">
-<xs:complexContent mixed="false">
-<xs:extension base="Inventors.Xml.Configuration.Job">
-<xs:attribute name="include-documentation" type="xs:boolean" use="optional" />
-<xs:attribute name="documentation-file-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional" />
-<xs:attribute name="documentation-output-format" type="Inventors.Xml.Content.DocumentationFormat" use="optional" />
-<xs:attribute name="encode-data" type="xs:boolean" use="optional" />
-<xs:attribute name="encapsulate-character-data" type="xs:boolean" use="optional" />
-</xs:extension>
-</xs:complexContent>
-</xs:complexType>
 </xs:schema>

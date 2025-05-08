@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace Inventors.Xml.Serialization
 {
@@ -11,10 +6,7 @@ namespace Inventors.Xml.Serialization
     public class XmlDocumentationAttribute :
         Attribute
     {
-        public XmlDocumentationAttribute(string id) 
-        { 
-            ID = id;
-        }
+        public XmlDocumentationAttribute(string id) => ID = id;
 
         public XmlDocumentationAttribute() 
         { 

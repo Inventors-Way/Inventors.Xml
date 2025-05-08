@@ -14,18 +14,12 @@ what is checked into the Git repository.
 <xsdg 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="Schema/xsdg.xsd"
-    assembly="Inventors.Xml"
-    documentation-assembly="Inventors.Xml.Documentation"
-    documentation-generator="Inventors.Xml.Documentation.XSDGConfigDocumentation"
-    input-path="xsdg\bin\Debug\net6.0\"
-    output-path="xsdg\Schema\">
-        
+    assembly="LabBench.Core"
+    input-path="LabBench/bin/Debug/net6.0-windows/"
+    output-path="LabBench/Schema">
+
     <schema
-        title="Generating XML Schema"
-        type="Inventors.Xml.XSDGConfig"
-        include-documentation="true"
-        documentation-file-format="markdown"
-        documentation-output-format="html"
-        encode-data="true"
-        encapsulate-character-data="false"/>
+        title="Generating XML Schema (Experiment)"
+        type="LabBench.Core.Experiment"
+        include-documentation="false" />
 </xsdg>

@@ -4,12 +4,7 @@
     xsi:noNamespaceSchemaLocation="xsdg.xsd"
     assembly="Inventors.Xml.dll"
     input-path="Inventors.Xml/bin/Debug/net6.0/"
-    documentation-path="Inventors.Xml/Documentation/"
     output-path="xsdg/Schema/">
-    
-    <documentation
-        title="Creating Markdown Documentation"
-        type="Inventors.Xml.XSDGConfig"
-        documentation-file-format="markdown" />
+
 
 </xsdg>

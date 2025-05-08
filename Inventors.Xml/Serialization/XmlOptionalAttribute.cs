@@ -8,9 +8,9 @@ namespace Inventors.Xml.Serialization
     public class XmlOptionalAttribute :
         Attribute
     {
-        public XmlOptionalAttribute(bool required)
+        public XmlOptionalAttribute(bool optional)
         {
-            Optional = required;
+            Optional = optional;
         }
 
         public XmlOptionalAttribute()

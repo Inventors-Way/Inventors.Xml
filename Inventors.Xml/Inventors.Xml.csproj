@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Inventors.XML</Title>
-    <Version>0.6.0</Version>
+    <Version>0.8.0</Version>
     <Authors>Inventors' Way</Authors>
     <Company>Inventors' Way ApS</Company>
     <Copyright>Copyright 2023 Inventors Way ApS</Copyright>
@@ -35,10 +35,6 @@ These three drawbacks inspired us to write the Inventors.Xml.Serialization libra
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="Throw" Version="1.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Inventors.Xml.Documentation\Inventors.Xml.Documentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

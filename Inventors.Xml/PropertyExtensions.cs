@@ -13,21 +13,7 @@ namespace Inventors.Xml
 {
     public static class PropertyExtensions
     {
-        private static readonly Dictionary<string, string> _typeMapping = new Dictionary<string, string>();
-
-        static PropertyExtensions()
-        {
-            _typeMapping.Add(typeof(double).ToString(), "double");
-            _typeMapping.Add(typeof(float).ToString(), "float");
-            _typeMapping.Add(typeof(string).ToString(), "string");
-            _typeMapping.Add(typeof(int).ToString(), "integer");
-            _typeMapping.Add(typeof(bool).ToString(), "boolean");
-            _typeMapping.Add(typeof(long).ToString(), "long");
-            _typeMapping.Add(typeof(short).ToString(), "short");
-            _typeMapping.Add(typeof(byte).ToString(), "byte");
-        }
-
-        public static PropertyXSDType GetXSDType(this PropertyInfo property, Type type)
+        public static PropertyXSDType GetSchemaType(this PropertyInfo property, Type type)
         {
             if (type.IsPropertyInherited(property.Name)) 
                 return PropertyXSDType.Inherited;
@@ -36,10 +22,10 @@ namespace Inventors.Xml
             if (property.IsAttribute()) 
                 return PropertyXSDType.Attribute;
             if (property.IsElement())
-                return property.IsChoiceElement() ? PropertyXSDType.Choice : PropertyXSDType.Class;
+                return property.IsChoiceElement() ? PropertyXSDType.Choice : PropertyXSDType.Element;
             if (property.IsArray()) 
                 return PropertyXSDType.Array;
-            if (!property.IsPublic()) 
+            if (!property.IsPublic())
                 return PropertyXSDType.Private;
 
             return PropertyXSDType.Invalid;
@@ -146,7 +132,7 @@ namespace Inventors.Xml
         public static IEnumerable<Type?> GetArrayTypes(this PropertyInfo property) =>
             from item in property.GetCustomAttributes<XmlArrayItemAttribute>()
             select item.Type;
-
+        /*
         public static AttributeDescriptor ParseAttribute(this PropertyInfo property, ObjectDocument document)
         {
             string typeKey = property.PropertyType.ToString();
@@ -174,7 +160,7 @@ namespace Inventors.Xml
             type.FullName.ThrowIfNull();
             var typeName = TypeExtensions.SanitizeXSDName(type.FullName);
 
-            if (!document.Exists(type.GetXSDTypeName()))
+            if (!document.Exists(type.GetSchemaTypeName()))
             {
                 document.Add(new EnumElement(name: typeName,
                                              values: type.ParseEnumValues(),
@@ -189,5 +175,6 @@ namespace Inventors.Xml
                 PropertyName: property.Name,
                 Documentation: property.GetDocumentation());
         }
+        */
     }
 }

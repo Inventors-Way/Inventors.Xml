@@ -1,1 +1,0 @@
-The ID of the manager of the department.

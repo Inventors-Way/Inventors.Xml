@@ -10,12 +10,10 @@ namespace Inventors.Xml.Content
         Element
     {
         public NullElement() :
-            base("", false, "")
+            base("", "")
         {
 
         }
-
-        public override bool IsNested => false;
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
     }
@@ -24,25 +22,15 @@ namespace Inventors.Xml.Content
     {
         private static readonly Element _empty = new NullElement();
 
-        public Element(string name, bool isAbstract, string documentation)
+        public Element(string name, string documentation)
         {
             Name = name;
-            BaseType = string.Empty;
-            IsAbstract = isAbstract;
             Documentation = documentation;
         }
 
         public string Name { get; }
 
-        public string BaseType { get; internal set; }
-
-        public bool IsAbstract { get; }
-
-        public bool IsDerived => !string.IsNullOrEmpty(BaseType);
-
         public bool Null => string.IsNullOrEmpty(Name);
-
-        public abstract bool IsNested { get; }
 
         public static Element Empty => _empty;
 

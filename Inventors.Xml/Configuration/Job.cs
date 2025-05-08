@@ -14,20 +14,25 @@ namespace Inventors.Xml.Configuration
     {
         [XmlAttribute("title")]
         [XmlRequired(true)]
-        [XmlDocumentation("Configuration.Job.Title.md")]
+        [XmlDocumentation("@Configuration.Job.Title.md")]
         public string Title { get; set; } = string.Empty;
 
         [XmlAttribute("type")]
         [XmlRequired(true)]
-        [XmlDocumentation("Configuration.Job.Type.md")]
+        [XmlDocumentation("@Configuration.Job.Type.md")]
         public string Type { get; set; } = string.Empty;
 
-        protected Type LoadType(IJobConfiguration configuration) => configuration.Assembly
-                .ThrowIfNull()
-                .Value
-                .GetType(Type)
-                .ThrowIfNull()
-                .Value;
+        protected Type LoadType(IJobConfiguration configuration)
+        {
+            if (configuration.Assembly is not Assembly assembly)
+                throw new InvalidOperationException("Assembly not loaded");
+
+            if (assembly.GetType(Type) is not Type type)
+                throw new InvalidOperationException($"Did not get type [ {Type} ]");
+
+            return type;
+        }
+            
 
         protected static string GetOutputPath(string path, IJobConfiguration c) =>
             string.IsNullOrEmpty(c.OutputPath) ? path : Path.Combine(new string[]

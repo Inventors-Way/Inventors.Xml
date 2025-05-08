@@ -30,11 +30,15 @@ namespace Inventors.Xml.Generators.Xsd
             if (executed)
                 return builder.ToString();
 
+            if (document?.Root is null)
+                throw new InvalidOperationException("No root type found in the document");
+
             executed = true;
 
             builder.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             builder.AppendLine("<xs:schema elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">");
-            builder.AppendLine($"<xs:element name=\"{document.Root.Name}\" nillable=\"true\" type=\"{document.Root.Type.Name}\" />");
+            builder.AppendLine();
+            builder.AppendLine($"<xs:element name=\"{document.Root.Name}\" nillable=\"true\" type=\"{document.Root.Type}\" />");
 
             document.Run(this);
 
@@ -44,119 +48,65 @@ namespace Inventors.Xml.Generators.Xsd
 
         public void Visit(NullElement element) { }
 
-        public void Visit(ArrayElement element)
+        public void Visit(TypeElement element)
         {
+            var orderOperator = element.Elements.Any(e => e.Choice) ? "sequence" : "all";
+
             builder.AppendLine();
             builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
-            builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
+            Annotate(GetDocumentation(element.Documentation));
 
-            foreach (var item in element.Items)
-            {
-                builder.AppendLine($"<xs:element minOccurs=\"1\" maxOccurs=\"1\" name=\"{item.Name}\" nillable=\"true\" type=\"{item.Type.Name}\" />");
-            }
-
-            builder.AppendLine($"</xs:choice>");
-            builder.AppendLine($"</xs:complexType>");
-        }
-
-        public void Visit(ChoiceElement element)
-        {
-            if (element.Multiple)
-            {
-                builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
-            }
-            else
-            {
-                builder.AppendLine($"<xs:choice minOccurs=\"1\" maxOccurs=\"1\">");
-            }
-
-            foreach (var choice in element.Choices)
-            {
-                builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{choice.Name}\" type=\"{choice.Type.Name}\" />");
-            }
-
-            builder.AppendLine("</xs:choice>");
-        }
-
-        public void Visit(ClassElement element)
-        {
-            builder.AppendLine();
-
-            if (element.IsAbstract)
-            {
-                builder.AppendLine($"<xs:complexType name=\"{element.Name}\" abstract=\"true\">");
-            }
-            else
-            {
-                builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
-            }
-
-            if (element.IsDerived)
-            {
-                CreateDerivedType(element);
-            }
-            else
-            {
-                CreateNonderivedType(element);
-            }
-
-            builder.AppendLine("</xs:complexType>");
-        }
-
-        private void CreateDerivedType(ClassElement element)
-        {
-            builder.AppendLine("<xs:complexContent mixed=\"false\">");
-            builder.AppendLine($"<xs:extension base=\"{element.BaseType}\">");
-
-            CreateNonderivedType(element);
-
-            builder.AppendLine("</xs:extension>");
-            builder.AppendLine("</xs:complexContent>");
-        }
-
-        private static string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
-
-        private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
-
-        private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
-
-        public void CreateNonderivedType(ClassElement element)
-        {
-            var info = AnnotateElement(element);
-            
             if (element.Elements.Count > 0)
             {
-                builder.AppendLine("<xs:sequence>");
+                builder.AppendLine($"<xs:{orderOperator}>");
 
                 foreach (var e in element.Elements)
                 {
-                    if (e.Type.IsNested)
+                    if (e.Choice)
                     {
-                        e.Type.Accept(this);
-                    }
-                    else
-                    {
-                        if (info is null)
+                        if (document[e.Type] is not ChoiceElement choice)
+                            throw new InvalidOperationException("Element is not a choice element");
+
+                        if (choice.Multiple)
                         {
-                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\" />");
+                            builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
                         }
                         else
                         {
-                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type.Name}\">");
-                            Annotate(GetDocumentation(e.Type.Documentation));
+                            builder.AppendLine($"<xs:choice minOccurs=\"1\" maxOccurs=\"1\">");
+                        }
+
+                        foreach (var item in choice.Choices)
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"0\" maxOccurs=\"1\" name=\"{item.Name}\" type=\"{item.Type}\" />");
+                        }
+
+                        builder.AppendLine($"</xs:choice>");
+
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(e.Documentation))
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\" />");
+                        }
+                        else
+                        {
+                            builder.AppendLine($"<xs:element minOccurs=\"{MinOccurs(e)}\" maxOccurs=\"1\" name=\"{e.Name}\" type=\"{e.Type}\">");
+                            Annotate(GetDocumentation(e.Documentation));
                             builder.AppendLine("</xs:element>");
                         }
                     }
                 }
 
-                builder.AppendLine("</xs:sequence>");
+                builder.AppendLine($"</xs:{orderOperator}>");
             }
 
             if (element.Attributes.Count > 0)
             {
                 foreach (var a in element.Attributes)
                 {
-                    if (info is null)
+                    if (string.IsNullOrEmpty(a.Documentation))
                     {
                         builder.AppendLine($"<xs:attribute name=\"{a.Name}\" type=\"{AttributeType(a)}\" use=\"{Required(a)}\" />");
                     }
@@ -168,7 +118,62 @@ namespace Inventors.Xml.Generators.Xsd
                     }
                 }
             }
+
+            builder.AppendLine("</xs:complexType>");
         }
+
+        public void Visit(ArrayElement element)
+        {
+            builder.AppendLine();
+            builder.AppendLine($"<xs:complexType name=\"{element.Name}\">");
+
+            builder.AppendLine($"<xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">");
+
+            foreach (var item in element.Items)
+            {
+                builder.AppendLine($"<xs:element minOccurs=\"1\" maxOccurs=\"1\" name=\"{item.Name}\" nillable=\"true\" type=\"{item.Type}\" />");
+            }
+
+            builder.AppendLine($"</xs:choice>");
+            builder.AppendLine($"</xs:complexType>");
+        }
+
+        public void Visit(ChoiceElement element)
+        {
+        }
+
+        public void Visit(EnumElement element)
+        {
+            builder.AppendLine();
+            builder.AppendLine($"<xs:simpleType name=\"{element.Name}\">");
+            Annotate(GetDocumentation(element.Documentation));
+            builder.AppendLine($"<xs:restriction base=\"xs:string\">");
+
+
+            foreach (var value in element.Values)
+            {
+                if (string.IsNullOrEmpty(value.Documentation))
+                {
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Name}\" />");
+                }
+                else
+                {
+                    builder.AppendLine($"<xs:enumeration value=\"{value.Name}\">");
+                    Annotate(GetDocumentation(value.Documentation));
+                    builder.AppendLine($"</xs:enumeration>");
+                }
+            }
+
+            builder.AppendLine($"</xs:restriction>");
+            builder.AppendLine("</xs:simpleType>");
+        }
+
+
+        private static string MinOccurs(ElementDescriptor d) => d.Required ? "1" : "0";
+
+        private static string Required(AttributeDescriptor a) => a.Required ? "required" : "optional";
+
+        private static string AttributeType(AttributeDescriptor a) => a.Primitive ? $"xs:{a.Type}" : a.Type;
 
         public string GetDocumentation(string id)
         {
@@ -178,19 +183,10 @@ namespace Inventors.Xml.Generators.Xsd
             if (documentation is null)
                 return string.Empty;
 
-            return documentation[id];
-        }
-
-        public ElementDocumentationInfo? AnnotateElement(Element element)
-        {
-            if (documentation is null)
-                return null;
-
-            var content = documentation[element.Documentation];
-
-            Annotate(content);
-
-            return new ElementDocumentationInfo(element.Documentation, documentation.OutputFormat);
+            if (id.StartsWith("@"))
+                return documentation[id.Substring(1)];
+            else
+                return documentation.Format(id.Trim());
         }
 
         public void Annotate(string? content)
@@ -203,32 +199,6 @@ namespace Inventors.Xml.Generators.Xsd
             builder.AppendLine(content);
             builder.AppendLine("</xs:documentation>");
             builder.AppendLine("</xs:annotation>");
-        }
-
-        public void Visit(EnumElement element)
-        {
-            builder.AppendLine();
-            builder.AppendLine($"<xs:simpleType name=\"{element.Name}\">");
-            var info = AnnotateElement(element);
-            builder.AppendLine($"<xs:restriction base=\"xs:string\">");
-
-
-            foreach (var value in element.Values)
-            {
-                if (info is null)
-                {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\" />");
-                }
-                else
-                {
-                    builder.AppendLine($"<xs:enumeration value=\"{value.XSDName}\">");
-                    Annotate(GetDocumentation(value.Documentation));
-                    builder.AppendLine($"</xs:enumeration>");
-                }
-            }
-
-            builder.AppendLine($"</xs:restriction>");
-            builder.AppendLine("</xs:simpleType>");
         }
 
         private readonly StringBuilder builder = new();

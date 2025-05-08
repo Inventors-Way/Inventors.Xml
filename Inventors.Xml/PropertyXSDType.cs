@@ -12,7 +12,7 @@ namespace Inventors.Xml
         Inherited,
         Ignored,
         Attribute,
-        Class,
+        Element,
         Choice,
         Array,
         Invalid

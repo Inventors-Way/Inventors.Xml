@@ -10,7 +10,7 @@ namespace Inventors.Xml.Content
         Element
     {
         public ChoiceElement(string name, bool multiple, string documentation) :
-            base(name: name, false, documentation)
+            base(name, documentation)
         {
             Multiple = multiple;
         }
@@ -26,8 +26,6 @@ namespace Inventors.Xml.Content
 
         public override void Accept(IElementVisitor visitor) => visitor.Visit(this);
 
-        public override bool IsNested => true;
-
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -36,7 +34,7 @@ namespace Inventors.Xml.Content
 
             foreach (var choice in Choices)
             {
-                builder.AppendLine($"- {choice.Name} [ {choice.Type.Name} ]");
+                builder.AppendLine($"- {choice.Name} [ {choice.Type} ]");
             }
 
             return builder.ToString();

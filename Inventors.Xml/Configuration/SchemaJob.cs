@@ -12,32 +12,33 @@ using System.Xml.Serialization;
 
 namespace Inventors.Xml.Configuration
 {
+    [XmlDocumentation("@Configuration.SchemaJob.md")]
     public class SchemaJob :
         Job
     {
         [XmlAttribute("include-documentation")]
         [XmlRequired(false)]
-        [XmlDocumentation("Configuration.SchemaJob.IncludeDocumentation.md")]
+        [XmlDocumentation("@Configuration.SchemaJob.IncludeDocumentation.md")]
         public bool IncludeDocumentation { get; set; } = true;
 
         [XmlAttribute("documentation-file-format")]
         [XmlRequired(false)]
-        [XmlDocumentation("Configuration.SchemaJob.DocumentationFileFormat.md")]
+        [XmlDocumentation("@Configuration.SchemaJob.DocumentationFileFormat.md")]
         public DocumentationFormat DocumentationFileFormat { get; set; } = DocumentationFormat.MarkDown;
 
         [XmlAttribute("documentation-output-format")]
         [XmlRequired(false)]
-        [XmlDocumentation("Configuration.SchemaJob.DocumentationOutputFormat.md")]
+        [XmlDocumentation("@Configuration.SchemaJob.DocumentationOutputFormat.md")]
         public DocumentationFormat DocumentationOutputFormat { get; set; } = DocumentationFormat.Html;
 
         [XmlAttribute("encode-data")]
         [XmlRequired(false)]
-        [XmlDocumentation("Configuration.SchemaJob.EncodeData.md")]
+        [XmlDocumentation("@Configuration.SchemaJob.EncodeData.md")]
         public bool EncodeData { get; set; } = true;
 
         [XmlAttribute("encapsulate-character-data")]
         [XmlRequired(false)]
-        [XmlDocumentation("Configuration.SchemaJob.EncapsulateCharacterData.md")]
+        [XmlDocumentation("@Configuration.SchemaJob.EncapsulateCharacterData.md")]
         public bool EncapsulateCharacterData { get; set; } = false;
 
         private XSDGenerator CreateGenerator(ObjectDocument document, IDocumentationSource? docSource)
@@ -50,9 +51,10 @@ namespace Inventors.Xml.Configuration
                 .SetOutputFormat(DocumentationOutputFormat)
                 .SetEncoding(EncodeData)
                 .SetCharacterData(EncapsulateCharacterData)
-            .Build());
+                .Build());
 
             return "Creating XSD generator".Run(() => new XSDGenerator(document, documentation));
+
         }
 
         public override void Run(string path, IJobConfiguration configuration, IDocumentationSource? docSource = null, bool verbose = false)

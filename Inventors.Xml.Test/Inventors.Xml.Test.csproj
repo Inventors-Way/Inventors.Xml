@@ -17,11 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Inventors.Xml.Documentation\Inventors.Xml.Documentation.csproj" />
     <ProjectReference Include="..\Inventors.Xml\Inventors.Xml.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestDocumentation\" />
   </ItemGroup>
 
 </Project>
