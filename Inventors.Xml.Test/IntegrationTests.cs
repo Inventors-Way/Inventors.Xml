@@ -39,9 +39,10 @@ namespace Inventors.Xml.Test
         {
             var document = ObjectDocument.Parse(typeof(Person), NullReporter.Instance);
             DocumentationProvider documentation = DocumentationProvider.Create(document, new PersonDocumentation())
-                .SetInputFormat(DocumentationFormat.Text)
-                .SetOutputFormat(DocumentationFormat.Text)
-                .SetEncoding(true)
+                .SetInputFormat(DocumentationFormat.MarkDown)
+                .SetOutputFormat(DocumentationFormat.Html)
+                .SetEncoding(true)        
+                .SetCharacterData(false)
                 .Build();
 
             var generator = new XSDGenerator(document, documentation);

@@ -6,7 +6,7 @@
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Person">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Person
+&lt;p&gt;PersonDocumentation: Person&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:all>
@@ -20,7 +20,7 @@ The spouse of the person
 <xs:element minOccurs="0" maxOccurs="1" name="home" type="Inventors.Xml.Test.TestObjects.Home">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Person.Home
+&lt;p&gt;PersonDocumentation: Person.Home&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:element>
@@ -44,13 +44,14 @@ The name of the person
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Spouse">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Spouse
+&lt;p&gt;PersonDocumentation: Spouse&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-The spouse's name
+The spouse&#39;s name 
+            *Type: (&lt;string&gt;*
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -59,13 +60,13 @@ The spouse's name
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Home">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Home
+&lt;p&gt;PersonDocumentation: Home&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="address" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Home.Address
+&lt;p&gt;PersonDocumentation: Home.Address&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
@@ -105,20 +106,20 @@ A self-contrained unit
 <xs:complexType name="Inventors.Xml.Test.TestObjects.Child">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Child
+&lt;p&gt;PersonDocumentation: Child&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 <xs:attribute name="name" type="xs:string" use="required">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Child.Name
+&lt;p&gt;PersonDocumentation: Child.Name&lt;/p&gt;
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>
 <xs:attribute name="age" type="xs:integer" use="optional">
 <xs:annotation>
 <xs:documentation>
-PersonDocumentation: Child.Age
+Age of the child [ calculated.int ]
 </xs:documentation>
 </xs:annotation>
 </xs:attribute>

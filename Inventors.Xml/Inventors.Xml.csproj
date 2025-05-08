@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Inventors.XML</Title>
-    <Version>0.7.0</Version>
+    <Version>0.8.0</Version>
     <Authors>Inventors' Way</Authors>
     <Company>Inventors' Way ApS</Company>
     <Copyright>Copyright 2023 Inventors Way ApS</Copyright>

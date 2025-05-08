@@ -98,7 +98,7 @@ namespace Inventors.Xml.Content
 
         public DocumentationFormat OutputFormat => options.OutputFormat;
 
-        private string Format(string text)
+        public string Format(string text)
         {
             if (options.Encoding)
                 text = WebUtility.HtmlEncode(text);
@@ -107,6 +107,36 @@ namespace Inventors.Xml.Content
                 text = $"<![CDATA[{text}]]>";
 
             return text;
+        }
+
+        public string Process(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+
+            switch (InputFormat)
+            {
+                case DocumentationFormat.Text:
+                    return Format(text);
+                case DocumentationFormat.Html:
+                    return Format(text);
+                case DocumentationFormat.MarkDown:
+                    {
+                        switch (OutputFormat)
+                        {
+                            case DocumentationFormat.Text:
+                                return Format(Markdown.ToPlainText(text));
+                            case DocumentationFormat.Html:
+                                return Format(Markdown.ToHtml(text).Trim());
+                            case DocumentationFormat.MarkDown:
+                                return Format(text);
+                            default:
+                                return Format(text);
+                        }
+                    }
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
         public string this[string? id]
@@ -118,32 +148,7 @@ namespace Inventors.Xml.Content
 
                 var text = options.Source.GetItem(id);
 
-                if (string.IsNullOrEmpty(text))
-                    return string.Empty;
-
-                switch (InputFormat)
-                {
-                    case DocumentationFormat.Text:
-                        return Format(text);
-                    case DocumentationFormat.Html:
-                        return Format(text);
-                    case DocumentationFormat.MarkDown:
-                        {
-                            switch (OutputFormat)
-                            {
-                                case DocumentationFormat.Text:
-                                    return Format(Markdown.ToPlainText(text));
-                                case DocumentationFormat.Html:
-                                    return Format(Markdown.ToHtml(text).Trim());
-                                case DocumentationFormat.MarkDown:
-                                    return Format(text);
-                                default:
-                                    return Format(text);
-                            }
-                        }
-                    default:
-                        throw new NotSupportedException();
-                }
+                return Process(text);
             }
         }
 

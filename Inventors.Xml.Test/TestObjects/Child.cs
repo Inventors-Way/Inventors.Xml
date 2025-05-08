@@ -18,7 +18,7 @@ namespace Inventors.Xml.Test.TestObjects
 
         [XmlAttribute("age")]
         [XmlOptional]
-        [XmlDocumentation("@Child.Age")]
+        [XmlDocumentation(@"Age of the child [ calculated.int ]")]
         public int Age { get; set; } = 0;
 
         public override string ToString() => $"Child: {Name}, Age: {Age}";

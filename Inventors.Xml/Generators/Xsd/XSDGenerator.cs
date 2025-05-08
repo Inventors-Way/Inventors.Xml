@@ -186,7 +186,7 @@ namespace Inventors.Xml.Generators.Xsd
             if (id.StartsWith("@"))
                 return documentation[id.Substring(1)];
             else
-                return id;
+                return documentation.Format(id.Trim());
         }
 
         public void Annotate(string? content)

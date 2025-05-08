@@ -13,7 +13,9 @@ namespace Inventors.Xml.Test.TestObjects
     {
         [XmlAttribute("name")]
         [XmlRequired]
-        [XmlDocumentation("The spouse's name")]
+        [XmlDocumentation(@"
+            The spouse's name 
+            *Type: (<string>*")]
         public string Name { get; set; } = string.Empty;
 
         public override string ToString() => $"Spouse: {Name}";
